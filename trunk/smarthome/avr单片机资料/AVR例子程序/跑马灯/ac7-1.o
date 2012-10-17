@@ -1,0 +1,54 @@
+XL
+H 1 areas 4 global symbols
+M ac7
+S push_gset2 Ref0000
+S pop_gset2 Ref0000
+A text size 4C flags 0
+dbfile d:\MYDOCU~1\ac7-1\ac7-1.c
+dbfunc e delay_ms 0 fV
+dbsym r i 14 i
+dbsym r j 16 i
+dbsym r k 10 i
+dbline FFFFFFFF 4
+dbline 6 4
+dbline 8 4
+dbline 9 A
+dbline A A
+dbline B 10
+dbline A 10
+dbline A 14
+dbline C 1C
+dbline 8 1C
+dbline 8 20
+dbline FFFFFFFE 26
+dbline 0 2A
+dbfunc e main 2C fV
+dbline FFFFFFFF 2C
+dbline 10 2C
+dbline 11 2C
+dbline 12 30
+dbline 14 34
+dbline 15 34
+dbline 16 38
+dbline 17 3E
+dbline 18 42
+dbline 19 48
+dbline 13 48
+dbline FFFFFFFE 4A
+dbline 0 4A
+S _main Def002C
+S _delay_ms Def0000
+T 00 00 0E 94 00 00 44 27 55 27 0B C0 66 27 77 27
+R 00 00 00 00 12 04 00 00
+T 0E 00 02 C0 6F 5F 7F 4F 6A 33 E2 E0 7E 07 D0 F3
+R 00 00 00 00
+T 1C 00 4F 5F 5F 4F 40 17 51 07 90 F3 0E 94 00 00
+R 00 00 00 00 12 0E 01 00
+T 2A 00 08 95
+R 00 00 00 00
+T 2C 00 8F EF 87 BB 88 BB 0A C0 8A EA 88 BB 04 EF
+R 00 00 00 00
+T 3A 00 11 E0 E1 DF 85 E5 88 BB 04 EF 11 E0 DC DF
+R 00 00 00 00
+T 48 00 F5 CF 08 95
+R 00 00 00 00

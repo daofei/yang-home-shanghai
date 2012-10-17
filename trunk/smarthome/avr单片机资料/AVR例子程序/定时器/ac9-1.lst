@@ -1,0 +1,94 @@
+__start:
+__text_start:
+    002A E5CF      LDI	R28,0x5F
+    002B E0D4      LDI	R29,4
+    002C BFCD      OUT	0x3D,R28
+    002D BFDE      OUT	0x3E,R29
+    002E 51C0      SUBI	R28,0x10
+    002F 40D0      SBCI	R29,0
+    0030 EA0A      LDI	R16,0xAA
+    0031 8308      STD	Y+0,R16
+    0032 2400      CLR	R0
+    0033 E6E0      LDI	R30,0x60
+    0034 E0F0      LDI	R31,0
+    0035 E010      LDI	R17,0
+    0036 36E0      CPI	R30,0x60
+    0037 07F1      CPC	R31,R17
+    0038 F011      BEQ	0x003B
+    0039 9201      ST	R0,Z+
+    003A CFFB      RJMP	0x0036
+    003B 8300      STD	Z+0,R16
+    003C E5E4      LDI	R30,0x54
+    003D E0F0      LDI	R31,0
+    003E E6A0      LDI	R26,0x60
+    003F E0B0      LDI	R27,0
+    0040 E010      LDI	R17,0
+    0041 35E4      CPI	R30,0x54
+    0042 07F1      CPC	R31,R17
+    0043 F021      BEQ	0x0048
+    0044 95C8      LPM
+    0045 9631      ADIW	R30,1
+    0046 920D      ST	R0,X+
+    0047 CFF9      RJMP	0x0041
+    0048 940E004B  CALL	_main
+_exit:
+    004A CFFF      RJMP	_exit
+FILE: d:\MYDOCU~1\ac9-1\ac9-1.c
+(0001) #include<iom16v.h>	
+(0002) #define uchar unsigned char	
+(0003) /************************************/
+(0004) #define FLASH_0  (PORTB=PORTB&0xfe) 
+(0005) #define FLASH_1  (PORTB=PORTB|0x01) 
+(0006) /************************************/
+(0007) void main(void) 
+(0008) {			
+(0009) uchar cnt,status; 
+(0010)  PORTB = 0x01; 
+_main:
+  cnt                  --> R16
+  status               --> R18
+    004B E081      LDI	R24,1
+    004C BB88      OUT	0x18,R24
+(0011)  DDRB  = 0x01; 
+    004D BB87      OUT	0x17,R24
+(0012)  TCNT1H = 0xCF;
+    004E EC8F      LDI	R24,0xCF
+    004F BD8D      OUT	0x2D,R24
+(0013)  TCNT1L = 0x2C;
+    0050 E28C      LDI	R24,0x2C
+    0051 BD8C      OUT	0x2C,R24
+(0014)  TCCR1B = 0x03;
+    0052 E083      LDI	R24,3
+    0053 BD8E      OUT	0x2E,R24
+(0015)    	for(;;)	
+(0016)  	{	
+(0017) 		do {status=TIFR&0x04;}while(status!=0x04); 
+    0054 B728      IN	R18,0x38
+    0055 7024      ANDI	R18,4
+    0056 3024      CPI	R18,4
+    0057 F7E1      BNE	0x0054
+(0018) 		TIFR=0x04;
+    0058 E084      LDI	R24,4
+    0059 BF88      OUT	0x38,R24
+(0019) 		TCNT1H = 0xCF; 
+    005A EC8F      LDI	R24,0xCF
+    005B BD8D      OUT	0x2D,R24
+(0020) 		TCNT1L = 0x2C; 
+    005C E28C      LDI	R24,0x2C
+    005D BD8C      OUT	0x2C,R24
+(0021) 		cnt++;		
+    005E 9503      INC	R16
+(0022) 		if(cnt==9)FLASH_0;
+    005F 3009      CPI	R16,0x9
+    0060 F419      BNE	0x0064
+    0061 B388      IN	R24,0x18
+    0062 7F8E      ANDI	R24,0xFE
+    0063 BB88      OUT	0x18,R24
+(0023) 		if(cnt>=10){cnt=0;FLASH_1;}
+FILE: <library>
+    0064 300A      CPI	R16,0xA
+    0065 F370      BCS	0x0054
+    0066 2700      CLR	R16
+    0067 9AC0      SBI	0x18,0
+    0068 CFEB      RJMP	0x0054
+    0069 9508      RET

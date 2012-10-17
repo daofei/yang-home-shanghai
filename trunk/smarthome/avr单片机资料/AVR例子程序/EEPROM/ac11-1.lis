@@ -1,0 +1,412 @@
+                        .module ac11-1.c
+                        .area lit(rom, con, rel)
+ 0000           _SEG7::
+ 0000 3F06              .byte 63,6
+ 0002 5B4F              .byte 91,'O
+ 0004 666D              .byte 'f,'m
+ 0006 7D07              .byte 125,7
+ 0008 7F6F              .byte 127,'o
+ 000A                   .dbfile d:\MYDOCU~1\ac11-1\ac11-1.c
+ 000A                   .dbsym e SEG7 _SEG7 A[10:10]kc
+ 000A           _ACT::
+ 000A FEFD              .byte 254,253
+ 000C FBF7              .byte 251,247
+ 000E                   .dbsym e ACT _ACT A[4:4]kc
+                        .area text(rom, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac11-1\ac11-1.c
+ 0000                   .dbfunc e delay_ms _delay_ms fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              k -> R16,R17
+                        .even
+ 0000           _delay_ms::
+ 0000 0E940000          xcall push_gset2
+ 0004                   .dbline -1
+ 0004                   .dbline 10
+ 0004           ; #include <iom16v.h>                   
+ 0004           ; #define uchar unsigned char   
+ 0004           ; #define uint  unsigned int    
+ 0004           ; uchar const SEG7[10]={0x3f,0x06,0x5b, 
+ 0004           ; 0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+ 0004           ; uchar const ACT[4]={0xfe,0xfd,0xfb,0xf7};
+ 0004           ; uchar val,DispBuff[4];                
+ 0004           ; //*************************************
+ 0004           ; void delay_ms(uint k)         
+ 0004           ; {
+ 0004                   .dbline 12
+ 0004           ; uint i,j;                     
+ 0004           ;     for(i=0;i<k;i++)
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0BC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 13
+ 000A           ;     {
+ 000A                   .dbline 14
+ 000A           ;        for(j=0;j<1140;j++)
+ 000A 6627              clr R22
+ 000C 7727              clr R23
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 15
+ 0010           L7:
+ 0010                   .dbline 14
+ 0010 6F5F              subi R22,255  ; offset = 1
+ 0012 7F4F              sbci R23,255
+ 0014           L9:
+ 0014                   .dbline 14
+ 0014 6437              cpi R22,116
+ 0016 E4E0              ldi R30,4
+ 0018 7E07              cpc R23,R30
+ 001A D0F3              brlo L6
+ 001C                   .dbline 16
+ 001C           L3:
+ 001C                   .dbline 12
+ 001C 4F5F              subi R20,255  ; offset = 1
+ 001E 5F4F              sbci R21,255
+ 0020           L5:
+ 0020                   .dbline 12
+ 0020 4017              cp R20,R16
+ 0022 5107              cpc R21,R17
+ 0024 90F3              brlo L2
+ 0026                   .dbline -2
+ 0026           L1:
+ 0026 0E940000          xcall pop_gset2
+ 002A                   .dbline 0 ; func end
+ 002A 0895              ret
+ 002C                   .dbsym r i 20 i
+ 002C                   .dbsym r j 22 i
+ 002C                   .dbsym r k 16 i
+ 002C                   .dbend
+ 002C                   .dbfunc e W_EEP _W_EEP fV
+ 002C           ;            dat -> R18
+ 002C           ;            add -> R16,R17
+                        .even
+ 002C           _W_EEP::
+ 002C                   .dbline -1
+ 002C                   .dbline 20
+ 002C           ;        ;
+ 002C           ;     }
+ 002C           ; }
+ 002C           ; //***************写EEPROM子函数*****************
+ 002C           ; void W_EEP(uint add,uchar dat) 
+ 002C           ; {
+ 002C           L11:
+ 002C                   .dbline 21
+ 002C           L12:
+ 002C                   .dbline 21
+ 002C           ; while(EECR&(1<<EEWE));        
+ 002C E199              sbic 0x1c,1
+ 002E FECF              rjmp L11
+ 0030                   .dbline 22
+ 0030           ; EEAR=add;                             
+ 0030 1FBB              out 0x1f,R17
+ 0032 0EBB              out 0x1e,R16
+ 0034                   .dbline 23
+ 0034           ; EEDR=dat;                             
+ 0034 2DBB              out 0x1d,R18
+ 0036                   .dbline 24
+ 0036           ; EECR|=(1<<EEMWE);
+ 0036 E29A              sbi 0x1c,2
+ 0038                   .dbline 25
+ 0038           ; EECR|=(1<<EEWE);      
+ 0038 E19A              sbi 0x1c,1
+ 003A                   .dbline -2
+ 003A           L10:
+ 003A                   .dbline 0 ; func end
+ 003A 0895              ret
+ 003C                   .dbsym r dat 18 c
+ 003C                   .dbsym r add 16 i
+ 003C                   .dbend
+ 003C                   .dbfunc e R_EEP _R_EEP fc
+ 003C           ;            add -> R16,R17
+                        .even
+ 003C           _R_EEP::
+ 003C                   .dbline -1
+ 003C                   .dbline 29
+ 003C           ; }
+ 003C           ; //****************读EEPROM子函数*******************
+ 003C           ; uchar R_EEP(uint add) 
+ 003C           ; {
+ 003C           L15:
+ 003C                   .dbline 30
+ 003C           L16:
+ 003C                   .dbline 30
+ 003C           ; while(EECR&(1<<EEWE));
+ 003C E199              sbic 0x1c,1
+ 003E FECF              rjmp L15
+ 0040                   .dbline 31
+ 0040           ; EEAR=add;                             
+ 0040 1FBB              out 0x1f,R17
+ 0042 0EBB              out 0x1e,R16
+ 0044                   .dbline 32
+ 0044           ; EECR|=(1<<EERE);              
+ 0044 E09A              sbi 0x1c,0
+ 0046                   .dbline 33
+ 0046           ; return EEDR;          
+ 0046 0DB3              in R16,0x1d
+ 0048                   .dbline -2
+ 0048           L14:
+ 0048                   .dbline 0 ; func end
+ 0048 0895              ret
+ 004A                   .dbsym r add 16 i
+ 004A                   .dbend
+ 004A                   .dbfunc e conv _conv fV
+ 004A           ;              i -> R20
+                        .even
+ 004A           _conv::
+ 004A 0E940000          xcall push_gset1
+ 004E 402F              mov R20,R16
+ 0050                   .dbline -1
+ 0050                   .dbline 37
+ 0050           ; }
+ 0050           ; //****************数据转换子函数*********************
+ 0050           ; void conv(uchar i)    
+ 0050           ; {
+ 0050                   .dbline 38
+ 0050           ; DispBuff[3]=i/1000;
+ 0050 28EE              ldi R18,1000
+ 0052 33E0              ldi R19,3
+ 0054 042F              mov R16,R20
+ 0056 1127              clr R17
+ 0058 0E940000          xcall div16s
+ 005C 00930300          sts _DispBuff+3,R16
+ 0060                   .dbline 39
+ 0060           ; DispBuff[2]=(i%1000)/100;
+ 0060 28EE              ldi R18,1000
+ 0062 33E0              ldi R19,3
+ 0064 042F              mov R16,R20
+ 0066 1127              clr R17
+ 0068 0E940000          xcall mod16s
+ 006C 24E6              ldi R18,100
+ 006E 30E0              ldi R19,0
+ 0070 0E940000          xcall div16s
+ 0074 00930200          sts _DispBuff+2,R16
+ 0078                   .dbline 40
+ 0078           ; DispBuff[1]=(i%100)/10;
+ 0078 14E6              ldi R17,100
+ 007A 042F              mov R16,R20
+ 007C 0E940000          xcall mod8u
+ 0080 1AE0              ldi R17,10
+ 0082 0E940000          xcall div8u
+ 0086 00930100          sts _DispBuff+1,R16
+ 008A                   .dbline 41
+ 008A           ; DispBuff[0]=i%10;
+ 008A 1AE0              ldi R17,10
+ 008C 042F              mov R16,R20
+ 008E 0E940000          xcall mod8u
+ 0092 00930000          sts _DispBuff,R16
+ 0096                   .dbline -2
+ 0096           L18:
+ 0096 0E940000          xcall pop_gset1
+ 009A                   .dbline 0 ; func end
+ 009A 0895              ret
+ 009C                   .dbsym r i 20 c
+ 009C                   .dbend
+ 009C                   .dbfunc e display _display fV
+ 009C           ;              p -> R20,R21
+                        .even
+ 009C           _display::
+ 009C 0E940000          xcall push_gset1
+ 00A0 A801              movw R20,R16
+ 00A2                   .dbline -1
+ 00A2                   .dbline 45
+ 00A2           ; }
+ 00A2           ; //*************************************
+ 00A2           ; void display(uchar p[4]) 
+ 00A2           ; {
+ 00A2                   .dbline 46
+ 00A2           ; PORTA=SEG7[p[0]];
+ 00A2 80E0              ldi R24,<_SEG7
+ 00A4 90E0              ldi R25,>_SEG7
+ 00A6 FA01              movw R30,R20
+ 00A8 E081              ldd R30,z+0
+ 00AA FF27              clr R31
+ 00AC E80F              add R30,R24
+ 00AE F91F              adc R31,R25
+ 00B0 E491              lpm R30,Z
+ 00B2 EBBB              out 0x1b,R30
+ 00B4                   .dbline 47
+ 00B4           ; PORTC=ACT[0];
+ 00B4 E0E0              ldi R30,<_ACT
+ 00B6 F0E0              ldi R31,>_ACT
+ 00B8 E491              lpm R30,Z
+ 00BA E5BB              out 0x15,R30
+ 00BC                   .dbline 48
+ 00BC           ; delay_ms(1);
+ 00BC 01E0              ldi R16,1
+ 00BE 10E0              ldi R17,0
+ 00C0 9FDF              xcall _delay_ms
+ 00C2                   .dbline 49
+ 00C2           ; PORTA=SEG7[p[1]];
+ 00C2 80E0              ldi R24,<_SEG7
+ 00C4 90E0              ldi R25,>_SEG7
+ 00C6 FA01              movw R30,R20
+ 00C8 E181              ldd R30,z+1
+ 00CA FF27              clr R31
+ 00CC E80F              add R30,R24
+ 00CE F91F              adc R31,R25
+ 00D0 E491              lpm R30,Z
+ 00D2 EBBB              out 0x1b,R30
+ 00D4                   .dbline 50
+ 00D4           ; PORTC=ACT[1];
+ 00D4 E0E0              ldi R30,<_ACT+1
+ 00D6 F0E0              ldi R31,>_ACT+1
+ 00D8 E491              lpm R30,Z
+ 00DA E5BB              out 0x15,R30
+ 00DC                   .dbline 51
+ 00DC           ; delay_ms(1);
+ 00DC 01E0              ldi R16,1
+ 00DE 10E0              ldi R17,0
+ 00E0 8FDF              xcall _delay_ms
+ 00E2                   .dbline 52
+ 00E2           ; PORTA=SEG7[p[2]];
+ 00E2 80E0              ldi R24,<_SEG7
+ 00E4 90E0              ldi R25,>_SEG7
+ 00E6 FA01              movw R30,R20
+ 00E8 E281              ldd R30,z+2
+ 00EA FF27              clr R31
+ 00EC E80F              add R30,R24
+ 00EE F91F              adc R31,R25
+ 00F0 E491              lpm R30,Z
+ 00F2 EBBB              out 0x1b,R30
+ 00F4                   .dbline 53
+ 00F4           ; PORTC=ACT[2];
+ 00F4 E0E0              ldi R30,<_ACT+2
+ 00F6 F0E0              ldi R31,>_ACT+2
+ 00F8 E491              lpm R30,Z
+ 00FA E5BB              out 0x15,R30
+ 00FC                   .dbline 54
+ 00FC           ; delay_ms(1);
+ 00FC 01E0              ldi R16,1
+ 00FE 10E0              ldi R17,0
+ 0100 7FDF              xcall _delay_ms
+ 0102                   .dbline 55
+ 0102           ; PORTA=SEG7[p[3]];
+ 0102 80E0              ldi R24,<_SEG7
+ 0104 90E0              ldi R25,>_SEG7
+ 0106 FA01              movw R30,R20
+ 0108 E381              ldd R30,z+3
+ 010A FF27              clr R31
+ 010C E80F              add R30,R24
+ 010E F91F              adc R31,R25
+ 0110 E491              lpm R30,Z
+ 0112 EBBB              out 0x1b,R30
+ 0114                   .dbline 56
+ 0114           ; PORTC=ACT[3];
+ 0114 E0E0              ldi R30,<_ACT+3
+ 0116 F0E0              ldi R31,>_ACT+3
+ 0118 E491              lpm R30,Z
+ 011A E5BB              out 0x15,R30
+ 011C                   .dbline 57
+ 011C           ; delay_ms(1);
+ 011C 01E0              ldi R16,1
+ 011E 10E0              ldi R17,0
+ 0120 6FDF              xcall _delay_ms
+ 0122                   .dbline -2
+ 0122           L22:
+ 0122 0E940000          xcall pop_gset1
+ 0126                   .dbline 0 ; func end
+ 0126 0895              ret
+ 0128                   .dbsym r p 20 pc
+ 0128                   .dbend
+ 0128                   .dbfunc e port_init _port_init fV
+                        .even
+ 0128           _port_init::
+ 0128                   .dbline -1
+ 0128                   .dbline 61
+ 0128           ; }
+ 0128           ; //*************************************
+ 0128           ; void port_init(void)
+ 0128           ; {                                                     
+ 0128                   .dbline 62
+ 0128           ;  PORTA = 0xFF;                        
+ 0128 8FEF              ldi R24,255
+ 012A 8BBB              out 0x1b,R24
+ 012C                   .dbline 63
+ 012C           ;  DDRA  = 0xFF;                        
+ 012C 8ABB              out 0x1a,R24
+ 012E                   .dbline 64
+ 012E           ;  PORTB = 0xFF;                        
+ 012E 88BB              out 0x18,R24
+ 0130                   .dbline 65
+ 0130           ;  DDRB  = 0xFF;                
+ 0130 87BB              out 0x17,R24
+ 0132                   .dbline 66
+ 0132           ;  PORTC = 0xFF;                        
+ 0132 85BB              out 0x15,R24
+ 0134                   .dbline 67
+ 0134           ;  DDRC  = 0xFF;        
+ 0134 84BB              out 0x14,R24
+ 0136                   .dbline 68
+ 0136           ;  PORTD = 0xFF;                        
+ 0136 82BB              out 0x12,R24
+ 0138                   .dbline 69
+ 0138           ;  DDRD  = 0xFF;                        
+ 0138 81BB              out 0x11,R24
+ 013A                   .dbline -2
+ 013A           L26:
+ 013A                   .dbline 0 ; func end
+ 013A 0895              ret
+ 013C                   .dbend
+ 013C                   .dbfunc e main _main fV
+                        .even
+ 013C           _main::
+ 013C                   .dbline -1
+ 013C                   .dbline 73
+ 013C           ; }                                                     
+ 013C           ; //*************************************
+ 013C           ; void main(void)                       
+ 013C           ; {
+ 013C                   .dbline 74
+ 013C           ; port_init();          
+ 013C F5DF              xcall _port_init
+ 013E                   .dbline 75
+ 013E           ; W_EEP(488,21);delay_ms(10);   
+ 013E 25E1              ldi R18,21
+ 0140 08EE              ldi R16,488
+ 0142 11E0              ldi R17,1
+ 0144 73DF              xcall _W_EEP
+ 0146                   .dbline 75
+ 0146 0AE0              ldi R16,10
+ 0148 10E0              ldi R17,0
+ 014A 5ADF              xcall _delay_ms
+ 014C                   .dbline 76
+ 014C           ; val=R_EEP(488);delay_ms(10);
+ 014C 08EE              ldi R16,488
+ 014E 11E0              ldi R17,1
+ 0150 75DF              xcall _R_EEP
+ 0152 00930400          sts _val,R16
+ 0156                   .dbline 76
+ 0156 0AE0              ldi R16,10
+ 0158 10E0              ldi R17,0
+ 015A 52DF              xcall _delay_ms
+ 015C                   .dbline 77
+ 015C           ; conv(val);                            
+ 015C 00910400          lds R16,_val
+ 0160 74DF              xcall _conv
+ 0162 03C0              xjmp L29
+ 0164           L28:
+ 0164                   .dbline 79
+ 0164                   .dbline 80
+ 0164 00E0              ldi R16,<_DispBuff
+ 0166 10E0              ldi R17,>_DispBuff
+ 0168 99DF              xcall _display
+ 016A                   .dbline 81
+ 016A           L29:
+ 016A                   .dbline 78
+ 016A FCCF              xjmp L28
+ 016C           X0:
+ 016C                   .dbline -2
+ 016C           L27:
+ 016C                   .dbline 0 ; func end
+ 016C 0895              ret
+ 016E                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac11-1\ac11-1.c
+ 0000           _DispBuff::
+ 0000                   .blkb 4
+ 0004                   .dbsym e DispBuff _DispBuff A[4:4]c
+ 0004           _val::
+ 0004                   .blkb 1
+ 0005                   .dbsym e val _val c

@@ -1,0 +1,104 @@
+XL
+H 2 areas 8 global symbols
+M ac7
+S push_gset2 Ref0000
+S mod16s Ref0000
+S div16s Ref0000
+S pop_gset2 Ref0000
+A text size B4 flags 0
+dbfile d:\MYDOCU~1\ac7-4\ac7-4.c
+dbfunc e delay_ms 0 fV
+dbsym r i 14 i
+dbsym r j 16 i
+dbsym r k 10 i
+dbline FFFFFFFF 4
+dbline 9 4
+dbline B 4
+dbline C A
+dbline D A
+dbline D 10
+dbline D 10
+dbline D 14
+dbline E 1C
+dbline B 1C
+dbline B 20
+dbline FFFFFFFE 26
+dbline 0 2A
+dbfunc e main 2C fV
+dbsym r i 16 c
+dbsym r counter 14 c
+dbline FFFFFFFF 2C
+dbline 12 2C
+dbline 13 2C
+dbline 14 2E
+dbline 15 32
+dbline 16 34
+dbline 17 38
+dbline 18 3A
+dbline 19 3C
+dbline 1B 40
+dbline 1C 40
+dbline 1D 44
+dbline 1D 44
+dbline 1D 48
+dbline 1D 4A
+dbline 1E 4A
+dbline 1F 4E
+dbline 1F 4E
+dbline 1F 54
+dbline 1F 56
+dbline 20 56
+dbline 21 5A
+dbline 22 5A
+dbline 23 74
+dbline 24 7C
+dbline 25 82
+dbline 26 9C
+dbline 27 A4
+dbline 28 AA
+dbline 20 AA
+dbline 20 AC
+dbline 29 B0
+dbline 1A B0
+dbline FFFFFFFE B2
+dbline 0 B2
+S _main Def002C
+S _delay_ms Def0000
+A lit size C flags 0
+dbfile d:\MYDOCU~1\ac7-4\ac7-4.c
+dbsym e SEG7 0 A[10:10]kc
+dbsym e ACT A A[2:2]kc
+S _ACT Def000A
+S _SEG7 Def0000
+T 00 00 3F 06 5B 4F 66 6D 7D 07 7F 6F FE FD
+R 00 00 01 00
+T 00 00 0E 94 00 00 44 27 55 27 0B C0 66 27 77 27
+R 00 00 00 00 12 04 00 00
+T 0E 00 02 C0 6F 5F 7F 4F 6A 33 E2 E0 7E 07 D0 F3
+R 00 00 00 00
+T 1C 00 4F 5F 5F 4F 40 17 51 07 90 F3 0E 94 00 00
+R 00 00 00 00 12 0E 03 00
+T 2A 00 08 95
+R 00 00 00 00
+T 2C 00 44 27 8F EF 8A BB 84 BB 22 24 21 BA 2B BA
+R 00 00 00 00
+T 3A 00 85 BB 82 BB 38 C0 84 99 03 C0 43 36 08 F4
+R 00 00 00 00
+T 48 00 43 95 85 99 04 C0 22 24 24 16 08 F4 4A 95
+R 00 00 00 00
+T 56 00 66 27 29 C0 2A E0 30 E0 04 2F 11 27 0E 94
+R 00 00 00 00
+T 64 00 00 00 F8 01 80 E0
+R 00 00 00 00 12 02 01 00 20 06 01 00 00 00
+T 6A 00 90 E0 E8 0F F9 1F E4 91 EB BB E0 E0
+R 00 00 00 00 40 02 01 00 00 00 20 0C 01 00 0A 00
+T 76 00 F0 E0 E4 91 E5 BB 01 E0 10 E0 BF DF 2A E0
+R 00 00 00 00 40 02 01 00 0A 00
+T 84 00 30 E0 04 2F 11 27 0E 94 00 00 F8 01 80 E0
+R 00 00 00 00 12 0A 02 00 20 0E 01 00 00 00
+T 92 00 90 E0 E8 0F F9 1F E4 91 EB BB E0 E0
+R 00 00 00 00 40 02 01 00 00 00 20 0C 01 00 0B 00
+T 9E 00 F0 E0 E4 91 E5 BB 01 E0 10 E0 AB DF 63 95
+R 00 00 00 00 40 02 01 00 0B 00
+T AC 00 64 36 A8 F2 C7 CF 08 95
+R 00 00 00 00

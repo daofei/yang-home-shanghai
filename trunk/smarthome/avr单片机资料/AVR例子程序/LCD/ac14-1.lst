@@ -1,0 +1,482 @@
+__start:
+__text_start:
+    003B E5CF      LDI	R28,0x5F
+    003C E0D4      LDI	R29,4
+    003D BFCD      OUT	0x3D,R28
+    003E BFDE      OUT	0x3E,R29
+    003F 51C0      SUBI	R28,0x10
+    0040 40D0      SBCI	R29,0
+    0041 EA0A      LDI	R16,0xAA
+    0042 8308      STD	Y+0,R16
+    0043 2400      CLR	R0
+    0044 E6E0      LDI	R30,0x60
+    0045 E0F0      LDI	R31,0
+    0046 E010      LDI	R17,0
+    0047 36E0      CPI	R30,0x60
+    0048 07F1      CPC	R31,R17
+    0049 F011      BEQ	0x004C
+    004A 9201      ST	R0,Z+
+    004B CFFB      RJMP	0x0047
+    004C 8300      STD	Z+0,R16
+    004D E7E6      LDI	R30,0x76
+    004E E0F0      LDI	R31,0
+    004F E6A0      LDI	R26,0x60
+    0050 E0B0      LDI	R27,0
+    0051 E010      LDI	R17,0
+    0052 37E6      CPI	R30,0x76
+    0053 07F1      CPC	R31,R17
+    0054 F021      BEQ	0x0059
+    0055 95C8      LPM
+    0056 9631      ADIW	R30,1
+    0057 920D      ST	R0,X+
+    0058 CFF9      RJMP	0x0052
+    0059 940E005C  CALL	_main
+_exit:
+    005B CFFF      RJMP	_exit
+_main:
+    005C 9722      SBIW	R28,2
+FILE: d:\MYDOCU~1\ac14-1\ac14-1.c
+(0001) #include <iom16v.h>		
+(0002) #include <macros.h>
+(0003) //-----------------------------------------------
+(0004) #define uchar unsigned char	
+(0005) #define uint unsigned int
+(0006) //-------------------引脚电平的宏定义---------
+(0007) #define LCM_RS_1 PORTB|=BIT(PB0)	  
+(0008) #define LCM_RS_0 PORTB&=~BIT(PB0) 
+(0009) #define LCM_RW_1 PORTB|=BIT(PB1)
+(0010) #define LCM_RW_0 PORTB&=~BIT(PB1) 
+(0011) #define LCM_EN_1 PORTB|=BIT(PB2)	  
+(0012) #define LCM_EN_0 PORTB&=~BIT(PB2)  
+(0013) //======================================
+(0014) #define DataPort PORTA		
+(0015) #define Busy 0x80		
+(0016) #define xtal 8   		
+(0017) //======================================
+(0018) const uchar str0[]={"-This is a LCD-!"};
+(0019) const uchar str1[]={"-Design by ZXH-!"};
+(0020) //========函数声明=========
+(0021) void Delay_1ms(void);
+(0022) void Delay_nms(uint n);
+(0023) void WaitForEnable(void);
+(0024) void LcdWriteData(uchar W);
+(0025) void LcdWriteCommand(uchar CMD,uchar Attribc);
+(0026) void InitLcd(void);
+(0027) void Display(uchar dd);
+(0028) void DisplayOneChar(uchar x,uchar y,uchar Wdata);
+(0029) void ePutstr(uchar x,uchar y,uchar const *ptr);
+(0030) //******************************************
+(0031) void main(void)				
+(0032) {
+(0033)     Delay_nms(400);			
+    005D E900      LDI	R16,0x90
+    005E E011      LDI	R17,1
+    005F D0E2      RCALL	_Delay_nms
+(0034) 	DDRA=0xff;PORTA=0x00;	
+    0060 EF8F      LDI	R24,0xFF
+    0061 BB8A      OUT	0x1A,R24
+    0062 2422      CLR	R2
+    0063 BA2B      OUT	0x1B,R2
+(0035) 	DDRB=0xff;PORTB=0x00;
+    0064 BB87      OUT	0x17,R24
+    0065 BA28      OUT	0x18,R2
+(0036) 	InitLcd();				
+    0066 D079      RCALL	_InitLcd
+    0067 C02A      RJMP	0x0092
+(0037) 	/********************************************/
+(0038) 		while(1)              
+(0039) 		{
+(0040) 		   LcdWriteCommand(0x01,1); 
+    0068 E021      LDI	R18,1
+    0069 E001      LDI	R16,1
+    006A D097      RCALL	_LcdWriteCommand
+(0041) 		   LcdWriteCommand(0x0c,1);	  
+    006B E021      LDI	R18,1
+    006C E00C      LDI	R16,0xC
+    006D D094      RCALL	_LcdWriteCommand
+(0042) 		   DisplayOneChar(0,1,0x41); 
+    006E E481      LDI	R24,0x41
+    006F 8388      STD	Y+0,R24
+    0070 E021      LDI	R18,1
+    0071 2700      CLR	R16
+    0072 D061      RCALL	_DisplayOneChar
+(0043) 		   ePutstr(0,0,str0); 
+    0073 E584      LDI	R24,0x54
+    0074 E090      LDI	R25,0
+    0075 8399      STD	Y+1,R25
+    0076 8388      STD	Y+0,R24
+    0077 2722      CLR	R18
+    0078 2700      CLR	R16
+    0079 D01B      RCALL	_ePutstr
+(0044) 		   Delay_nms(2000);	
+    007A ED00      LDI	R16,0xD0
+    007B E017      LDI	R17,7
+    007C D0C5      RCALL	_Delay_nms
+(0045) 		   LcdWriteCommand(0x01,1);  
+    007D E021      LDI	R18,1
+    007E E001      LDI	R16,1
+    007F D082      RCALL	_LcdWriteCommand
+(0046) 		   LcdWriteCommand(0x0c,1);  
+    0080 E021      LDI	R18,1
+    0081 E00C      LDI	R16,0xC
+    0082 D07F      RCALL	_LcdWriteCommand
+(0047) 		   DisplayOneChar(8,0,0x42);	
+    0083 E482      LDI	R24,0x42
+    0084 8388      STD	Y+0,R24
+    0085 2722      CLR	R18
+    0086 E008      LDI	R16,0x8
+    0087 D04C      RCALL	_DisplayOneChar
+(0048) 		   ePutstr(0,1,str1);  
+    0088 E685      LDI	R24,0x65
+    0089 E090      LDI	R25,0
+    008A 8399      STD	Y+1,R25
+    008B 8388      STD	Y+0,R24
+    008C E021      LDI	R18,1
+    008D 2700      CLR	R16
+    008E D006      RCALL	_ePutstr
+(0049) 		   Delay_nms(2000); 
+    008F ED00      LDI	R16,0xD0
+    0090 E017      LDI	R17,7
+    0091 D0B0      RCALL	_Delay_nms
+    0092 CFD5      RJMP	0x0068
+    0093 9622      ADIW	R28,2
+    0094 9508      RET
+_ePutstr:
+  l                    --> R20
+  i                    --> R22
+  ptr                  --> R10
+  y                    --> R12
+  x                    --> R14
+    0095 940E015A  CALL	push_gset5
+    0097 2EC2      MOV	R12,R18
+    0098 2EE0      MOV	R14,R16
+    0099 9721      SBIW	R28,1
+    009A 84AB      LDD	R10,Y+11
+    009B 84BC      LDD	R11,Y+12
+(0050) 	   }
+(0051) }		   
+(0052) //**********************显示指定座标的一串字符子函数**************
+(0053) void ePutstr(uchar x,uchar y,uchar const *ptr)
+(0054) {
+(0055) uchar i,l=0;
+    009C 2744      CLR	R20
+    009D C001      RJMP	0x009F
+(0056) 	while(ptr[l]>31){l++;}
+    009E 9543      INC	R20
+    009F 2FE4      MOV	R30,R20
+    00A0 27FF      CLR	R31
+    00A1 0DEA      ADD	R30,R10
+    00A2 1DFB      ADC	R31,R11
+    00A3 91E4      LPM	R30,0(Z)
+    00A4 E18F      LDI	R24,0x1F
+    00A5 178E      CP	R24,R30
+    00A6 F3B8      BCS	0x009E
+(0057) 	for(i=0;i<l;i++){
+    00A7 2766      CLR	R22
+    00A8 C014      RJMP	0x00BD
+(0058) 	DisplayOneChar(x++,y,ptr[i]);
+    00A9 2FE6      MOV	R30,R22
+    00AA 27FF      CLR	R31
+    00AB 0DEA      ADD	R30,R10
+    00AC 1DFB      ADC	R31,R11
+    00AD 91E4      LPM	R30,0(Z)
+    00AE 83E8      STD	Y+0,R30
+    00AF 2D2C      MOV	R18,R12
+    00B0 2C2E      MOV	R2,R14
+    00B1 2D82      MOV	R24,R2
+    00B2 5F8F      SUBI	R24,0xFF
+    00B3 2EE8      MOV	R14,R24
+    00B4 2D02      MOV	R16,R2
+    00B5 D01E      RCALL	_DisplayOneChar
+(0059) 	if(x==16){
+    00B6 2D8E      MOV	R24,R14
+    00B7 3180      CPI	R24,0x10
+    00B8 F419      BNE	0x00BC
+(0060) 		x=0;y^=1;
+    00B9 24EE      CLR	R14
+    00BA E081      LDI	R24,1
+    00BB 26C8      EOR	R12,R24
+    00BC 9563      INC	R22
+    00BD 1764      CP	R22,R20
+    00BE F350      BCS	0x00A9
+    00BF 9621      ADIW	R28,1
+    00C0 940E0157  CALL	pop_gset5
+    00C2 9508      RET
+_LocateXY:
+  temp                 --> R20
+  posy                 --> R22
+  posx                 --> R10
+    00C3 940E015E  CALL	push_gset3
+    00C5 2F62      MOV	R22,R18
+    00C6 2EA0      MOV	R10,R16
+(0061) 	}
+(0062)   }
+(0063) }
+(0064) //*******************显示光标定位子函数******************
+(0065) void LocateXY(char posx,char posy)
+(0066) {
+(0067) uchar temp;
+(0068) 	temp&=0x7f;
+    00C7 774F      ANDI	R20,0x7F
+(0069) 	temp=posx&0x0f;
+    00C8 2D4A      MOV	R20,R10
+    00C9 704F      ANDI	R20,0xF
+(0070) 	posy&=0x01;
+    00CA 7061      ANDI	R22,1
+(0071) 	if(posy)temp|=0x40;
+    00CB F009      BEQ	0x00CD
+    00CC 6440      ORI	R20,0x40
+(0072) 	temp|=0x80;
+    00CD 6840      ORI	R20,0x80
+(0073) 	LcdWriteCommand(temp,0);
+    00CE 2722      CLR	R18
+    00CF 2F04      MOV	R16,R20
+    00D0 D031      RCALL	_LcdWriteCommand
+    00D1 940E0154  CALL	pop_gset3
+    00D3 9508      RET
+_DisplayOneChar:
+  Wdata                --> Y+4
+  y                    --> R22
+  x                    --> R20
+    00D4 940E0160  CALL	push_gset2
+    00D6 2F62      MOV	R22,R18
+    00D7 2F40      MOV	R20,R16
+(0074) }
+(0075) //*******************显示指定座标的一个字符子函数*******************
+(0076) void DisplayOneChar(uchar x,uchar y,uchar Wdata)
+(0077) {
+(0078) LocateXY(x,y);
+    00D8 2F26      MOV	R18,R22
+    00D9 2F04      MOV	R16,R20
+    00DA DFE8      RCALL	_LocateXY
+(0079) LcdWriteData(Wdata);
+    00DB 810C      LDD	R16,Y+4
+    00DC D038      RCALL	_LcdWriteData
+    00DD 940E0151  CALL	pop_gset2
+    00DF 9508      RET
+(0080) }
+(0081) //*******************LCD初始化子函数*********************
+(0082) void InitLcd(void) 
+(0083) {
+(0084) LcdWriteCommand(0x38,0); 
+_InitLcd:
+    00E0 2722      CLR	R18
+    00E1 E308      LDI	R16,0x38
+    00E2 D01F      RCALL	_LcdWriteCommand
+(0085) Delay_nms(5);
+    00E3 E005      LDI	R16,5
+    00E4 E010      LDI	R17,0
+    00E5 D05C      RCALL	_Delay_nms
+(0086) LcdWriteCommand(0x38,0); 
+    00E6 2722      CLR	R18
+    00E7 E308      LDI	R16,0x38
+    00E8 D019      RCALL	_LcdWriteCommand
+(0087) Delay_nms(5);
+    00E9 E005      LDI	R16,5
+    00EA E010      LDI	R17,0
+    00EB D056      RCALL	_Delay_nms
+(0088) LcdWriteCommand(0x38,0); 
+    00EC 2722      CLR	R18
+    00ED E308      LDI	R16,0x38
+    00EE D013      RCALL	_LcdWriteCommand
+(0089) Delay_nms(5);
+    00EF E005      LDI	R16,5
+    00F0 E010      LDI	R17,0
+    00F1 D050      RCALL	_Delay_nms
+(0090) LcdWriteCommand(0x38,1); 
+    00F2 E021      LDI	R18,1
+    00F3 E308      LDI	R16,0x38
+    00F4 D00D      RCALL	_LcdWriteCommand
+(0091) LcdWriteCommand(0x08,1); 
+    00F5 E021      LDI	R18,1
+    00F6 E008      LDI	R16,0x8
+    00F7 D00A      RCALL	_LcdWriteCommand
+(0092) LcdWriteCommand(0x01,1);
+    00F8 E021      LDI	R18,1
+    00F9 E001      LDI	R16,1
+    00FA D007      RCALL	_LcdWriteCommand
+(0093) LcdWriteCommand(0x06,1); 
+    00FB E021      LDI	R18,1
+    00FC E006      LDI	R16,6
+    00FD D004      RCALL	_LcdWriteCommand
+(0094) LcdWriteCommand(0x0c,1); 
+    00FE E021      LDI	R18,1
+    00FF E00C      LDI	R16,0xC
+    0100 D001      RCALL	_LcdWriteCommand
+    0101 9508      RET
+_LcdWriteCommand:
+  Attribc              --> R22
+  CMD                  --> R20
+    0102 940E0160  CALL	push_gset2
+    0104 2F62      MOV	R22,R18
+    0105 2F40      MOV	R20,R16
+(0095) }
+(0096) //********************写命令到LCM子函数********************
+(0097) void LcdWriteCommand(uchar CMD,uchar Attribc)
+(0098) {
+(0099) if(Attribc)WaitForEnable();
+    0106 2366      TST	R22
+    0107 F009      BEQ	0x0109
+    0108 D01C      RCALL	_WaitForEnable
+(0100) LCM_RS_0;LCM_RW_0;_NOP();
+    0109 98C0      CBI	0x18,0
+    010A 98C1      CBI	0x18,1
+    010B 0000      NOP
+(0101) DataPort=CMD;_NOP();
+    010C BB4B      OUT	0x1B,R20
+    010D 0000      NOP
+(0102) LCM_EN_1;_NOP();_NOP();LCM_EN_0;
+    010E 9AC2      SBI	0x18,2
+    010F 0000      NOP
+    0110 0000      NOP
+    0111 98C2      CBI	0x18,2
+    0112 940E0151  CALL	pop_gset2
+    0114 9508      RET
+_LcdWriteData:
+  dataW                --> R20
+    0115 940E0162  CALL	push_gset1
+    0117 2F40      MOV	R20,R16
+(0103) }
+(0104) //*******************写数据到LCM子函数********************
+(0105) void LcdWriteData(uchar dataW)
+(0106) {
+(0107) WaitForEnable();
+    0118 D00C      RCALL	_WaitForEnable
+(0108) LCM_RS_1;LCM_RW_0;_NOP();
+    0119 9AC0      SBI	0x18,0
+    011A 98C1      CBI	0x18,1
+    011B 0000      NOP
+(0109) DataPort=dataW;_NOP();
+    011C BB4B      OUT	0x1B,R20
+    011D 0000      NOP
+(0110) LCM_EN_1;_NOP();_NOP();LCM_EN_0;
+    011E 9AC2      SBI	0x18,2
+    011F 0000      NOP
+    0120 0000      NOP
+    0121 98C2      CBI	0x18,2
+    0122 940E0165  CALL	pop_gset1
+    0124 9508      RET
+(0111) }
+(0112) //*******************检测LCD忙信号子函数*********************
+(0113) void WaitForEnable(void)
+(0114) {
+(0115) uchar val;
+(0116) DataPort=0xff;
+_WaitForEnable:
+  val                  --> R16
+    0125 EF8F      LDI	R24,0xFF
+    0126 BB8B      OUT	0x1B,R24
+(0117) LCM_RS_0;LCM_RW_1;_NOP();
+    0127 98C0      CBI	0x18,0
+    0128 9AC1      SBI	0x18,1
+    0129 0000      NOP
+(0118) LCM_EN_1;_NOP();_NOP();
+    012A 9AC2      SBI	0x18,2
+    012B 0000      NOP
+    012C 0000      NOP
+(0119) DDRA=0x00;
+    012D 2422      CLR	R2
+    012E BA2A      OUT	0x1A,R2
+(0120) val=PINA;
+    012F B309      IN	R16,0x19
+    0130 C001      RJMP	0x0132
+(0121) while(val&Busy)val=PINA;
+    0131 B309      IN	R16,0x19
+    0132 FD07      SBRC	R16,7
+    0133 CFFD      RJMP	0x0131
+(0122) LCM_EN_0;
+    0134 98C2      CBI	0x18,2
+(0123) DDRA=0xff;
+    0135 EF8F      LDI	R24,0xFF
+    0136 BB8A      OUT	0x1A,R24
+    0137 9508      RET
+(0124) }
+(0125) //****************************************
+(0126) void Delay_1ms(void)		//1mS延时子函数
+(0127) { uint i;
+(0128)  for(i=1;i<(uint)(xtal*143-2);i++)
+_Delay_1ms:
+  i                    --> R16
+    0138 E001      LDI	R16,1
+    0139 E010      LDI	R17,0
+    013A C002      RJMP	0x013D
+    013B 5F0F      SUBI	R16,0xFF
+    013C 4F1F      SBCI	R17,0xFF
+    013D 3706      CPI	R16,0x76
+    013E E0E4      LDI	R30,4
+    013F 071E      CPC	R17,R30
+    0140 F3D0      BCS	0x013B
+    0141 9508      RET
+_Delay_nms:
+  i                    --> R20
+  n                    --> R22
+    0142 940E0160  CALL	push_gset2
+    0144 01B8      MOVW	R22,R16
+(0129)     ;
+(0130) }
+(0131) //====================================
+(0132) void Delay_nms(uint n)		//n*1mS延时子函数
+(0133) {
+(0134)  uint i=0;
+    0145 2744      CLR	R20
+    0146 2755      CLR	R21
+    0147 C003      RJMP	0x014B
+(0135)    while(i<n)
+(0136)    {Delay_1ms();
+    0148 DFEF      RCALL	_Delay_1ms
+(0137)     i++;
+FILE: <library>
+    0149 5F4F      SUBI	R20,0xFF
+    014A 4F5F      SBCI	R21,0xFF
+    014B 1746      CP	R20,R22
+    014C 0757      CPC	R21,R23
+    014D F3D0      BCS	0x0148
+    014E 940E0151  CALL	pop_gset2
+    0150 9508      RET
+pop_gset2:
+    0151 E0E2      LDI	R30,2
+    0152 940C0166  JMP	pop
+pop_gset3:
+    0154 E0E4      LDI	R30,4
+    0155 940C0166  JMP	pop
+pop_gset5:
+    0157 27EE      CLR	R30
+    0158 940C0166  JMP	pop
+push_gset5:
+    015A 92FA      ST	R15,-Y
+    015B 92EA      ST	R14,-Y
+push_gset4:
+    015C 92DA      ST	R13,-Y
+    015D 92CA      ST	R12,-Y
+push_gset3:
+    015E 92BA      ST	R11,-Y
+    015F 92AA      ST	R10,-Y
+push_gset2:
+    0160 937A      ST	R23,-Y
+    0161 936A      ST	R22,-Y
+push_gset1:
+    0162 935A      ST	R21,-Y
+    0163 934A      ST	R20,-Y
+    0164 9508      RET
+pop_gset1:
+    0165 E0E1      LDI	R30,1
+pop:
+    0166 9149      LD	R20,Y+
+    0167 9159      LD	R21,Y+
+    0168 FDE0      SBRC	R30,0
+    0169 9508      RET
+    016A 9169      LD	R22,Y+
+    016B 9179      LD	R23,Y+
+    016C FDE1      SBRC	R30,1
+    016D 9508      RET
+    016E 90A9      LD	R10,Y+
+    016F 90B9      LD	R11,Y+
+    0170 FDE2      SBRC	R30,2
+    0171 9508      RET
+    0172 90C9      LD	R12,Y+
+    0173 90D9      LD	R13,Y+
+    0174 FDE3      SBRC	R30,3
+    0175 9508      RET
+    0176 90E9      LD	R14,Y+
+    0177 90F9      LD	R15,Y+
+    0178 9508      RET

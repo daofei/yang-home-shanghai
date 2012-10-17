@@ -1,0 +1,94 @@
+__start:
+__text_start:
+    002A E5CF      LDI	R28,0x5F
+    002B E0D4      LDI	R29,4
+    002C BFCD      OUT	0x3D,R28
+    002D BFDE      OUT	0x3E,R29
+    002E 51C0      SUBI	R28,0x10
+    002F 40D0      SBCI	R29,0
+    0030 EA0A      LDI	R16,0xAA
+    0031 8308      STD	Y+0,R16
+    0032 2400      CLR	R0
+    0033 E6E0      LDI	R30,0x60
+    0034 E0F0      LDI	R31,0
+    0035 E010      LDI	R17,0
+    0036 36E0      CPI	R30,0x60
+    0037 07F1      CPC	R31,R17
+    0038 F011      BEQ	0x003B
+    0039 9201      ST	R0,Z+
+    003A CFFB      RJMP	0x0036
+    003B 8300      STD	Z+0,R16
+    003C E5E4      LDI	R30,0x54
+    003D E0F0      LDI	R31,0
+    003E E6A0      LDI	R26,0x60
+    003F E0B0      LDI	R27,0
+    0040 E010      LDI	R17,0
+    0041 35E4      CPI	R30,0x54
+    0042 07F1      CPC	R31,R17
+    0043 F021      BEQ	0x0048
+    0044 95C8      LPM
+    0045 9631      ADIW	R30,1
+    0046 920D      ST	R0,X+
+    0047 CFF9      RJMP	0x0041
+    0048 940E005E  CALL	_main
+_exit:
+    004A CFFF      RJMP	_exit
+FILE: C:\DOCUME~1\Administrator\MYDOCU~1\ac3-1\ac3-1.c
+(0001) 
+(0002) #include<iom16v.h>
+(0003) void delay(void)
+(0004) {
+(0005) unsigned int i,j;
+(0006) for(i=0;i<1000;i++)
+_delay:
+  i                    --> R16
+  j                    --> R18
+    004B 2700      CLR	R16
+    004C 2711      CLR	R17
+    004D C00B      RJMP	0x0059
+(0007) {
+(0008)    for(j=0;j<500;j++)
+    004E 2722      CLR	R18
+    004F 2733      CLR	R19
+    0050 C002      RJMP	0x0053
+    0051 5F2F      SUBI	R18,0xFF
+    0052 4F3F      SBCI	R19,0xFF
+    0053 3F24      CPI	R18,0xF4
+    0054 E0E1      LDI	R30,1
+    0055 073E      CPC	R19,R30
+    0056 F3D0      BCS	0x0051
+    0057 5F0F      SUBI	R16,0xFF
+    0058 4F1F      SBCI	R17,0xFF
+    0059 3E08      CPI	R16,0xE8
+    005A E0E3      LDI	R30,3
+    005B 071E      CPC	R17,R30
+    005C F388      BCS	0x004E
+    005D 9508      RET
+(0009)    ;
+(0010) }
+(0011) }
+(0012) //=============================
+(0013) void main(void)
+(0014) {
+(0015) DDRB=0xff;
+_main:
+    005E EF8F      LDI	R24,0xFF
+    005F BB87      OUT	0x17,R24
+(0016) PORTB=0xff;
+    0060 BB88      OUT	0x18,R24
+    0061 C006      RJMP	0x0068
+(0017) while(1)
+(0018)   {
+(0019)   PORTB=0x00;
+    0062 2422      CLR	R2
+    0063 BA28      OUT	0x18,R2
+(0020)   delay();
+    0064 DFE6      RCALL	_delay
+(0021)   PORTB=0xff;
+    0065 EF8F      LDI	R24,0xFF
+    0066 BB88      OUT	0x18,R24
+(0022)   delay();
+FILE: <library>
+    0067 DFE3      RCALL	_delay
+    0068 CFF9      RJMP	0x0062
+    0069 9508      RET

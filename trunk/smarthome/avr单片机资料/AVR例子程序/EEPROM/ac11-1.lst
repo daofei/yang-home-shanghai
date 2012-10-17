@@ -1,0 +1,427 @@
+__text_start:
+__start:
+    0031 E5CF      LDI	R28,0x5F
+    0032 E0D4      LDI	R29,4
+    0033 BFCD      OUT	0x3D,R28
+    0034 BFDE      OUT	0x3E,R29
+    0035 51C0      SUBI	R28,0x10
+    0036 40D0      SBCI	R29,0
+    0037 EA0A      LDI	R16,0xAA
+    0038 8308      STD	Y+0,R16
+    0039 2400      CLR	R0
+    003A E6E0      LDI	R30,0x60
+    003B E0F0      LDI	R31,0
+    003C E010      LDI	R17,0
+    003D 36E5      CPI	R30,0x65
+    003E 07F1      CPC	R31,R17
+    003F F011      BEQ	0x0042
+    0040 9201      ST	R0,Z+
+    0041 CFFB      RJMP	0x003D
+    0042 8300      STD	Z+0,R16
+    0043 E6E2      LDI	R30,0x62
+    0044 E0F0      LDI	R31,0
+    0045 E6A0      LDI	R26,0x60
+    0046 E0B0      LDI	R27,0
+    0047 E010      LDI	R17,0
+    0048 36E2      CPI	R30,0x62
+    0049 07F1      CPC	R31,R17
+    004A F021      BEQ	0x004F
+    004B 95C8      LPM
+    004C 9631      ADIW	R30,1
+    004D 920D      ST	R0,X+
+    004E CFF9      RJMP	0x0048
+    004F 940E00F0  CALL	_main
+_exit:
+    0051 CFFF      RJMP	_exit
+_delay_ms:
+  i                    --> R20
+  j                    --> R22
+  k                    --> R16
+    0052 940E0164  CALL	push_gset2
+FILE: d:\MYDOCU~1\ac11-1\ac11-1.c
+(0001) #include <iom16v.h>			
+(0002) #define uchar unsigned char	
+(0003) #define uint  unsigned int	
+(0004) uchar const SEG7[10]={0x3f,0x06,0x5b, 
+(0005) 0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+(0006) uchar const ACT[4]={0xfe,0xfd,0xfb,0xf7};
+(0007) uchar val,DispBuff[4];		
+(0008) //*************************************
+(0009) void delay_ms(uint k) 	
+(0010) {
+(0011) uint i,j;			
+(0012)     for(i=0;i<k;i++)
+    0054 2744      CLR	R20
+    0055 2755      CLR	R21
+    0056 C00B      RJMP	0x0062
+(0013)     {
+(0014)        for(j=0;j<1140;j++)
+    0057 2766      CLR	R22
+    0058 2777      CLR	R23
+    0059 C002      RJMP	0x005C
+    005A 5F6F      SUBI	R22,0xFF
+    005B 4F7F      SBCI	R23,0xFF
+    005C 3764      CPI	R22,0x74
+    005D E0E4      LDI	R30,4
+    005E 077E      CPC	R23,R30
+    005F F3D0      BCS	0x005A
+    0060 5F4F      SUBI	R20,0xFF
+    0061 4F5F      SBCI	R21,0xFF
+    0062 1740      CP	R20,R16
+    0063 0751      CPC	R21,R17
+    0064 F390      BCS	0x0057
+    0065 940E015B  CALL	pop_gset2
+    0067 9508      RET
+(0015)        ;
+(0016)     }
+(0017) }
+(0018) //***************写EEPROM子函数*****************
+(0019) void W_EEP(uint add,uchar dat) 
+(0020) {
+(0021) while(EECR&(1<<EEWE));	
+_W_EEP:
+  dat                  --> R18
+  add                  --> R16
+    0068 99E1      SBIC	0x1C,1
+    0069 CFFE      RJMP	_W_EEP
+(0022) EEAR=add;				
+    006A BB1F      OUT	0x1F,R17
+    006B BB0E      OUT	0x1E,R16
+(0023) EEDR=dat;				
+    006C BB2D      OUT	0x1D,R18
+(0024) EECR|=(1<<EEMWE);
+    006D 9AE2      SBI	0x1C,2
+(0025) EECR|=(1<<EEWE);	
+    006E 9AE1      SBI	0x1C,1
+    006F 9508      RET
+(0026) }
+(0027) //****************读EEPROM子函数*******************
+(0028) uchar R_EEP(uint add)	
+(0029) {
+(0030) while(EECR&(1<<EEWE));
+_R_EEP:
+  add                  --> R16
+    0070 99E1      SBIC	0x1C,1
+    0071 CFFE      RJMP	_R_EEP
+(0031) EEAR=add;				
+    0072 BB1F      OUT	0x1F,R17
+    0073 BB0E      OUT	0x1E,R16
+(0032) EECR|=(1<<EERE);		
+    0074 9AE0      SBI	0x1C,0
+(0033) return EEDR;		
+    0075 B30D      IN	R16,0x1D
+    0076 9508      RET
+_conv:
+  i                    --> R20
+    0077 940E0166  CALL	push_gset1
+    0079 2F40      MOV	R20,R16
+(0034) }
+(0035) //****************数据转换子函数*********************
+(0036) void conv(uchar i)	
+(0037) {
+(0038) DispBuff[3]=i/1000;
+    007A EE28      LDI	R18,0xE8
+    007B E033      LDI	R19,3
+    007C 2F04      MOV	R16,R20
+    007D 2711      CLR	R17
+    007E 940E010D  CALL	div16s
+    0080 93000063  STS	DispBuff+3,R16
+(0039) DispBuff[2]=(i%1000)/100;
+    0082 EE28      LDI	R18,0xE8
+    0083 E033      LDI	R19,3
+    0084 2F04      MOV	R16,R20
+    0085 2711      CLR	R17
+    0086 940E0109  CALL	mod16s
+    0088 E624      LDI	R18,0x64
+    0089 E030      LDI	R19,0
+    008A 940E010D  CALL	div16s
+    008C 93000062  STS	DispBuff+2,R16
+(0040) DispBuff[1]=(i%100)/10;
+    008E E614      LDI	R17,0x64
+    008F 2F04      MOV	R16,R20
+    0090 940E0143  CALL	mod8u
+    0092 E01A      LDI	R17,0xA
+    0093 940E0145  CALL	div8u
+    0095 93000061  STS	DispBuff+1,R16
+(0041) DispBuff[0]=i%10;
+    0097 E01A      LDI	R17,0xA
+    0098 2F04      MOV	R16,R20
+    0099 940E0143  CALL	mod8u
+    009B 93000060  STS	DispBuff,R16
+    009D 940E0169  CALL	pop_gset1
+    009F 9508      RET
+_display:
+  p                    --> R20
+    00A0 940E0166  CALL	push_gset1
+    00A2 01A8      MOVW	R20,R16
+(0042) }
+(0043) //*************************************
+(0044) void display(uchar p[4]) 
+(0045) {
+(0046) PORTA=SEG7[p[0]];
+    00A3 E584      LDI	R24,0x54
+    00A4 E090      LDI	R25,0
+    00A5 01FA      MOVW	R30,R20
+    00A6 81E0      LDD	R30,Z+0
+    00A7 27FF      CLR	R31
+    00A8 0FE8      ADD	R30,R24
+    00A9 1FF9      ADC	R31,R25
+    00AA 91E4      LPM	R30,0(Z)
+    00AB BBEB      OUT	0x1B,R30
+(0047) PORTC=ACT[0];
+    00AC E5EE      LDI	R30,0x5E
+    00AD E0F0      LDI	R31,0
+    00AE 91E4      LPM	R30,0(Z)
+    00AF BBE5      OUT	0x15,R30
+(0048) delay_ms(1);
+    00B0 E001      LDI	R16,1
+    00B1 E010      LDI	R17,0
+    00B2 DF9F      RCALL	_delay_ms
+(0049) PORTA=SEG7[p[1]];
+    00B3 E584      LDI	R24,0x54
+    00B4 E090      LDI	R25,0
+    00B5 01FA      MOVW	R30,R20
+    00B6 81E1      LDD	R30,Z+1
+    00B7 27FF      CLR	R31
+    00B8 0FE8      ADD	R30,R24
+    00B9 1FF9      ADC	R31,R25
+    00BA 91E4      LPM	R30,0(Z)
+    00BB BBEB      OUT	0x1B,R30
+(0050) PORTC=ACT[1];
+    00BC E5EF      LDI	R30,0x5F
+    00BD E0F0      LDI	R31,0
+    00BE 91E4      LPM	R30,0(Z)
+    00BF BBE5      OUT	0x15,R30
+(0051) delay_ms(1);
+    00C0 E001      LDI	R16,1
+    00C1 E010      LDI	R17,0
+    00C2 DF8F      RCALL	_delay_ms
+(0052) PORTA=SEG7[p[2]];
+    00C3 E584      LDI	R24,0x54
+    00C4 E090      LDI	R25,0
+    00C5 01FA      MOVW	R30,R20
+    00C6 81E2      LDD	R30,Z+2
+    00C7 27FF      CLR	R31
+    00C8 0FE8      ADD	R30,R24
+    00C9 1FF9      ADC	R31,R25
+    00CA 91E4      LPM	R30,0(Z)
+    00CB BBEB      OUT	0x1B,R30
+(0053) PORTC=ACT[2];
+    00CC E6E0      LDI	R30,0x60
+    00CD E0F0      LDI	R31,0
+    00CE 91E4      LPM	R30,0(Z)
+    00CF BBE5      OUT	0x15,R30
+(0054) delay_ms(1);
+    00D0 E001      LDI	R16,1
+    00D1 E010      LDI	R17,0
+    00D2 DF7F      RCALL	_delay_ms
+(0055) PORTA=SEG7[p[3]];
+    00D3 E584      LDI	R24,0x54
+    00D4 E090      LDI	R25,0
+    00D5 01FA      MOVW	R30,R20
+    00D6 81E3      LDD	R30,Z+3
+    00D7 27FF      CLR	R31
+    00D8 0FE8      ADD	R30,R24
+    00D9 1FF9      ADC	R31,R25
+    00DA 91E4      LPM	R30,0(Z)
+    00DB BBEB      OUT	0x1B,R30
+(0056) PORTC=ACT[3];
+    00DC E6E1      LDI	R30,0x61
+    00DD E0F0      LDI	R31,0
+    00DE 91E4      LPM	R30,0(Z)
+    00DF BBE5      OUT	0x15,R30
+(0057) delay_ms(1);
+    00E0 E001      LDI	R16,1
+    00E1 E010      LDI	R17,0
+    00E2 DF6F      RCALL	_delay_ms
+    00E3 940E0169  CALL	pop_gset1
+    00E5 9508      RET
+(0058) }
+(0059) //*************************************
+(0060) void port_init(void)
+(0061) {							
+(0062)  PORTA = 0xFF;			
+_port_init:
+    00E6 EF8F      LDI	R24,0xFF
+    00E7 BB8B      OUT	0x1B,R24
+(0063)  DDRA  = 0xFF;			
+    00E8 BB8A      OUT	0x1A,R24
+(0064)  PORTB = 0xFF;			
+    00E9 BB88      OUT	0x18,R24
+(0065)  DDRB  = 0xFF;		
+    00EA BB87      OUT	0x17,R24
+(0066)  PORTC = 0xFF; 			
+    00EB BB85      OUT	0x15,R24
+(0067)  DDRC  = 0xFF;	
+    00EC BB84      OUT	0x14,R24
+(0068)  PORTD = 0xFF;			
+    00ED BB82      OUT	0x12,R24
+(0069)  DDRD  = 0xFF;			
+    00EE BB81      OUT	0x11,R24
+    00EF 9508      RET
+(0070) }							
+(0071) //*************************************
+(0072) void main(void)			
+(0073) {
+(0074) port_init();		
+_main:
+    00F0 DFF5      RCALL	_port_init
+(0075) W_EEP(488,21);delay_ms(10);	
+    00F1 E125      LDI	R18,0x15
+    00F2 EE08      LDI	R16,0xE8
+    00F3 E011      LDI	R17,1
+    00F4 DF73      RCALL	_W_EEP
+    00F5 E00A      LDI	R16,0xA
+    00F6 E010      LDI	R17,0
+    00F7 DF5A      RCALL	_delay_ms
+(0076) val=R_EEP(488);delay_ms(10);
+    00F8 EE08      LDI	R16,0xE8
+    00F9 E011      LDI	R17,1
+    00FA DF75      RCALL	_R_EEP
+    00FB 93000064  STS	val,R16
+    00FD E00A      LDI	R16,0xA
+    00FE E010      LDI	R17,0
+    00FF DF52      RCALL	_delay_ms
+(0077) conv(val);				
+    0100 91000064  LDS	R16,val
+    0102 DF74      RCALL	_conv
+    0103 C003      RJMP	0x0107
+(0078) while(1)	
+(0079) {
+(0080) display(DispBuff);	
+FILE: <library>
+    0104 E600      LDI	R16,0x60
+    0105 E010      LDI	R17,0
+    0106 DF99      RCALL	_display
+    0107 CFFC      RJMP	0x0104
+    0108 9508      RET
+mod16s:
+    0109 9468      BSET	6
+    010A 92DA      ST	R13,-Y
+    010B 2ED1      MOV	R13,R17
+    010C C004      RJMP	0x0111
+div16s:
+    010D 94E8      BCLR	6
+    010E 92DA      ST	R13,-Y
+    010F 2ED1      MOV	R13,R17
+    0110 26D3      EOR	R13,R19
+    0111 FF17      SBRS	R17,7
+    0112 C004      RJMP	0x0117
+    0113 9510      COM	R17
+    0114 9500      COM	R16
+    0115 5F0F      SUBI	R16,0xFF
+    0116 4F1F      SBCI	R17,0xFF
+    0117 FF37      SBRS	R19,7
+    0118 C004      RJMP	0x011D
+    0119 9530      COM	R19
+    011A 9520      COM	R18
+    011B 5F2F      SUBI	R18,0xFF
+    011C 4F3F      SBCI	R19,0xFF
+    011D 940E012A  CALL	xdiv16u
+    011F FED7      SBRS	R13,7
+    0120 C004      RJMP	0x0125
+    0121 9510      COM	R17
+    0122 9500      COM	R16
+    0123 5F0F      SUBI	R16,0xFF
+    0124 4F1F      SBCI	R17,0xFF
+    0125 90D9      LD	R13,Y+
+    0126 9508      RET
+mod16u:
+    0127 9468      BSET	6
+    0128 C001      RJMP	xdiv16u
+div16u:
+    0129 94E8      BCLR	6
+xdiv16u:
+    012A 92EA      ST	R14,-Y
+    012B 92FA      ST	R15,-Y
+    012C 938A      ST	R24,-Y
+    012D 24EE      CLR	R14
+    012E 24FF      CLR	R15
+    012F E180      LDI	R24,0x10
+    0130 0F00      LSL	R16
+    0131 1F11      ROL	R17
+    0132 1CEE      ROL	R14
+    0133 1CFF      ROL	R15
+    0134 16E2      CP	R14,R18
+    0135 06F3      CPC	R15,R19
+    0136 F018      BCS	0x013A
+    0137 1AE2      SUB	R14,R18
+    0138 0AF3      SBC	R15,R19
+    0139 9503      INC	R16
+    013A 958A      DEC	R24
+    013B F7A1      BNE	0x0130
+    013C F416      BRTC	0x013F
+    013D 2D0E      MOV	R16,R14
+    013E 2D1F      MOV	R17,R15
+    013F 9189      LD	R24,Y+
+    0140 90F9      LD	R15,Y+
+    0141 90E9      LD	R14,Y+
+    0142 9508      RET
+mod8u:
+    0143 9468      BSET	6
+    0144 C001      RJMP	xdiv8u
+div8u:
+    0145 94E8      BCLR	6
+xdiv8u:
+    0146 932A      ST	R18,-Y
+    0147 92FA      ST	R15,-Y
+    0148 92EA      ST	R14,-Y
+    0149 24FF      CLR	R15
+    014A 24EE      CLR	R14
+    014B E120      LDI	R18,0x10
+    014C 0F00      LSL	R16
+    014D 1CFF      ROL	R15
+    014E 1CEE      ROL	R14
+    014F 16E1      CP	R14,R17
+    0150 F010      BCS	0x0153
+    0151 1AE1      SUB	R14,R17
+    0152 9503      INC	R16
+    0153 952A      DEC	R18
+    0154 F7B9      BNE	0x014C
+    0155 F40E      BRTC	0x0157
+    0156 2D0E      MOV	R16,R14
+    0157 90E9      LD	R14,Y+
+    0158 90F9      LD	R15,Y+
+    0159 9129      LD	R18,Y+
+    015A 9508      RET
+pop_gset2:
+    015B E0E2      LDI	R30,2
+    015C 940C016A  JMP	pop
+push_gset5:
+    015E 92FA      ST	R15,-Y
+    015F 92EA      ST	R14,-Y
+push_gset4:
+    0160 92DA      ST	R13,-Y
+    0161 92CA      ST	R12,-Y
+push_gset3:
+    0162 92BA      ST	R11,-Y
+    0163 92AA      ST	R10,-Y
+push_gset2:
+    0164 937A      ST	R23,-Y
+    0165 936A      ST	R22,-Y
+push_gset1:
+    0166 935A      ST	R21,-Y
+    0167 934A      ST	R20,-Y
+    0168 9508      RET
+pop_gset1:
+    0169 E0E1      LDI	R30,1
+pop:
+    016A 9149      LD	R20,Y+
+    016B 9159      LD	R21,Y+
+    016C FDE0      SBRC	R30,0
+    016D 9508      RET
+    016E 9169      LD	R22,Y+
+    016F 9179      LD	R23,Y+
+    0170 FDE1      SBRC	R30,1
+    0171 9508      RET
+    0172 90A9      LD	R10,Y+
+    0173 90B9      LD	R11,Y+
+    0174 FDE2      SBRC	R30,2
+    0175 9508      RET
+    0176 90C9      LD	R12,Y+
+    0177 90D9      LD	R13,Y+
+    0178 FDE3      SBRC	R30,3
+    0179 9508      RET
+    017A 90E9      LD	R14,Y+
+    017B 90F9      LD	R15,Y+
+    017C 9508      RET

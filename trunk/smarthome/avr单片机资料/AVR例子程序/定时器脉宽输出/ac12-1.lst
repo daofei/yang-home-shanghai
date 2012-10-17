@@ -1,0 +1,165 @@
+__start:
+__text_start:
+    002A E5CF      LDI	R28,0x5F
+    002B E0D4      LDI	R29,4
+    002C BFCD      OUT	0x3D,R28
+    002D BFDE      OUT	0x3E,R29
+    002E 51C0      SUBI	R28,0x10
+    002F 40D0      SBCI	R29,0
+    0030 EA0A      LDI	R16,0xAA
+    0031 8308      STD	Y+0,R16
+    0032 2400      CLR	R0
+    0033 E6E0      LDI	R30,0x60
+    0034 E0F0      LDI	R31,0
+    0035 E010      LDI	R17,0
+    0036 36E0      CPI	R30,0x60
+    0037 07F1      CPC	R31,R17
+    0038 F011      BEQ	0x003B
+    0039 9201      ST	R0,Z+
+    003A CFFB      RJMP	0x0036
+    003B 8300      STD	Z+0,R16
+    003C E5E4      LDI	R30,0x54
+    003D E0F0      LDI	R31,0
+    003E E6A0      LDI	R26,0x60
+    003F E0B0      LDI	R27,0
+    0040 E010      LDI	R17,0
+    0041 35E4      CPI	R30,0x54
+    0042 07F1      CPC	R31,R17
+    0043 F021      BEQ	0x0048
+    0044 95C8      LPM
+    0045 9631      ADIW	R30,1
+    0046 920D      ST	R0,X+
+    0047 CFF9      RJMP	0x0041
+    0048 940E006B  CALL	_main
+_exit:
+    004A CFFF      RJMP	_exit
+FILE: d:\MYDOCU~1\ac12-1\ac12-1.c
+(0001) #include<iom16v.h>			
+(0002) #define uchar unsigned char 
+(0003) #define uint unsigned int
+(0004) //=============================================
+(0005) #define xtal 8   			
+(0006) void delay_1ms(void)		
+(0007) { uint i;
+(0008)  for(i=1;i<(uint)(xtal*143-2);i++)
+_delay_1ms:
+  i                    --> R16
+    004B E001      LDI	R16,1
+    004C E010      LDI	R17,0
+    004D C002      RJMP	0x0050
+    004E 5F0F      SUBI	R16,0xFF
+    004F 4F1F      SBCI	R17,0xFF
+    0050 3706      CPI	R16,0x76
+    0051 E0E4      LDI	R30,4
+    0052 071E      CPC	R17,R30
+    0053 F3D0      BCS	0x004E
+    0054 9508      RET
+_delay_ms:
+  i                    --> R20
+  n                    --> R22
+    0055 940E0082  CALL	push_gset2
+    0057 01B8      MOVW	R22,R16
+(0009)     ;
+(0010) }
+(0011) //=============================================
+(0012) void delay_ms(uint n)	
+(0013) {
+(0014)  uint i=0;
+    0058 2744      CLR	R20
+    0059 2755      CLR	R21
+    005A C003      RJMP	0x005E
+(0015)    while(i<n)
+(0016)    {delay_1ms();
+    005B DFEF      RCALL	_delay_1ms
+(0017)     i++;
+    005C 5F4F      SUBI	R20,0xFF
+    005D 4F5F      SBCI	R21,0xFF
+    005E 1746      CP	R20,R22
+    005F 0757      CPC	R21,R23
+    0060 F3D0      BCS	0x005B
+    0061 940E0079  CALL	pop_gset2
+    0063 9508      RET
+(0018)    }
+(0019) }
+(0020) //================================================
+(0021) void init_IO(void)      
+(0022) {
+(0023)  DDRD=0xff;		
+_init_IO:
+    0064 EF8F      LDI	R24,0xFF
+    0065 BB81      OUT	0x11,R24
+(0024)  PORTD=0x00;	
+    0066 2422      CLR	R2
+    0067 BA22      OUT	0x12,R2
+(0025)  TCCR2=0x71;	
+    0068 E781      LDI	R24,0x71
+    0069 BD85      OUT	0x25,R24
+    006A 9508      RET
+(0026) }
+(0027) /******************Ö÷º¯Êý******************/
+(0028) void main(void)	
+(0029) {	uchar wide;	
+(0030) init_IO();		
+_main:
+  wide                 --> R20
+    006B DFF8      RCALL	_init_IO
+    006C C00A      RJMP	0x0077
+(0031) 	while(1)	
+(0032)     {	
+(0033) 	delay_ms(20);	
+    006D E104      LDI	R16,0x14
+    006E E010      LDI	R17,0
+    006F DFE5      RCALL	_delay_ms
+(0034) 	if(++wide==255)wide=0;
+    0070 2F84      MOV	R24,R20
+    0071 5F8F      SUBI	R24,0xFF
+    0072 2F48      MOV	R20,R24
+    0073 3F4F      CPI	R20,0xFF
+    0074 F409      BNE	0x0076
+    0075 2744      CLR	R20
+(0035) 	OCR2=wide;	
+FILE: <library>
+    0076 BD43      OUT	0x23,R20
+    0077 CFF5      RJMP	0x006D
+    0078 9508      RET
+pop_gset2:
+    0079 E0E2      LDI	R30,2
+    007A 940C0088  JMP	pop
+push_gset5:
+    007C 92FA      ST	R15,-Y
+    007D 92EA      ST	R14,-Y
+push_gset4:
+    007E 92DA      ST	R13,-Y
+    007F 92CA      ST	R12,-Y
+push_gset3:
+    0080 92BA      ST	R11,-Y
+    0081 92AA      ST	R10,-Y
+push_gset2:
+    0082 937A      ST	R23,-Y
+    0083 936A      ST	R22,-Y
+push_gset1:
+    0084 935A      ST	R21,-Y
+    0085 934A      ST	R20,-Y
+    0086 9508      RET
+pop_gset1:
+    0087 E0E1      LDI	R30,1
+pop:
+    0088 9149      LD	R20,Y+
+    0089 9159      LD	R21,Y+
+    008A FDE0      SBRC	R30,0
+    008B 9508      RET
+    008C 9169      LD	R22,Y+
+    008D 9179      LD	R23,Y+
+    008E FDE1      SBRC	R30,1
+    008F 9508      RET
+    0090 90A9      LD	R10,Y+
+    0091 90B9      LD	R11,Y+
+    0092 FDE2      SBRC	R30,2
+    0093 9508      RET
+    0094 90C9      LD	R12,Y+
+    0095 90D9      LD	R13,Y+
+    0096 FDE3      SBRC	R30,3
+    0097 9508      RET
+    0098 90E9      LD	R14,Y+
+    0099 90F9      LD	R15,Y+
+    009A 9508      RET

@@ -1,0 +1,624 @@
+                        .module ac14-1.c
+                        .area lit(rom, con, rel)
+ 0000           _str0::
+ 0000 2D546869732069732061204C43442D21  .byte 45,'T,'h,'i,'s,32,'i,'s,32,'a,32,'L,'C,'D,45,33
+ 0010 00                .byte 0
+ 0011                   .dbfile d:\MYDOCU~1\ac14-1\ac14-1.c
+ 0011                   .dbsym e str0 _str0 A[17:17]kc
+ 0011           _str1::
+ 0011 2D44657369676E206279205A58482D21  .byte 45,'D,'e,'s,'i,'g,'n,32,'b,'y,32,'Z,'X,'H,45,33
+ 0021 00                .byte 0
+ 0022                   .dbsym e str1 _str1 A[17:17]kc
+                        .area text(rom, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac14-1\ac14-1.c
+ 0000                   .dbfunc e main _main fV
+                        .even
+ 0000           _main::
+ 0000 2297              sbiw R28,2
+ 0002                   .dbline -1
+ 0002                   .dbline 32
+ 0002           ; #include <iom16v.h>           
+ 0002           ; #include <macros.h>
+ 0002           ; //-----------------------------------------------
+ 0002           ; #define uchar unsigned char   
+ 0002           ; #define uint unsigned int
+ 0002           ; //-------------------引脚电平的宏定义---------
+ 0002           ; #define LCM_RS_1 PORTB|=BIT(PB0)        
+ 0002           ; #define LCM_RS_0 PORTB&=~BIT(PB0) 
+ 0002           ; #define LCM_RW_1 PORTB|=BIT(PB1)
+ 0002           ; #define LCM_RW_0 PORTB&=~BIT(PB1) 
+ 0002           ; #define LCM_EN_1 PORTB|=BIT(PB2)        
+ 0002           ; #define LCM_EN_0 PORTB&=~BIT(PB2)  
+ 0002           ; //======================================
+ 0002           ; #define DataPort PORTA                
+ 0002           ; #define Busy 0x80             
+ 0002           ; #define xtal 8                
+ 0002           ; //======================================
+ 0002           ; const uchar str0[]={"-This is a LCD-!"};
+ 0002           ; const uchar str1[]={"-Design by ZXH-!"};
+ 0002           ; //========函数声明=========
+ 0002           ; void Delay_1ms(void);
+ 0002           ; void Delay_nms(uint n);
+ 0002           ; void WaitForEnable(void);
+ 0002           ; void LcdWriteData(uchar W);
+ 0002           ; void LcdWriteCommand(uchar CMD,uchar Attribc);
+ 0002           ; void InitLcd(void);
+ 0002           ; void Display(uchar dd);
+ 0002           ; void DisplayOneChar(uchar x,uchar y,uchar Wdata);
+ 0002           ; void ePutstr(uchar x,uchar y,uchar const *ptr);
+ 0002           ; //******************************************
+ 0002           ; void main(void)                               
+ 0002           ; {
+ 0002                   .dbline 33
+ 0002           ;     Delay_nms(400);                   
+ 0002 00E9              ldi R16,400
+ 0004 11E0              ldi R17,1
+ 0006 E2D0              xcall _Delay_nms
+ 0008                   .dbline 34
+ 0008           ;       DDRA=0xff;PORTA=0x00;   
+ 0008 8FEF              ldi R24,255
+ 000A 8ABB              out 0x1a,R24
+ 000C                   .dbline 34
+ 000C 2224              clr R2
+ 000E 2BBA              out 0x1b,R2
+ 0010                   .dbline 35
+ 0010           ;       DDRB=0xff;PORTB=0x00;
+ 0010 87BB              out 0x17,R24
+ 0012                   .dbline 35
+ 0012 28BA              out 0x18,R2
+ 0014                   .dbline 36
+ 0014           ;       InitLcd();                              
+ 0014 79D0              xcall _InitLcd
+ 0016 2AC0              xjmp L3
+ 0018           L2:
+ 0018                   .dbline 39
+ 0018                   .dbline 40
+ 0018 21E0              ldi R18,1
+ 001A 01E0              ldi R16,1
+ 001C 97D0              xcall _LcdWriteCommand
+ 001E                   .dbline 41
+ 001E 21E0              ldi R18,1
+ 0020 0CE0              ldi R16,12
+ 0022 94D0              xcall _LcdWriteCommand
+ 0024                   .dbline 42
+ 0024 81E4              ldi R24,65
+ 0026 8883              std y+0,R24
+ 0028 21E0              ldi R18,1
+ 002A 0027              clr R16
+ 002C 61D0              xcall _DisplayOneChar
+ 002E                   .dbline 43
+ 002E 80E0              ldi R24,<_str0
+ 0030 90E0              ldi R25,>_str0
+ 0032 9983              std y+1,R25
+ 0034 8883              std y+0,R24
+ 0036 2227              clr R18
+ 0038 0027              clr R16
+ 003A 1BD0              xcall _ePutstr
+ 003C                   .dbline 44
+ 003C 00ED              ldi R16,2000
+ 003E 17E0              ldi R17,7
+ 0040 C5D0              xcall _Delay_nms
+ 0042                   .dbline 45
+ 0042 21E0              ldi R18,1
+ 0044 01E0              ldi R16,1
+ 0046 82D0              xcall _LcdWriteCommand
+ 0048                   .dbline 46
+ 0048 21E0              ldi R18,1
+ 004A 0CE0              ldi R16,12
+ 004C 7FD0              xcall _LcdWriteCommand
+ 004E                   .dbline 47
+ 004E 82E4              ldi R24,66
+ 0050 8883              std y+0,R24
+ 0052 2227              clr R18
+ 0054 08E0              ldi R16,8
+ 0056 4CD0              xcall _DisplayOneChar
+ 0058                   .dbline 48
+ 0058 80E0              ldi R24,<_str1
+ 005A 90E0              ldi R25,>_str1
+ 005C 9983              std y+1,R25
+ 005E 8883              std y+0,R24
+ 0060 21E0              ldi R18,1
+ 0062 0027              clr R16
+ 0064 06D0              xcall _ePutstr
+ 0066                   .dbline 49
+ 0066 00ED              ldi R16,2000
+ 0068 17E0              ldi R17,7
+ 006A B0D0              xcall _Delay_nms
+ 006C                   .dbline 50
+ 006C           L3:
+ 006C                   .dbline 38
+ 006C D5CF              xjmp L2
+ 006E           X0:
+ 006E                   .dbline -2
+ 006E           L1:
+ 006E 2296              adiw R28,2
+ 0070                   .dbline 0 ; func end
+ 0070 0895              ret
+ 0072                   .dbend
+ 0072                   .dbfunc e ePutstr _ePutstr fV
+ 0072           ;              l -> R20
+ 0072           ;              i -> R22
+ 0072           ;            ptr -> R10,R11
+ 0072           ;              y -> R12
+ 0072           ;              x -> R14
+                        .even
+ 0072           _ePutstr::
+ 0072 0E940000          xcall push_gset5
+ 0076 C22E              mov R12,R18
+ 0078 E02E              mov R14,R16
+ 007A 2197              sbiw R28,1
+ 007C AB84              ldd R10,y+11
+ 007E BC84              ldd R11,y+12
+ 0080                   .dbline -1
+ 0080                   .dbline 54
+ 0080           ;       /********************************************/
+ 0080           ;               while(1)              
+ 0080           ;               {
+ 0080           ;                  LcdWriteCommand(0x01,1); 
+ 0080           ;                  LcdWriteCommand(0x0c,1);       
+ 0080           ;                  DisplayOneChar(0,1,0x41); 
+ 0080           ;                  ePutstr(0,0,str0); 
+ 0080           ;                  Delay_nms(2000);     
+ 0080           ;                  LcdWriteCommand(0x01,1);  
+ 0080           ;                  LcdWriteCommand(0x0c,1);  
+ 0080           ;                  DisplayOneChar(8,0,0x42);    
+ 0080           ;                  ePutstr(0,1,str1);  
+ 0080           ;                  Delay_nms(2000); 
+ 0080           ;          }
+ 0080           ; }                
+ 0080           ; //**********************显示指定座标的一串字符子函数**************
+ 0080           ; void ePutstr(uchar x,uchar y,uchar const *ptr)
+ 0080           ; {
+ 0080                   .dbline 55
+ 0080           ; uchar i,l=0;
+ 0080 4427              clr R20
+ 0082 01C0              xjmp L7
+ 0084           L6:
+ 0084                   .dbline 56
+ 0084                   .dbline 56
+ 0084 4395              inc R20
+ 0086                   .dbline 56
+ 0086           L7:
+ 0086                   .dbline 56
+ 0086           ;       while(ptr[l]>31){l++;}
+ 0086 E42F              mov R30,R20
+ 0088 FF27              clr R31
+ 008A EA0D              add R30,R10
+ 008C FB1D              adc R31,R11
+ 008E E491              lpm R30,Z
+ 0090 8FE1              ldi R24,31
+ 0092 8E17              cp R24,R30
+ 0094 B8F3              brlo L6
+ 0096                   .dbline 57
+ 0096 6627              clr R22
+ 0098 14C0              xjmp L12
+ 009A           L9:
+ 009A                   .dbline 57
+ 009A           ;       for(i=0;i<l;i++){
+ 009A                   .dbline 58
+ 009A           ;       DisplayOneChar(x++,y,ptr[i]);
+ 009A E62F              mov R30,R22
+ 009C FF27              clr R31
+ 009E EA0D              add R30,R10
+ 00A0 FB1D              adc R31,R11
+ 00A2 E491              lpm R30,Z
+ 00A4 E883              std y+0,R30
+ 00A6 2C2D              mov R18,R12
+ 00A8 2E2C              mov R2,R14
+ 00AA 822D              mov R24,R2
+ 00AC 8F5F              subi R24,255    ; addi 1
+ 00AE E82E              mov R14,R24
+ 00B0 022D              mov R16,R2
+ 00B2 1ED0              xcall _DisplayOneChar
+ 00B4                   .dbline 59
+ 00B4           ;       if(x==16){
+ 00B4 8E2D              mov R24,R14
+ 00B6 8031              cpi R24,16
+ 00B8 19F4              brne L13
+ 00BA                   .dbline 59
+ 00BA                   .dbline 60
+ 00BA           ;               x=0;y^=1;
+ 00BA EE24              clr R14
+ 00BC                   .dbline 60
+ 00BC 81E0              ldi R24,1
+ 00BE C826              eor R12,R24
+ 00C0                   .dbline 61
+ 00C0           ;       }
+ 00C0           L13:
+ 00C0                   .dbline 62
+ 00C0           L10:
+ 00C0                   .dbline 57
+ 00C0 6395              inc R22
+ 00C2           L12:
+ 00C2                   .dbline 57
+ 00C2 6417              cp R22,R20
+ 00C4 50F3              brlo L9
+ 00C6                   .dbline -2
+ 00C6           L5:
+ 00C6 2196              adiw R28,1
+ 00C8 0E940000          xcall pop_gset5
+ 00CC                   .dbline 0 ; func end
+ 00CC 0895              ret
+ 00CE                   .dbsym r l 20 c
+ 00CE                   .dbsym r i 22 c
+ 00CE                   .dbsym r ptr 10 pkc
+ 00CE                   .dbsym r y 12 c
+ 00CE                   .dbsym r x 14 c
+ 00CE                   .dbend
+ 00CE                   .dbfunc e LocateXY _LocateXY fV
+ 00CE           ;           temp -> R20
+ 00CE           ;           posy -> R22
+ 00CE           ;           posx -> R10
+                        .even
+ 00CE           _LocateXY::
+ 00CE 0E940000          xcall push_gset3
+ 00D2 622F              mov R22,R18
+ 00D4 A02E              mov R10,R16
+ 00D6                   .dbline -1
+ 00D6                   .dbline 66
+ 00D6           ;   }
+ 00D6           ; }
+ 00D6           ; //*******************显示光标定位子函数******************
+ 00D6           ; void LocateXY(char posx,char posy)
+ 00D6           ; {
+ 00D6                   .dbline 68
+ 00D6           ; uchar temp;
+ 00D6           ;       temp&=0x7f;
+ 00D6 4F77              andi R20,127
+ 00D8                   .dbline 69
+ 00D8           ;       temp=posx&0x0f;
+ 00D8 4A2D              mov R20,R10
+ 00DA 4F70              andi R20,15
+ 00DC                   .dbline 70
+ 00DC           ;       posy&=0x01;
+ 00DC 6170              andi R22,1
+ 00DE                   .dbline 71
+ 00DE           ;       if(posy)temp|=0x40;
+ 00DE 09F0              breq L16
+ 00E0                   .dbline 71
+ 00E0 4064              ori R20,64
+ 00E2           L16:
+ 00E2                   .dbline 72
+ 00E2           ;       temp|=0x80;
+ 00E2 4068              ori R20,128
+ 00E4                   .dbline 73
+ 00E4           ;       LcdWriteCommand(temp,0);
+ 00E4 2227              clr R18
+ 00E6 042F              mov R16,R20
+ 00E8 31D0              xcall _LcdWriteCommand
+ 00EA                   .dbline -2
+ 00EA           L15:
+ 00EA 0E940000          xcall pop_gset3
+ 00EE                   .dbline 0 ; func end
+ 00EE 0895              ret
+ 00F0                   .dbsym r temp 20 c
+ 00F0                   .dbsym r posy 22 c
+ 00F0                   .dbsym r posx 10 c
+ 00F0                   .dbend
+ 00F0                   .dbfunc e DisplayOneChar _DisplayOneChar fV
+ 00F0           ;          Wdata -> y+4
+ 00F0           ;              y -> R22
+ 00F0           ;              x -> R20
+                        .even
+ 00F0           _DisplayOneChar::
+ 00F0 0E940000          xcall push_gset2
+ 00F4 622F              mov R22,R18
+ 00F6 402F              mov R20,R16
+ 00F8                   .dbline -1
+ 00F8                   .dbline 77
+ 00F8           ; }
+ 00F8           ; //*******************显示指定座标的一个字符子函数*******************
+ 00F8           ; void DisplayOneChar(uchar x,uchar y,uchar Wdata)
+ 00F8           ; {
+ 00F8                   .dbline 78
+ 00F8           ; LocateXY(x,y);
+ 00F8 262F              mov R18,R22
+ 00FA 042F              mov R16,R20
+ 00FC E8DF              xcall _LocateXY
+ 00FE                   .dbline 79
+ 00FE           ; LcdWriteData(Wdata);
+ 00FE 0C81              ldd R16,y+4
+ 0100 38D0              xcall _LcdWriteData
+ 0102                   .dbline -2
+ 0102           L18:
+ 0102 0E940000          xcall pop_gset2
+ 0106                   .dbline 0 ; func end
+ 0106 0895              ret
+ 0108                   .dbsym l Wdata 4 c
+ 0108                   .dbsym r y 22 c
+ 0108                   .dbsym r x 20 c
+ 0108                   .dbend
+ 0108                   .dbfunc e InitLcd _InitLcd fV
+                        .even
+ 0108           _InitLcd::
+ 0108                   .dbline -1
+ 0108                   .dbline 83
+ 0108           ; }
+ 0108           ; //*******************LCD初始化子函数*********************
+ 0108           ; void InitLcd(void) 
+ 0108           ; {
+ 0108                   .dbline 84
+ 0108           ; LcdWriteCommand(0x38,0); 
+ 0108 2227              clr R18
+ 010A 08E3              ldi R16,56
+ 010C 1FD0              xcall _LcdWriteCommand
+ 010E                   .dbline 85
+ 010E           ; Delay_nms(5);
+ 010E 05E0              ldi R16,5
+ 0110 10E0              ldi R17,0
+ 0112 5CD0              xcall _Delay_nms
+ 0114                   .dbline 86
+ 0114           ; LcdWriteCommand(0x38,0); 
+ 0114 2227              clr R18
+ 0116 08E3              ldi R16,56
+ 0118 19D0              xcall _LcdWriteCommand
+ 011A                   .dbline 87
+ 011A           ; Delay_nms(5);
+ 011A 05E0              ldi R16,5
+ 011C 10E0              ldi R17,0
+ 011E 56D0              xcall _Delay_nms
+ 0120                   .dbline 88
+ 0120           ; LcdWriteCommand(0x38,0); 
+ 0120 2227              clr R18
+ 0122 08E3              ldi R16,56
+ 0124 13D0              xcall _LcdWriteCommand
+ 0126                   .dbline 89
+ 0126           ; Delay_nms(5);
+ 0126 05E0              ldi R16,5
+ 0128 10E0              ldi R17,0
+ 012A 50D0              xcall _Delay_nms
+ 012C                   .dbline 90
+ 012C           ; LcdWriteCommand(0x38,1); 
+ 012C 21E0              ldi R18,1
+ 012E 08E3              ldi R16,56
+ 0130 0DD0              xcall _LcdWriteCommand
+ 0132                   .dbline 91
+ 0132           ; LcdWriteCommand(0x08,1); 
+ 0132 21E0              ldi R18,1
+ 0134 08E0              ldi R16,8
+ 0136 0AD0              xcall _LcdWriteCommand
+ 0138                   .dbline 92
+ 0138           ; LcdWriteCommand(0x01,1);
+ 0138 21E0              ldi R18,1
+ 013A 01E0              ldi R16,1
+ 013C 07D0              xcall _LcdWriteCommand
+ 013E                   .dbline 93
+ 013E           ; LcdWriteCommand(0x06,1); 
+ 013E 21E0              ldi R18,1
+ 0140 06E0              ldi R16,6
+ 0142 04D0              xcall _LcdWriteCommand
+ 0144                   .dbline 94
+ 0144           ; LcdWriteCommand(0x0c,1); 
+ 0144 21E0              ldi R18,1
+ 0146 0CE0              ldi R16,12
+ 0148 01D0              xcall _LcdWriteCommand
+ 014A                   .dbline -2
+ 014A           L19:
+ 014A                   .dbline 0 ; func end
+ 014A 0895              ret
+ 014C                   .dbend
+ 014C                   .dbfunc e LcdWriteCommand _LcdWriteCommand fV
+ 014C           ;        Attribc -> R22
+ 014C           ;            CMD -> R20
+                        .even
+ 014C           _LcdWriteCommand::
+ 014C 0E940000          xcall push_gset2
+ 0150 622F              mov R22,R18
+ 0152 402F              mov R20,R16
+ 0154                   .dbline -1
+ 0154                   .dbline 98
+ 0154           ; }
+ 0154           ; //********************写命令到LCM子函数********************
+ 0154           ; void LcdWriteCommand(uchar CMD,uchar Attribc)
+ 0154           ; {
+ 0154                   .dbline 99
+ 0154           ; if(Attribc)WaitForEnable();
+ 0154 6623              tst R22
+ 0156 09F0              breq L21
+ 0158                   .dbline 99
+ 0158 1CD0              xcall _WaitForEnable
+ 015A           L21:
+ 015A                   .dbline 100
+ 015A           ; LCM_RS_0;LCM_RW_0;_NOP();
+ 015A C098              cbi 0x18,0
+ 015C                   .dbline 100
+ 015C C198              cbi 0x18,1
+ 015E                   .dbline 100
+ 015E 0000              nop
+ 0160                   .dbline 101
+ 0160           ; DataPort=CMD;_NOP();
+ 0160 4BBB              out 0x1b,R20
+ 0162                   .dbline 101
+ 0162 0000              nop
+ 0164                   .dbline 102
+ 0164           ; LCM_EN_1;_NOP();_NOP();LCM_EN_0;
+ 0164 C29A              sbi 0x18,2
+ 0166                   .dbline 102
+ 0166 0000              nop
+ 0168                   .dbline 102
+ 0168 0000              nop
+ 016A                   .dbline 102
+ 016A C298              cbi 0x18,2
+ 016C                   .dbline -2
+ 016C           L20:
+ 016C 0E940000          xcall pop_gset2
+ 0170                   .dbline 0 ; func end
+ 0170 0895              ret
+ 0172                   .dbsym r Attribc 22 c
+ 0172                   .dbsym r CMD 20 c
+ 0172                   .dbend
+ 0172                   .dbfunc e LcdWriteData _LcdWriteData fV
+ 0172           ;          dataW -> R20
+                        .even
+ 0172           _LcdWriteData::
+ 0172 0E940000          xcall push_gset1
+ 0176 402F              mov R20,R16
+ 0178                   .dbline -1
+ 0178                   .dbline 106
+ 0178           ; }
+ 0178           ; //*******************写数据到LCM子函数********************
+ 0178           ; void LcdWriteData(uchar dataW)
+ 0178           ; {
+ 0178                   .dbline 107
+ 0178           ; WaitForEnable();
+ 0178 0CD0              xcall _WaitForEnable
+ 017A                   .dbline 108
+ 017A           ; LCM_RS_1;LCM_RW_0;_NOP();
+ 017A C09A              sbi 0x18,0
+ 017C                   .dbline 108
+ 017C C198              cbi 0x18,1
+ 017E                   .dbline 108
+ 017E 0000              nop
+ 0180                   .dbline 109
+ 0180           ; DataPort=dataW;_NOP();
+ 0180 4BBB              out 0x1b,R20
+ 0182                   .dbline 109
+ 0182 0000              nop
+ 0184                   .dbline 110
+ 0184           ; LCM_EN_1;_NOP();_NOP();LCM_EN_0;
+ 0184 C29A              sbi 0x18,2
+ 0186                   .dbline 110
+ 0186 0000              nop
+ 0188                   .dbline 110
+ 0188 0000              nop
+ 018A                   .dbline 110
+ 018A C298              cbi 0x18,2
+ 018C                   .dbline -2
+ 018C           L23:
+ 018C 0E940000          xcall pop_gset1
+ 0190                   .dbline 0 ; func end
+ 0190 0895              ret
+ 0192                   .dbsym r dataW 20 c
+ 0192                   .dbend
+ 0192                   .dbfunc e WaitForEnable _WaitForEnable fV
+ 0192           ;            val -> R16
+                        .even
+ 0192           _WaitForEnable::
+ 0192                   .dbline -1
+ 0192                   .dbline 114
+ 0192           ; }
+ 0192           ; //*******************检测LCD忙信号子函数*********************
+ 0192           ; void WaitForEnable(void)
+ 0192           ; {
+ 0192                   .dbline 116
+ 0192           ; uchar val;
+ 0192           ; DataPort=0xff;
+ 0192 8FEF              ldi R24,255
+ 0194 8BBB              out 0x1b,R24
+ 0196                   .dbline 117
+ 0196           ; LCM_RS_0;LCM_RW_1;_NOP();
+ 0196 C098              cbi 0x18,0
+ 0198                   .dbline 117
+ 0198 C19A              sbi 0x18,1
+ 019A                   .dbline 117
+ 019A 0000              nop
+ 019C                   .dbline 118
+ 019C           ; LCM_EN_1;_NOP();_NOP();
+ 019C C29A              sbi 0x18,2
+ 019E                   .dbline 118
+ 019E 0000              nop
+ 01A0                   .dbline 118
+ 01A0 0000              nop
+ 01A2                   .dbline 119
+ 01A2           ; DDRA=0x00;
+ 01A2 2224              clr R2
+ 01A4 2ABA              out 0x1a,R2
+ 01A6                   .dbline 120
+ 01A6           ; val=PINA;
+ 01A6 09B3              in R16,0x19
+ 01A8 01C0              xjmp L26
+ 01AA           L25:
+ 01AA                   .dbline 121
+ 01AA 09B3              in R16,0x19
+ 01AC           L26:
+ 01AC                   .dbline 121
+ 01AC           ; while(val&Busy)val=PINA;
+ 01AC 07FD              sbrc R16,7
+ 01AE FDCF              rjmp L25
+ 01B0                   .dbline 122
+ 01B0           ; LCM_EN_0;
+ 01B0 C298              cbi 0x18,2
+ 01B2                   .dbline 123
+ 01B2           ; DDRA=0xff;
+ 01B2 8FEF              ldi R24,255
+ 01B4 8ABB              out 0x1a,R24
+ 01B6                   .dbline -2
+ 01B6           L24:
+ 01B6                   .dbline 0 ; func end
+ 01B6 0895              ret
+ 01B8                   .dbsym r val 16 c
+ 01B8                   .dbend
+ 01B8                   .dbfunc e Delay_1ms _Delay_1ms fV
+ 01B8           ;              i -> R16,R17
+                        .even
+ 01B8           _Delay_1ms::
+ 01B8                   .dbline -1
+ 01B8                   .dbline 127
+ 01B8           ; }
+ 01B8           ; //****************************************
+ 01B8           ; void Delay_1ms(void)          //1mS延时子函数
+ 01B8           ; { uint i;
+ 01B8                   .dbline 128
+ 01B8           ;  for(i=1;i<(uint)(xtal*143-2);i++)
+ 01B8 01E0              ldi R16,1
+ 01BA 10E0              ldi R17,0
+ 01BC 02C0              xjmp L32
+ 01BE           L29:
+ 01BE                   .dbline 129
+ 01BE           L30:
+ 01BE                   .dbline 128
+ 01BE 0F5F              subi R16,255  ; offset = 1
+ 01C0 1F4F              sbci R17,255
+ 01C2           L32:
+ 01C2                   .dbline 128
+ 01C2 0637              cpi R16,118
+ 01C4 E4E0              ldi R30,4
+ 01C6 1E07              cpc R17,R30
+ 01C8 D0F3              brlo L29
+ 01CA                   .dbline -2
+ 01CA           L28:
+ 01CA                   .dbline 0 ; func end
+ 01CA 0895              ret
+ 01CC                   .dbsym r i 16 i
+ 01CC                   .dbend
+ 01CC                   .dbfunc e Delay_nms _Delay_nms fV
+ 01CC           ;              i -> R20,R21
+ 01CC           ;              n -> R22,R23
+                        .even
+ 01CC           _Delay_nms::
+ 01CC 0E940000          xcall push_gset2
+ 01D0 B801              movw R22,R16
+ 01D2                   .dbline -1
+ 01D2                   .dbline 133
+ 01D2           ;     ;
+ 01D2           ; }
+ 01D2           ; //====================================
+ 01D2           ; void Delay_nms(uint n)                //n*1mS延时子函数
+ 01D2           ; {
+ 01D2                   .dbline 134
+ 01D2           ;  uint i=0;
+ 01D2 4427              clr R20
+ 01D4 5527              clr R21
+ 01D6 03C0              xjmp L35
+ 01D8           L34:
+ 01D8                   .dbline 136
+ 01D8                   .dbline 136
+ 01D8 EFDF              xcall _Delay_1ms
+ 01DA                   .dbline 137
+ 01DA 4F5F              subi R20,255  ; offset = 1
+ 01DC 5F4F              sbci R21,255
+ 01DE                   .dbline 138
+ 01DE           L35:
+ 01DE                   .dbline 135
+ 01DE           ;    while(i<n)
+ 01DE 4617              cp R20,R22
+ 01E0 5707              cpc R21,R23
+ 01E2 D0F3              brlo L34
+ 01E4                   .dbline -2
+ 01E4           L33:
+ 01E4 0E940000          xcall pop_gset2
+ 01E8                   .dbline 0 ; func end
+ 01E8 0895              ret
+ 01EA                   .dbsym r i 20 i
+ 01EA                   .dbsym r n 22 i
+ 01EA                   .dbend

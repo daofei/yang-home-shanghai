@@ -1,0 +1,126 @@
+XL
+H 1 areas 8 global symbols
+M ac17
+S push_gset2 Ref0000
+S pop_gset2 Ref0000
+A text size BC flags 0
+dbfile d:\MYDOCU~1\ac17-1\ac17-1.c
+dbfunc e delay_1ms 0 fV
+dbsym r i 10 i
+dbline FFFFFFFF 0
+dbline 8 0
+dbline A 0
+dbline B 6
+dbline A 6
+dbline A A
+dbline FFFFFFFE 12
+dbline 0 12
+dbfunc e delay_ms 14 fV
+dbsym r i 14 i
+dbsym r n 16 i
+dbline FFFFFFFF 1A
+dbline F 1A
+dbline 10 1A
+dbline 12 20
+dbline 13 20
+dbline 14 22
+dbline 15 26
+dbline 11 26
+dbline FFFFFFFE 2C
+dbline 0 30
+dbfunc e port_init 32 fV
+dbline FFFFFFFF 32
+dbline 19 32
+dbline 1A 32
+dbline 1B 36
+dbline 1C 38
+dbline 1D 3C
+dbline 1E 3E
+dbline 1F 40
+dbline 20 42
+dbline 21 44
+dbline FFFFFFFE 46
+dbline 0 46
+dbfunc e watchdog_init 48 fV
+dbline FFFFFFFF 48
+dbline 25 48
+dbline 26 48
+dbline 27 4A
+dbline FFFFFFFE 4E
+dbline 0 4E
+dbfunc e init_devices 50 fV
+dbline FFFFFFFF 50
+dbline 2B 50
+dbline 2C 50
+dbline 2D 52
+dbline FFFFFFFE 54
+dbline 0 54
+dbfunc e main 56 fV
+dbline FFFFFFFF 56
+dbline 31 56
+dbline 32 56
+dbline 34 5A
+dbline 35 5A
+dbline 36 5E
+dbline 37 64
+dbline 38 68
+dbline 39 6E
+dbline 3A 72
+dbline 3B 78
+dbline 3C 7C
+dbline 3D 82
+dbline 3E 84
+dbline 3F 88
+dbline 40 8E
+dbline 41 92
+dbline 42 98
+dbline 43 9C
+dbline 44 A2
+dbline 45 A6
+dbline 46 AC
+dbline 47 B0
+dbline 48 B6
+dbline 49 B8
+dbline 33 B8
+dbline FFFFFFFE BA
+dbline 0 BA
+S _main Def0056
+S _port_init Def0032
+S _init_devices Def0050
+S _delay_ms Def0014
+S _watchdog_init Def0048
+S _delay_1ms Def0000
+T 00 00 01 E0 10 E0 02 C0 0F 5F 1F 4F 06 37 E4 E0
+R 00 00 00 00
+T 0E 00 1E 07 D0 F3 08 95
+R 00 00 00 00
+T 14 00 0E 94 00 00 B8 01 44 27 55 27 03 C0 EF DF
+R 00 00 00 00 12 04 00 00
+T 22 00 4F 5F 5F 4F 46 17 57 07 D0 F3 0E 94 00 00
+R 00 00 00 00 12 0E 01 00
+T 30 00 08 95
+R 00 00 00 00
+T 32 00 22 24 2B BA 2A BA 8F EF 88 BB 87 BB 25 BA
+R 00 00 00 00
+T 40 00 24 BA 22 BA 21 BA 08 95
+R 00 00 00 00
+T 48 00 A8 95 88 E0 81 BD 08 95
+R 00 00 00 00
+T 50 00 F0 DF FA DF 08 95
+R 00 00 00 00
+T 56 00 FC DF 2F C0 8E EF 88 BB 03 E0 10 E0 D8 DF
+R 00 00 00 00
+T 64 00 8D EF 88 BB 03 E0 10 E0 D3 DF 8B EF 88 BB
+R 00 00 00 00
+T 72 00 03 E0 10 E0 CE DF 87 EF 88 BB 03 E0 10 E0
+R 00 00 00 00
+T 80 00 C9 DF A8 95 8F EE 88 BB 03 E0 10 E0 C3 DF
+R 00 00 00 00
+T 8E 00 8F ED 88 BB 03 E0 10 E0 BE DF 8F EB 88 BB
+R 00 00 00 00
+T 9C 00 03 E0 10 E0 B9 DF 8F E7 88 BB 03 E0 10 E0
+R 00 00 00 00
+T AA 00 B4 DF 8F EF 88 BB 03 E0 10 E0 AF DF A8 95
+R 00 00 00 00
+T B8 00 D0 CF 08 95
+R 00 00 00 00

@@ -1,0 +1,767 @@
+__text_start:
+__start:
+    0031 E5CF      LDI	R28,0x5F
+    0032 E0D4      LDI	R29,4
+    0033 BFCD      OUT	0x3D,R28
+    0034 BFDE      OUT	0x3E,R29
+    0035 51C0      SUBI	R28,0x10
+    0036 40D0      SBCI	R29,0
+    0037 EA0A      LDI	R16,0xAA
+    0038 8308      STD	Y+0,R16
+    0039 2400      CLR	R0
+    003A E6E0      LDI	R30,0x60
+    003B E0F0      LDI	R31,0
+    003C E010      LDI	R17,0
+    003D 36E6      CPI	R30,0x66
+    003E 07F1      CPC	R31,R17
+    003F F011      BEQ	0x0042
+    0040 9201      ST	R0,Z+
+    0041 CFFB      RJMP	0x003D
+    0042 8300      STD	Z+0,R16
+    0043 E6E2      LDI	R30,0x62
+    0044 E0F0      LDI	R31,0
+    0045 E6A0      LDI	R26,0x60
+    0046 E0B0      LDI	R27,0
+    0047 E010      LDI	R17,0
+    0048 36E2      CPI	R30,0x62
+    0049 07F1      CPC	R31,R17
+    004A F021      BEQ	0x004F
+    004B 95C8      LPM
+    004C 9631      ADIW	R30,1
+    004D 920D      ST	R0,X+
+    004E CFF9      RJMP	0x0048
+    004F 940E0181  CALL	_main
+_exit:
+    0051 CFFF      RJMP	_exit
+FILE: d:\MYDOCU~1\ac10-2\ac10-2.c
+(0001) #include <iom16v.h>			
+(0002) #define uchar unsigned char	
+(0003) #define uint  unsigned int
+(0004) #define OUT1_0  (PORTB=PORTB&0xfe) 
+(0005) #define OUT1_1  (PORTB=PORTB|0x01) 
+(0006) #define OUT2_0  (PORTB=PORTB&0xfd) 
+(0007) #define OUT2_1  (PORTB=PORTB|0x02) 
+(0008) uchar const SEG7[10]={0x3f,0x06,0x5b,
+(0009) 0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+(0010) uchar const ACT[4]={0xfe,0xfd,0xfb,0xf7};
+(0011) uint value,dis_val; 
+(0012) uchar i,flag; 
+(0013) /****************************************/
+(0014) void port_init(void)	
+(0015) {						
+(0016)  PORTA = 0x7F;	
+_port_init:
+    0052 E78F      LDI	R24,0x7F
+    0053 BB8B      OUT	0x1B,R24
+(0017)  DDRA  = 0x7F;		
+    0054 BB8A      OUT	0x1A,R24
+(0018)  PORTB = 0xFF;		
+    0055 EF8F      LDI	R24,0xFF
+    0056 BB88      OUT	0x18,R24
+(0019)  DDRB  = 0xFF;
+    0057 BB87      OUT	0x17,R24
+(0020)  PORTC = 0xFF; 			
+    0058 BB85      OUT	0x15,R24
+(0021)  DDRC  = 0xFF;		
+    0059 BB84      OUT	0x14,R24
+(0022)  PORTD = 0xFF;			
+    005A BB82      OUT	0x12,R24
+(0023)  DDRD  = 0xFF;			
+    005B BB81      OUT	0x11,R24
+    005C 9508      RET
+(0024) }				
+(0025) /************************************/
+(0026) void timer0_init(void) 
+(0027) {
+(0028)  TCNT0 = 0x83; 	
+_timer0_init:
+    005D E883      LDI	R24,0x83
+    005E BF82      OUT	0x32,R24
+(0029)  OCR0  = 0x7D;
+    005F E78D      LDI	R24,0x7D
+    0060 BF8C      OUT	0x3C,R24
+(0030)  TCCR0 = 0x03; 	
+    0061 E083      LDI	R24,3
+    0062 BF83      OUT	0x33,R24
+    0063 9508      RET
+_timer0_ovf_isr:
+    0064 922A      ST	R2,-Y
+    0065 930A      ST	R16,-Y
+    0066 931A      ST	R17,-Y
+    0067 932A      ST	R18,-Y
+    0068 933A      ST	R19,-Y
+    0069 938A      ST	R24,-Y
+    006A 939A      ST	R25,-Y
+    006B 93EA      ST	R30,-Y
+    006C 93FA      ST	R31,-Y
+    006D B62F      IN	R2,0x3F
+    006E 922A      ST	R2,-Y
+    006F 940E027B  CALL	push_gset1
+(0031) }
+(0032) /*************************************/
+(0033) #pragma interrupt_handler timer0_ovf_isr:10 
+(0034) void timer0_ovf_isr(void)
+(0035) {
+(0036)  TCNT0 = 0x83; 	
+    0071 E883      LDI	R24,0x83
+    0072 BF82      OUT	0x32,R24
+(0037)  if(++i>3)i=0;	
+    0073 91800061  LDS	R24,i
+    0075 5F8F      SUBI	R24,0xFF
+    0076 2E28      MOV	R2,R24
+    0077 92200061  STS	i,R2
+    0079 E083      LDI	R24,3
+    007A 1582      CP	R24,R2
+    007B F418      BCC	0x007F
+    007C 2422      CLR	R2
+    007D 92200061  STS	i,R2
+(0038)  switch(i) 		
+    007F 91400061  LDS	R20,i
+    0081 2755      CLR	R21
+    0082 3040      CPI	R20,0
+    0083 0745      CPC	R20,R21
+    0084 F079      BEQ	0x0094
+    0085 3041      CPI	R20,1
+    0086 E0E0      LDI	R30,0
+    0087 075E      CPC	R21,R30
+    0088 F0F9      BEQ	0x00A8
+    0089 3042      CPI	R20,2
+    008A E0E0      LDI	R30,0
+    008B 075E      CPC	R21,R30
+    008C F409      BNE	0x008E
+    008D C032      RJMP	0x00C0
+    008E 3043      CPI	R20,3
+    008F E0E0      LDI	R30,0
+    0090 075E      CPC	R21,R30
+    0091 F409      BNE	0x0093
+    0092 C045      RJMP	0x00D8
+    0093 C057      RJMP	0x00EB
+(0039)  {
+(0040)  case 0:PORTA=SEG7[dis_val%10];PORTC=ACT[0];break;
+    0094 E02A      LDI	R18,0xA
+    0095 E030      LDI	R19,0
+    0096 91000062  LDS	R16,dis_val
+    0098 91100063  LDS	R17,dis_val+1
+    009A 940E01B0  CALL	mod16u
+    009C 01F8      MOVW	R30,R16
+    009D E584      LDI	R24,0x54
+    009E E090      LDI	R25,0
+    009F 0FE8      ADD	R30,R24
+    00A0 1FF9      ADC	R31,R25
+    00A1 91E4      LPM	R30,0(Z)
+    00A2 BBEB      OUT	0x1B,R30
+    00A3 E5EE      LDI	R30,0x5E
+    00A4 E0F0      LDI	R31,0
+    00A5 91E4      LPM	R30,0(Z)
+    00A6 BBE5      OUT	0x15,R30
+    00A7 C043      RJMP	0x00EB
+(0041)  case 1:PORTA=SEG7[(dis_val/10)%10];PORTC=ACT[1];break;
+    00A8 E02A      LDI	R18,0xA
+    00A9 E030      LDI	R19,0
+    00AA 91000062  LDS	R16,dis_val
+    00AC 91100063  LDS	R17,dis_val+1
+    00AE 940E01B2  CALL	div16u
+    00B0 E02A      LDI	R18,0xA
+    00B1 E030      LDI	R19,0
+    00B2 940E01B0  CALL	mod16u
+    00B4 01F8      MOVW	R30,R16
+    00B5 E584      LDI	R24,0x54
+    00B6 E090      LDI	R25,0
+    00B7 0FE8      ADD	R30,R24
+    00B8 1FF9      ADC	R31,R25
+    00B9 91E4      LPM	R30,0(Z)
+    00BA BBEB      OUT	0x1B,R30
+    00BB E5EF      LDI	R30,0x5F
+    00BC E0F0      LDI	R31,0
+    00BD 91E4      LPM	R30,0(Z)
+    00BE BBE5      OUT	0x15,R30
+    00BF C02B      RJMP	0x00EB
+(0042)  case 2:PORTA=SEG7[(dis_val/100)%10];PORTC=ACT[2];break;
+    00C0 E624      LDI	R18,0x64
+    00C1 E030      LDI	R19,0
+    00C2 91000062  LDS	R16,dis_val
+    00C4 91100063  LDS	R17,dis_val+1
+    00C6 940E01B2  CALL	div16u
+    00C8 E02A      LDI	R18,0xA
+    00C9 E030      LDI	R19,0
+    00CA 940E01B0  CALL	mod16u
+    00CC 01F8      MOVW	R30,R16
+    00CD E584      LDI	R24,0x54
+    00CE E090      LDI	R25,0
+    00CF 0FE8      ADD	R30,R24
+    00D0 1FF9      ADC	R31,R25
+    00D1 91E4      LPM	R30,0(Z)
+    00D2 BBEB      OUT	0x1B,R30
+    00D3 E6E0      LDI	R30,0x60
+    00D4 E0F0      LDI	R31,0
+    00D5 91E4      LPM	R30,0(Z)
+    00D6 BBE5      OUT	0x15,R30
+    00D7 C013      RJMP	0x00EB
+(0043)  case 3:PORTA=SEG7[dis_val/1000];PORTC=ACT[3];break;
+    00D8 EE28      LDI	R18,0xE8
+    00D9 E033      LDI	R19,3
+    00DA 91000062  LDS	R16,dis_val
+    00DC 91100063  LDS	R17,dis_val+1
+    00DE 940E01B2  CALL	div16u
+    00E0 01F8      MOVW	R30,R16
+    00E1 E584      LDI	R24,0x54
+    00E2 E090      LDI	R25,0
+    00E3 0FE8      ADD	R30,R24
+    00E4 1FF9      ADC	R31,R25
+    00E5 91E4      LPM	R30,0(Z)
+    00E6 BBEB      OUT	0x1B,R30
+    00E7 E6E1      LDI	R30,0x61
+    00E8 E0F0      LDI	R31,0
+    00E9 91E4      LPM	R30,0(Z)
+    00EA BBE5      OUT	0x15,R30
+(0044)  default:break;
+    00EB 940E027E  CALL	pop_gset1
+    00ED 9029      LD	R2,Y+
+    00EE BE2F      OUT	0x3F,R2
+    00EF 91F9      LD	R31,Y+
+    00F0 91E9      LD	R30,Y+
+    00F1 9199      LD	R25,Y+
+    00F2 9189      LD	R24,Y+
+    00F3 9139      LD	R19,Y+
+    00F4 9129      LD	R18,Y+
+    00F5 9119      LD	R17,Y+
+    00F6 9109      LD	R16,Y+
+    00F7 9029      LD	R2,Y+
+    00F8 9518      RETI
+(0045)  }
+(0046) }
+(0047) /************************************/
+(0048) void timer1_init(void) 	
+(0049) {
+(0050)  TCNT1H = 0xE7; 	
+_timer1_init:
+    00F9 EE87      LDI	R24,0xE7
+    00FA BD8D      OUT	0x2D,R24
+(0051)  TCNT1L = 0x96;
+    00FB E986      LDI	R24,0x96
+    00FC BD8C      OUT	0x2C,R24
+(0052)  TCCR1B = 0x03; 	
+    00FD E083      LDI	R24,3
+    00FE BD8E      OUT	0x2E,R24
+    00FF 9508      RET
+_timer1_ovf_isr:
+    0100 938A      ST	R24,-Y
+    0101 B78F      IN	R24,0x3F
+    0102 938A      ST	R24,-Y
+(0053) }
+(0054) /***************************************************/
+(0055) #pragma interrupt_handler timer1_ovf_isr:9 
+(0056) void timer1_ovf_isr(void)
+(0057) {
+(0058)  TCNT1H = 0xE7; 		
+    0103 EE87      LDI	R24,0xE7
+    0104 BD8D      OUT	0x2D,R24
+(0059)  TCNT1L = 0x96; 
+    0105 E986      LDI	R24,0x96
+    0106 BD8C      OUT	0x2C,R24
+    0107 9189      LD	R24,Y+
+    0108 BF8F      OUT	0x3F,R24
+    0109 9189      LD	R24,Y+
+    010A 9518      RETI
+(0060)  }
+(0061) /****************************************************/
+(0062) void adc_init(void) 
+(0063) {
+(0064)  ADMUX = 0x07; 
+_adc_init:
+    010B E087      LDI	R24,7
+    010C B987      OUT	0x07,R24
+(0065)  ACSR  = 0x80; 
+    010D E880      LDI	R24,0x80
+    010E B988      OUT	0x08,R24
+(0066)  ADCSR = 0xE9; 
+    010F EE89      LDI	R24,0xE9
+    0110 B986      OUT	0x06,R24
+    0111 9508      RET
+_adc_isr:
+    0112 922A      ST	R2,-Y
+    0113 923A      ST	R3,-Y
+    0114 924A      ST	R4,-Y
+    0115 925A      ST	R5,-Y
+    0116 938A      ST	R24,-Y
+    0117 B62F      IN	R2,0x3F
+    0118 922A      ST	R2,-Y
+(0067) }
+(0068) /****************************************************/
+(0069) #pragma interrupt_handler adc_isr:15 
+(0070) void adc_isr(void)
+(0071) {
+(0072)  //conversion complete, read value (int) using...
+(0073)   value=ADCL;            
+    0119 B024      IN	R2,0x04
+    011A 2433      CLR	R3
+    011B 92300065  STS	value+1,R3
+    011D 92200064  STS	value,R2
+(0074)   value|=(int)ADCH << 8; 
+    011F B025      IN	R2,0x05
+    0120 2433      CLR	R3
+    0121 2C32      MOV	R3,R2
+    0122 2422      CLR	R2
+    0123 90400064  LDS	R4,value
+    0125 90500065  LDS	R5,value+1
+    0127 2842      OR	R4,R2
+    0128 2853      OR	R5,R3
+    0129 92500065  STS	value+1,R5
+    012B 92400064  STS	value,R4
+(0075)   flag=1;	
+    012D E081      LDI	R24,1
+    012E 93800060  STS	flag,R24
+    0130 9029      LD	R2,Y+
+    0131 BE2F      OUT	0x3F,R2
+    0132 9189      LD	R24,Y+
+    0133 9059      LD	R5,Y+
+    0134 9049      LD	R4,Y+
+    0135 9039      LD	R3,Y+
+    0136 9029      LD	R2,Y+
+    0137 9518      RETI
+(0076) }
+(0077) /***************************************/
+(0078) void init_devices(void) 
+(0079) {
+(0080)  port_init();	
+_init_devices:
+    0138 DF19      RCALL	_port_init
+(0081)  timer0_init();	
+    0139 DF23      RCALL	_timer0_init
+(0082)  timer1_init();	
+    013A DFBE      RCALL	_timer1_init
+(0083)  adc_init();	
+    013B DFCF      RCALL	_adc_init
+(0084)  TIMSK = 0x05; 
+    013C E085      LDI	R24,5
+    013D BF89      OUT	0x39,R24
+(0085)  SREG=0x80; 
+    013E E880      LDI	R24,0x80
+    013F BF8F      OUT	0x3F,R24
+    0140 9508      RET
+_delay:
+  i                    --> R20
+  j                    --> R22
+  k                    --> R16
+    0141 940E0279  CALL	push_gset2
+(0086) }
+(0087) /***************************************/
+(0088) void delay(uint k) 
+(0089) {
+(0090) uint i,j;
+(0091) 	 for(i=0;i<k;i++)
+    0143 2744      CLR	R20
+    0144 2755      CLR	R21
+    0145 C00B      RJMP	0x0151
+(0092) 	 {	 
+(0093) 	 for(j=0;j<140;j++); 
+    0146 2766      CLR	R22
+    0147 2777      CLR	R23
+    0148 C002      RJMP	0x014B
+    0149 5F6F      SUBI	R22,0xFF
+    014A 4F7F      SBCI	R23,0xFF
+    014B 386C      CPI	R22,0x8C
+    014C E0E0      LDI	R30,0
+    014D 077E      CPC	R23,R30
+    014E F3D0      BCS	0x0149
+    014F 5F4F      SUBI	R20,0xFF
+    0150 4F5F      SBCI	R21,0xFF
+    0151 1740      CP	R20,R16
+    0152 0751      CPC	R21,R17
+    0153 F390      BCS	0x0146
+    0154 940E026D  CALL	pop_gset2
+    0156 9508      RET
+_conv:
+  y                    --> R10
+  x                    --> Y+0
+  i                    --> R10
+    0157 940E0277  CALL	push_gset3
+    0159 0158      MOVW	R10,R16
+    015A 9724      SBIW	R28,4
+(0094) 	 }
+(0095) }
+(0096) /******************************************/
+(0097) uint conv(uint i) 
+(0098) {
+(0099) long x; 	
+(0100) uint y; 
+(0101) x=(5000*(long)i)/1023; 
+    015B 0115      MOVW	R2,R10
+    015C 2444      CLR	R4
+    015D 2455      CLR	R5
+    015E E848      LDI	R20,0x88
+    015F E153      LDI	R21,0x13
+    0160 E060      LDI	R22,0
+    0161 E070      LDI	R23,0
+    0162 925A      ST	R5,-Y
+    0163 924A      ST	R4,-Y
+    0164 923A      ST	R3,-Y
+    0165 922A      ST	R2,-Y
+    0166 018A      MOVW	R16,R20
+    0167 019B      MOVW	R18,R22
+    0168 940E023D  CALL	empy32s
+    016A EF4F      LDI	R20,0xFF
+    016B E053      LDI	R21,3
+    016C E060      LDI	R22,0
+    016D E070      LDI	R23,0
+    016E 937A      ST	R23,-Y
+    016F 936A      ST	R22,-Y
+    0170 935A      ST	R21,-Y
+    0171 934A      ST	R20,-Y
+    0172 940E01D2  CALL	div32s
+    0174 01FE      MOVW	R30,R28
+    0175 8300      STD	Z+0,R16
+    0176 8311      STD	Z+1,R17
+    0177 8322      STD	Z+2,R18
+    0178 8333      STD	Z+3,R19
+(0102) y=(uint)x; 	
+    0179 01FE      MOVW	R30,R28
+    017A 80A0      LDD	R10,Z+0
+    017B 80B1      LDD	R11,Z+1
+(0103) return y; 	
+    017C 0185      MOVW	R16,R10
+    017D 9624      ADIW	R28,4
+    017E 940E0270  CALL	pop_gset3
+    0180 9508      RET
+(0104) } 
+(0105) /******************************************/
+(0106) void main(void) 	
+(0107) {	 				
+(0108) init_devices();		
+_main:
+    0181 DFB6      RCALL	_init_devices
+    0182 C02B      RJMP	0x01AE
+(0109)   while(1) 	
+(0110)   {
+(0111)    		if(flag==1) 
+    0183 91800060  LDS	R24,flag
+    0185 3081      CPI	R24,1
+    0186 F521      BNE	0x01AB
+(0112) 		{
+(0113) 		dis_val=conv(value); 
+    0187 91000064  LDS	R16,value
+    0189 91100065  LDS	R17,value+1
+    018B DFCB      RCALL	_conv
+    018C 93100063  STS	dis_val+1,R17
+    018E 93000062  STS	dis_val,R16
+(0114) 		  if(dis_val<2000){OUT2_1;OUT1_0;} 
+    0190 3D00      CPI	R16,0xD0
+    0191 E0E7      LDI	R30,7
+    0192 071E      CPC	R17,R30
+    0193 F428      BCC	0x0199
+    0194 9AC1      SBI	0x18,1
+    0195 B388      IN	R24,0x18
+    0196 7F8E      ANDI	R24,0xFE
+    0197 BB88      OUT	0x18,R24
+    0198 C00F      RJMP	0x01A8
+(0115) 		  else if(dis_val<3000){OUT1_1;OUT2_1;} 
+    0199 91800062  LDS	R24,dis_val
+    019B 91900063  LDS	R25,dis_val+1
+    019D 3B88      CPI	R24,0xB8
+    019E E0EB      LDI	R30,0xB
+    019F 079E      CPC	R25,R30
+    01A0 F418      BCC	0x01A4
+    01A1 9AC0      SBI	0x18,0
+    01A2 9AC1      SBI	0x18,1
+    01A3 C004      RJMP	0x01A8
+(0116) 		  else {OUT2_0;OUT1_1;} 
+    01A4 B388      IN	R24,0x18
+    01A5 7F8D      ANDI	R24,0xFD
+    01A6 BB88      OUT	0x18,R24
+    01A7 9AC0      SBI	0x18,0
+(0117) 		flag=0;			
+    01A8 2422      CLR	R2
+    01A9 92200060  STS	flag,R2
+(0118) 		}
+(0119) 		delay(10);		
+FILE: <library>
+    01AB E00A      LDI	R16,0xA
+    01AC E010      LDI	R17,0
+    01AD DF93      RCALL	_delay
+    01AE CFD4      RJMP	0x0183
+    01AF 9508      RET
+mod16u:
+    01B0 9468      BSET	6
+    01B1 C001      RJMP	xdiv16u
+div16u:
+    01B2 94E8      BCLR	6
+xdiv16u:
+    01B3 92EA      ST	R14,-Y
+    01B4 92FA      ST	R15,-Y
+    01B5 938A      ST	R24,-Y
+    01B6 24EE      CLR	R14
+    01B7 24FF      CLR	R15
+    01B8 E180      LDI	R24,0x10
+    01B9 0F00      LSL	R16
+    01BA 1F11      ROL	R17
+    01BB 1CEE      ROL	R14
+    01BC 1CFF      ROL	R15
+    01BD 16E2      CP	R14,R18
+    01BE 06F3      CPC	R15,R19
+    01BF F018      BCS	0x01C3
+    01C0 1AE2      SUB	R14,R18
+    01C1 0AF3      SBC	R15,R19
+    01C2 9503      INC	R16
+    01C3 958A      DEC	R24
+    01C4 F7A1      BNE	0x01B9
+    01C5 F416      BRTC	0x01C8
+    01C6 2D0E      MOV	R16,R14
+    01C7 2D1F      MOV	R17,R15
+    01C8 9189      LD	R24,Y+
+    01C9 90F9      LD	R15,Y+
+    01CA 90E9      LD	R14,Y+
+    01CB 9508      RET
+div32u:
+    01CC 94E8      BCLR	6
+    01CD C001      RJMP	0x01CF
+mod32u:
+    01CE 9468      BSET	6
+    01CF D02F      RCALL	long_div_prolog
+    01D0 24CC      CLR	R12
+    01D1 C008      RJMP	0x01DA
+div32s:
+    01D2 94E8      BCLR	6
+    01D3 C001      RJMP	0x01D5
+mod32s:
+    01D4 9468      BSET	6
+    01D5 D029      RCALL	long_div_prolog
+    01D6 FD37      SBRC	R19,7
+    01D7 D053      RCALL	neg_R16_R19
+    01D8 FDB7      SBRC	R27,7
+    01D9 D05A      RCALL	neg_R24_R27
+    01DA 2477      CLR	R7
+    01DB 2488      CLR	R8
+    01DC 2499      CLR	R9
+    01DD 24AA      CLR	R10
+    01DE 24BB      CLR	R11
+    01DF D041      RCALL	tst_R16_R19
+    01E0 F0C1      BEQ	0x01F9
+    01E1 D044      RCALL	tst_R24_R27
+    01E2 F0B1      BEQ	0x01F9
+    01E3 E2E8      LDI	R30,0x28
+    01E4 0F00      LSL	R16
+    01E5 1F11      ROL	R17
+    01E6 1F22      ROL	R18
+    01E7 1F33      ROL	R19
+    01E8 1C77      ROL	R7
+    01E9 1C88      ROL	R8
+    01EA 1C99      ROL	R9
+    01EB 1CAA      ROL	R10
+    01EC 1CBB      ROL	R11
+    01ED 1688      CP	R8,R24
+    01EE 0699      CPC	R9,R25
+    01EF 06AA      CPC	R10,R26
+    01F0 06BB      CPC	R11,R27
+    01F1 F028      BCS	0x01F7
+    01F2 1A88      SUB	R8,R24
+    01F3 0A99      SBC	R9,R25
+    01F4 0AAA      SBC	R10,R26
+    01F5 0ABB      SBC	R11,R27
+    01F6 9503      INC	R16
+    01F7 95EA      DEC	R30
+    01F8 F759      BNE	0x01E4
+    01F9 F426      BRTC	0x01FE
+    01FA 2D08      MOV	R16,R8
+    01FB 2D19      MOV	R17,R9
+    01FC 2D2A      MOV	R18,R10
+    01FD 2D3B      MOV	R19,R11
+    01FE C013      RJMP	long_div_epilog
+long_div_prolog:
+    01FF 927A      ST	R7,-Y
+    0200 928A      ST	R8,-Y
+    0201 929A      ST	R9,-Y
+    0202 92AA      ST	R10,-Y
+    0203 92BA      ST	R11,-Y
+    0204 92CA      ST	R12,-Y
+    0205 93EA      ST	R30,-Y
+    0206 938A      ST	R24,-Y
+    0207 939A      ST	R25,-Y
+    0208 93AA      ST	R26,-Y
+    0209 93BA      ST	R27,-Y
+    020A 858B      LDD	R24,Y+11
+    020B 859C      LDD	R25,Y+12
+    020C 85AD      LDD	R26,Y+13
+    020D 85BE      LDD	R27,Y+14
+    020E 2EC3      MOV	R12,R19
+    020F F00E      BRTS	0x0211
+    0210 26CB      EOR	R12,R27
+    0211 9508      RET
+long_div_epilog:
+    0212 FCC7      SBRC	R12,7
+    0213 D017      RCALL	neg_R16_R19
+    0214 91B9      LD	R27,Y+
+    0215 91A9      LD	R26,Y+
+    0216 9199      LD	R25,Y+
+    0217 9189      LD	R24,Y+
+    0218 91E9      LD	R30,Y+
+    0219 90C9      LD	R12,Y+
+    021A 90B9      LD	R11,Y+
+    021B 90A9      LD	R10,Y+
+    021C 9099      LD	R9,Y+
+    021D 9089      LD	R8,Y+
+    021E 9079      LD	R7,Y+
+    021F 9624      ADIW	R28,4
+    0220 9508      RET
+tst_R16_R19:
+    0221 2FE0      MOV	R30,R16
+    0222 2BE1      OR	R30,R17
+    0223 2BE2      OR	R30,R18
+    0224 2BE3      OR	R30,R19
+    0225 9508      RET
+tst_R24_R27:
+    0226 2FE8      MOV	R30,R24
+    0227 2BE9      OR	R30,R25
+    0228 2BEA      OR	R30,R26
+    0229 2BEB      OR	R30,R27
+    022A 9508      RET
+neg_R16_R19:
+    022B 9500      COM	R16
+    022C 9510      COM	R17
+    022D 9520      COM	R18
+    022E 9530      COM	R19
+    022F 5F0F      SUBI	R16,0xFF
+    0230 4F1F      SBCI	R17,0xFF
+    0231 4F2F      SBCI	R18,0xFF
+    0232 4F3F      SBCI	R19,0xFF
+    0233 9508      RET
+neg_R24_R27:
+    0234 9580      COM	R24
+    0235 9590      COM	R25
+    0236 95A0      COM	R26
+    0237 95B0      COM	R27
+    0238 5F8F      SUBI	R24,0xFF
+    0239 4F9F      SBCI	R25,0xFF
+    023A 4FAF      SBCI	R26,0xFF
+    023B 4FBF      SBCI	R27,0xFF
+    023C 9508      RET
+empy32s:
+empy32u:
+    023D 940E0292  CALL	long_prolog
+    023F 927F      PUSH	R7
+    0240 940E02AB  CALL	tstzero1
+    0242 F139      BEQ	0x026A
+    0243 2477      CLR	R7
+    0244 940E02B1  CALL	tstzero2
+    0246 F419      BNE	0x024A
+    0247 018C      MOVW	R16,R24
+    0248 019D      MOVW	R18,R26
+    0249 C020      RJMP	0x026A
+    024A 9F08      MUL	R16,R24
+    024B 2CB0      MOV	R11,R0
+    024C 2CA1      MOV	R10,R1
+    024D 9F28      MUL	R18,R24
+    024E 2C90      MOV	R9,R0
+    024F 2C81      MOV	R8,R1
+    0250 9F18      MUL	R17,R24
+    0251 0CA0      ADD	R10,R0
+    0252 1C91      ADC	R9,R1
+    0253 1C87      ADC	R8,R7
+    0254 9F09      MUL	R16,R25
+    0255 0CA0      ADD	R10,R0
+    0256 1C91      ADC	R9,R1
+    0257 1C87      ADC	R8,R7
+    0258 9F19      MUL	R17,R25
+    0259 0C90      ADD	R9,R0
+    025A 1C81      ADC	R8,R1
+    025B 9F0A      MUL	R16,R26
+    025C 0C90      ADD	R9,R0
+    025D 1C81      ADC	R8,R1
+    025E 9F38      MUL	R19,R24
+    025F 0C80      ADD	R8,R0
+    0260 9F29      MUL	R18,R25
+    0261 0C80      ADD	R8,R0
+    0262 9F1A      MUL	R17,R26
+    0263 0C80      ADD	R8,R0
+    0264 9F0B      MUL	R16,R27
+    0265 0C80      ADD	R8,R0
+    0266 2D0B      MOV	R16,R11
+    0267 2D1A      MOV	R17,R10
+    0268 2D29      MOV	R18,R9
+    0269 2D38      MOV	R19,R8
+    026A 907F      POP	R7
+    026B 940C02A0  JMP	long_epilog
+pop_gset2:
+    026D E0E2      LDI	R30,2
+    026E 940C027F  JMP	pop
+pop_gset3:
+    0270 E0E4      LDI	R30,4
+    0271 940C027F  JMP	pop
+push_gset5:
+    0273 92FA      ST	R15,-Y
+    0274 92EA      ST	R14,-Y
+push_gset4:
+    0275 92DA      ST	R13,-Y
+    0276 92CA      ST	R12,-Y
+push_gset3:
+    0277 92BA      ST	R11,-Y
+    0278 92AA      ST	R10,-Y
+push_gset2:
+    0279 937A      ST	R23,-Y
+    027A 936A      ST	R22,-Y
+push_gset1:
+    027B 935A      ST	R21,-Y
+    027C 934A      ST	R20,-Y
+    027D 9508      RET
+pop_gset1:
+    027E E0E1      LDI	R30,1
+pop:
+    027F 9149      LD	R20,Y+
+    0280 9159      LD	R21,Y+
+    0281 FDE0      SBRC	R30,0
+    0282 9508      RET
+    0283 9169      LD	R22,Y+
+    0284 9179      LD	R23,Y+
+    0285 FDE1      SBRC	R30,1
+    0286 9508      RET
+    0287 90A9      LD	R10,Y+
+    0288 90B9      LD	R11,Y+
+    0289 FDE2      SBRC	R30,2
+    028A 9508      RET
+    028B 90C9      LD	R12,Y+
+    028C 90D9      LD	R13,Y+
+    028D FDE3      SBRC	R30,3
+    028E 9508      RET
+    028F 90E9      LD	R14,Y+
+    0290 90F9      LD	R15,Y+
+    0291 9508      RET
+long_prolog:
+    0292 928A      ST	R8,-Y
+    0293 929A      ST	R9,-Y
+    0294 92AA      ST	R10,-Y
+    0295 92BA      ST	R11,-Y
+    0296 93EA      ST	R30,-Y
+    0297 938A      ST	R24,-Y
+    0298 939A      ST	R25,-Y
+    0299 93AA      ST	R26,-Y
+    029A 93BA      ST	R27,-Y
+    029B 8589      LDD	R24,Y+9
+    029C 859A      LDD	R25,Y+10
+    029D 85AB      LDD	R26,Y+11
+    029E 85BC      LDD	R27,Y+12
+    029F 9508      RET
+long_epilog:
+    02A0 91B9      LD	R27,Y+
+    02A1 91A9      LD	R26,Y+
+    02A2 9199      LD	R25,Y+
+    02A3 9189      LD	R24,Y+
+    02A4 91E9      LD	R30,Y+
+    02A5 90B9      LD	R11,Y+
+    02A6 90A9      LD	R10,Y+
+    02A7 9099      LD	R9,Y+
+    02A8 9089      LD	R8,Y+
+    02A9 9624      ADIW	R28,4
+    02AA 9508      RET
+tstzero1:
+    02AB 27EE      CLR	R30
+    02AC 2BE0      OR	R30,R16
+    02AD 2BE1      OR	R30,R17
+    02AE 2BE2      OR	R30,R18
+    02AF 2BE3      OR	R30,R19
+    02B0 9508      RET
+tstzero2:
+    02B1 27EE      CLR	R30
+    02B2 2BE8      OR	R30,R24
+    02B3 2BE9      OR	R30,R25
+    02B4 2BEA      OR	R30,R26
+    02B5 2BEB      OR	R30,R27
+    02B6 9508      RET

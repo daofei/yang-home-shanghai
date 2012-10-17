@@ -1,0 +1,841 @@
+__text_start:
+__start:
+    0031 E5CF      LDI	R28,0x5F
+    0032 E0D4      LDI	R29,4
+    0033 BFCD      OUT	0x3D,R28
+    0034 BFDE      OUT	0x3E,R29
+    0035 51C0      SUBI	R28,0x10
+    0036 40D0      SBCI	R29,0
+    0037 EA0A      LDI	R16,0xAA
+    0038 8308      STD	Y+0,R16
+    0039 2400      CLR	R0
+    003A E6E0      LDI	R30,0x60
+    003B E0F0      LDI	R31,0
+    003C E010      LDI	R17,0
+    003D 36ED      CPI	R30,0x6D
+    003E 07F1      CPC	R31,R17
+    003F F011      BEQ	0x0042
+    0040 9201      ST	R0,Z+
+    0041 CFFB      RJMP	0x003D
+    0042 8300      STD	Z+0,R16
+    0043 E6E2      LDI	R30,0x62
+    0044 E0F0      LDI	R31,0
+    0045 E6A0      LDI	R26,0x60
+    0046 E0B0      LDI	R27,0
+    0047 E010      LDI	R17,0
+    0048 36E2      CPI	R30,0x62
+    0049 07F1      CPC	R31,R17
+    004A F021      BEQ	0x004F
+    004B 95C8      LPM
+    004C 9631      ADIW	R30,1
+    004D 920D      ST	R0,X+
+    004E CFF9      RJMP	0x0048
+    004F 940E0226  CALL	_main
+_exit:
+    0051 CFFF      RJMP	_exit
+FILE: d:\MYDOCU~1\ac11-3\ac11-3.c
+(0001) #include <iom16v.h>			
+(0002) #include<eeprom.h>
+(0003) #define uchar unsigned char
+(0004) #define uint  unsigned int	
+(0005) uchar const SEG7[10]={0x3f,0x06,0x5b, 
+(0006) 0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+(0007) uchar const ACT[4]={0xfe,0xfd,0xfb,0xf7};
+(0008) #define LED1_0  (PORTB=PORTB&0xfe)	
+(0009) #define S1 (PIND&0x10)
+(0010) #define S2 (PIND&0x20)
+(0011) #define S3 (PIND&0x40)
+(0012) #define S4 (PIND&0x80)
+(0013) #define SINT0 (PIND&0x04)
+(0014) #define SINT1 (PIND&0x08)
+(0015) uchar dpw,dpt,write_flag,time_flag,cnt;
+(0016) uint key_cnt,ms_cnt;		
+(0017) uchar sec,min,set_sec,set_min;		
+(0018) /************************************************/
+(0019) void port_init(void)	
+(0020) {						
+(0021)  PORTA = 0xFF;			
+_port_init:
+    0052 EF8F      LDI	R24,0xFF
+    0053 BB8B      OUT	0x1B,R24
+(0022)  DDRA  = 0xFF;			
+    0054 BB8A      OUT	0x1A,R24
+(0023)  PORTB = 0xFF;			
+    0055 BB88      OUT	0x18,R24
+(0024)  DDRB  = 0xFF;		
+    0056 BB87      OUT	0x17,R24
+(0025)  PORTC = 0xFF; 			
+    0057 BB85      OUT	0x15,R24
+(0026)  DDRC  = 0xFF;			
+    0058 BB84      OUT	0x14,R24
+(0027)  PORTD = 0xFF;			
+    0059 BB82      OUT	0x12,R24
+(0028)  DDRD  = 0x00;		
+    005A 2422      CLR	R2
+    005B BA21      OUT	0x11,R2
+    005C 9508      RET
+(0029) }					
+(0030) //***************************
+(0031) void timer0_init(void)	
+(0032) {							
+(0033) TCNT0 = 0x83; 			
+_timer0_init:
+    005D E883      LDI	R24,0x83
+    005E BF82      OUT	0x32,R24
+(0034) TCCR0 = 0x03; 			
+    005F E083      LDI	R24,3
+    0060 BF83      OUT	0x33,R24
+(0035) TIMSK = 0x01; 
+    0061 E081      LDI	R24,1
+    0062 BF89      OUT	0x39,R24
+    0063 9508      RET
+(0036) }							
+(0037) /*********************************************/
+(0038) void init_devices(void)		
+(0039) {							
+(0040)  port_init();		
+_init_devices:
+    0064 DFED      RCALL	_port_init
+(0041)  timer0_init();			
+    0065 DFF7      RCALL	_timer0_init
+(0042)  SREG=0x80;	
+    0066 E880      LDI	R24,0x80
+    0067 BF8F      OUT	0x3F,R24
+    0068 9508      RET
+_timer0_ovf_isr:
+    0069 922A      ST	R2,-Y
+    006A 923A      ST	R3,-Y
+    006B 930A      ST	R16,-Y
+    006C 931A      ST	R17,-Y
+    006D 932A      ST	R18,-Y
+    006E 933A      ST	R19,-Y
+    006F 938A      ST	R24,-Y
+    0070 939A      ST	R25,-Y
+    0071 93EA      ST	R30,-Y
+    0072 93FA      ST	R31,-Y
+    0073 B62F      IN	R2,0x3F
+    0074 922A      ST	R2,-Y
+    0075 940E02D5  CALL	push_gset1
+(0043) }							
+(0044) //***************************
+(0045) #pragma interrupt_handler timer0_ovf_isr:10
+(0046) void timer0_ovf_isr(void)	
+(0047) {							
+(0048)  TCNT0 = 0x83; 			
+    0077 E883      LDI	R24,0x83
+    0078 BF82      OUT	0x32,R24
+(0049)  if(++key_cnt>300)key_cnt=0;
+    0079 91800066  LDS	R24,key_cnt
+    007B 91900067  LDS	R25,key_cnt+1
+    007D 9601      ADIW	R24,1
+    007E 011C      MOVW	R2,R24
+    007F 92300067  STS	key_cnt+1,R3
+    0081 92200066  STS	key_cnt,R2
+    0083 E28C      LDI	R24,0x2C
+    0084 E091      LDI	R25,1
+    0085 1582      CP	R24,R2
+    0086 0593      CPC	R25,R3
+    0087 F430      BCC	0x008E
+    0088 2422      CLR	R2
+    0089 2433      CLR	R3
+    008A 92300067  STS	key_cnt+1,R3
+    008C 92200066  STS	key_cnt,R2
+(0050)  if(++cnt>7)cnt=0;	
+    008E 91800068  LDS	R24,cnt
+    0090 5F8F      SUBI	R24,0xFF
+    0091 2E28      MOV	R2,R24
+    0092 92200068  STS	cnt,R2
+    0094 E087      LDI	R24,7
+    0095 1582      CP	R24,R2
+    0096 F418      BCC	0x009A
+    0097 2422      CLR	R2
+    0098 92200068  STS	cnt,R2
+(0051)  if(++ms_cnt>999){ms_cnt=0;sec++;}
+    009A 91800064  LDS	R24,ms_cnt
+    009C 91900065  LDS	R25,ms_cnt+1
+    009E 9601      ADIW	R24,1
+    009F 011C      MOVW	R2,R24
+    00A0 92300065  STS	ms_cnt+1,R3
+    00A2 92200064  STS	ms_cnt,R2
+    00A4 EE87      LDI	R24,0xE7
+    00A5 E093      LDI	R25,3
+    00A6 1582      CP	R24,R2
+    00A7 0593      CPC	R25,R3
+    00A8 F458      BCC	0x00B4
+    00A9 2422      CLR	R2
+    00AA 2433      CLR	R3
+    00AB 92300065  STS	ms_cnt+1,R3
+    00AD 92200064  STS	ms_cnt,R2
+    00AF 91800063  LDS	R24,sec
+    00B1 5F8F      SUBI	R24,0xFF
+    00B2 93800063  STS	sec,R24
+(0052)  if(sec>59){min++;sec=0;}	
+    00B4 E38B      LDI	R24,0x3B
+    00B5 90200063  LDS	R2,sec
+    00B7 1582      CP	R24,R2
+    00B8 F440      BCC	0x00C1
+    00B9 91800062  LDS	R24,min
+    00BB 5F8F      SUBI	R24,0xFF
+    00BC 93800062  STS	min,R24
+    00BE 2422      CLR	R2
+    00BF 92200063  STS	sec,R2
+(0053)  if(min>59)min=59;		
+    00C1 E38B      LDI	R24,0x3B
+    00C2 90200062  LDS	R2,min
+    00C4 1582      CP	R24,R2
+    00C5 F410      BCC	0x00C8
+    00C6 93800062  STS	min,R24
+(0054)  switch(cnt)	
+    00C8 91400068  LDS	R20,cnt
+    00CA 2755      CLR	R21
+    00CB 3040      CPI	R20,0
+    00CC 0745      CPC	R20,R21
+    00CD F121      BEQ	0x00F2
+    00CE 3041      CPI	R20,1
+    00CF E0E0      LDI	R30,0
+    00D0 075E      CPC	R21,R30
+    00D1 F409      BNE	0x00D3
+    00D2 C032      RJMP	0x0105
+    00D3 3042      CPI	R20,2
+    00D4 E0E0      LDI	R30,0
+    00D5 075E      CPC	R21,R30
+    00D6 F409      BNE	0x00D8
+    00D7 C040      RJMP	0x0118
+    00D8 3043      CPI	R20,3
+    00D9 E0E0      LDI	R30,0
+    00DA 075E      CPC	R21,R30
+    00DB F409      BNE	0x00DD
+    00DC C04E      RJMP	0x012B
+    00DD 3044      CPI	R20,4
+    00DE E0E0      LDI	R30,0
+    00DF 075E      CPC	R21,R30
+    00E0 F409      BNE	0x00E2
+    00E1 C05C      RJMP	0x013E
+    00E2 3045      CPI	R20,5
+    00E3 E0E0      LDI	R30,0
+    00E4 075E      CPC	R21,R30
+    00E5 F409      BNE	0x00E7
+    00E6 C07E      RJMP	0x0165
+    00E7 3046      CPI	R20,6
+    00E8 E0E0      LDI	R30,0
+    00E9 075E      CPC	R21,R30
+    00EA F409      BNE	0x00EC
+    00EB C08C      RJMP	0x0178
+    00EC 3047      CPI	R20,7
+    00ED E0E0      LDI	R30,0
+    00EE 075E      CPC	R21,R30
+    00EF F409      BNE	0x00F1
+    00F0 C09A      RJMP	0x018B
+    00F1 C0BF      RJMP	0x01B1
+(0055)  {
+(0056)  case 0:PORTA=SEG7[sec%10];PORTC=ACT[0];break;
+    00F2 E02A      LDI	R18,0xA
+    00F3 E030      LDI	R19,0
+    00F4 91000063  LDS	R16,sec
+    00F6 2711      CLR	R17
+    00F7 940E028D  CALL	mod16s
+    00F9 01F8      MOVW	R30,R16
+    00FA E584      LDI	R24,0x54
+    00FB E090      LDI	R25,0
+    00FC 0FE8      ADD	R30,R24
+    00FD 1FF9      ADC	R31,R25
+    00FE 91E4      LPM	R30,0(Z)
+    00FF BBEB      OUT	0x1B,R30
+    0100 E5EE      LDI	R30,0x5E
+    0101 E0F0      LDI	R31,0
+    0102 91E4      LPM	R30,0(Z)
+    0103 BBE5      OUT	0x15,R30
+    0104 C0AC      RJMP	0x01B1
+(0057)  case 1:PORTA=SEG7[sec/10];PORTC=ACT[1];break;
+    0105 E02A      LDI	R18,0xA
+    0106 E030      LDI	R19,0
+    0107 91000063  LDS	R16,sec
+    0109 2711      CLR	R17
+    010A 940E0291  CALL	div16s
+    010C 01F8      MOVW	R30,R16
+    010D E584      LDI	R24,0x54
+    010E E090      LDI	R25,0
+    010F 0FE8      ADD	R30,R24
+    0110 1FF9      ADC	R31,R25
+    0111 91E4      LPM	R30,0(Z)
+    0112 BBEB      OUT	0x1B,R30
+    0113 E5EF      LDI	R30,0x5F
+    0114 E0F0      LDI	R31,0
+    0115 91E4      LPM	R30,0(Z)
+    0116 BBE5      OUT	0x15,R30
+    0117 C099      RJMP	0x01B1
+(0058)  case 2:PORTA=SEG7[min%10];PORTC=ACT[2];break;
+    0118 E02A      LDI	R18,0xA
+    0119 E030      LDI	R19,0
+    011A 91000062  LDS	R16,min
+    011C 2711      CLR	R17
+    011D 940E028D  CALL	mod16s
+    011F 01F8      MOVW	R30,R16
+    0120 E584      LDI	R24,0x54
+    0121 E090      LDI	R25,0
+    0122 0FE8      ADD	R30,R24
+    0123 1FF9      ADC	R31,R25
+    0124 91E4      LPM	R30,0(Z)
+    0125 BBEB      OUT	0x1B,R30
+    0126 E6E0      LDI	R30,0x60
+    0127 E0F0      LDI	R31,0
+    0128 91E4      LPM	R30,0(Z)
+    0129 BBE5      OUT	0x15,R30
+    012A C086      RJMP	0x01B1
+(0059)  case 3:PORTA=SEG7[min/10];PORTC=ACT[3];break;
+    012B E02A      LDI	R18,0xA
+    012C E030      LDI	R19,0
+    012D 91000062  LDS	R16,min
+    012F 2711      CLR	R17
+    0130 940E0291  CALL	div16s
+    0132 01F8      MOVW	R30,R16
+    0133 E584      LDI	R24,0x54
+    0134 E090      LDI	R25,0
+    0135 0FE8      ADD	R30,R24
+    0136 1FF9      ADC	R31,R25
+    0137 91E4      LPM	R30,0(Z)
+    0138 BBEB      OUT	0x1B,R30
+    0139 E6E1      LDI	R30,0x61
+    013A E0F0      LDI	R31,0
+    013B 91E4      LPM	R30,0(Z)
+    013C BBE5      OUT	0x15,R30
+    013D C073      RJMP	0x01B1
+(0060)  case 4:if(dpw==1){PORTA=SEG7[set_sec%10]|0x80;}
+    013E 9180006C  LDS	R24,dpw
+    0140 3081      CPI	R24,1
+    0141 F481      BNE	0x0152
+    0142 E02A      LDI	R18,0xA
+    0143 E030      LDI	R19,0
+    0144 91000061  LDS	R16,set_sec
+    0146 2711      CLR	R17
+    0147 940E028D  CALL	mod16s
+    0149 01F8      MOVW	R30,R16
+    014A E584      LDI	R24,0x54
+    014B E090      LDI	R25,0
+    014C 0FE8      ADD	R30,R24
+    014D 1FF9      ADC	R31,R25
+    014E 91E4      LPM	R30,0(Z)
+    014F 68E0      ORI	R30,0x80
+    0150 BBEB      OUT	0x1B,R30
+    0151 C00E      RJMP	0x0160
+(0061)  	    else {PORTA=SEG7[set_sec%10];}
+    0152 E02A      LDI	R18,0xA
+    0153 E030      LDI	R19,0
+    0154 91000061  LDS	R16,set_sec
+    0156 2711      CLR	R17
+    0157 940E028D  CALL	mod16s
+    0159 01F8      MOVW	R30,R16
+    015A E584      LDI	R24,0x54
+    015B E090      LDI	R25,0
+    015C 0FE8      ADD	R30,R24
+    015D 1FF9      ADC	R31,R25
+    015E 91E4      LPM	R30,0(Z)
+    015F BBEB      OUT	0x1B,R30
+(0062) 		PORTC=ACT[4];break;
+    0160 E6E2      LDI	R30,0x62
+    0161 E0F0      LDI	R31,0
+    0162 91E4      LPM	R30,0(Z)
+    0163 BBE5      OUT	0x15,R30
+    0164 C04C      RJMP	0x01B1
+(0063)  case 5:PORTA=SEG7[set_sec/10];PORTC=ACT[5];break;
+    0165 E02A      LDI	R18,0xA
+    0166 E030      LDI	R19,0
+    0167 91000061  LDS	R16,set_sec
+    0169 2711      CLR	R17
+    016A 940E0291  CALL	div16s
+    016C 01F8      MOVW	R30,R16
+    016D E584      LDI	R24,0x54
+    016E E090      LDI	R25,0
+    016F 0FE8      ADD	R30,R24
+    0170 1FF9      ADC	R31,R25
+    0171 91E4      LPM	R30,0(Z)
+    0172 BBEB      OUT	0x1B,R30
+    0173 E6E3      LDI	R30,0x63
+    0174 E0F0      LDI	R31,0
+    0175 91E4      LPM	R30,0(Z)
+    0176 BBE5      OUT	0x15,R30
+    0177 C039      RJMP	0x01B1
+(0064)  case 6:PORTA=SEG7[set_min%10];PORTC=ACT[6];break;
+    0178 E02A      LDI	R18,0xA
+    0179 E030      LDI	R19,0
+    017A 91000060  LDS	R16,set_min
+    017C 2711      CLR	R17
+    017D 940E028D  CALL	mod16s
+    017F 01F8      MOVW	R30,R16
+    0180 E584      LDI	R24,0x54
+    0181 E090      LDI	R25,0
+    0182 0FE8      ADD	R30,R24
+    0183 1FF9      ADC	R31,R25
+    0184 91E4      LPM	R30,0(Z)
+    0185 BBEB      OUT	0x1B,R30
+    0186 E6E4      LDI	R30,0x64
+    0187 E0F0      LDI	R31,0
+    0188 91E4      LPM	R30,0(Z)
+    0189 BBE5      OUT	0x15,R30
+    018A C026      RJMP	0x01B1
+(0065)  case 7:if(dpt==1){PORTA=SEG7[set_min/10]|0x80;}
+    018B 9180006B  LDS	R24,dpt
+    018D 3081      CPI	R24,1
+    018E F481      BNE	0x019F
+    018F E02A      LDI	R18,0xA
+    0190 E030      LDI	R19,0
+    0191 91000060  LDS	R16,set_min
+    0193 2711      CLR	R17
+    0194 940E0291  CALL	div16s
+    0196 01F8      MOVW	R30,R16
+    0197 E584      LDI	R24,0x54
+    0198 E090      LDI	R25,0
+    0199 0FE8      ADD	R30,R24
+    019A 1FF9      ADC	R31,R25
+    019B 91E4      LPM	R30,0(Z)
+    019C 68E0      ORI	R30,0x80
+    019D BBEB      OUT	0x1B,R30
+    019E C00E      RJMP	0x01AD
+(0066)  	    else {PORTA=SEG7[set_min/10];} 
+    019F E02A      LDI	R18,0xA
+    01A0 E030      LDI	R19,0
+    01A1 91000060  LDS	R16,set_min
+    01A3 2711      CLR	R17
+    01A4 940E0291  CALL	div16s
+    01A6 01F8      MOVW	R30,R16
+    01A7 E584      LDI	R24,0x54
+    01A8 E090      LDI	R25,0
+    01A9 0FE8      ADD	R30,R24
+    01AA 1FF9      ADC	R31,R25
+    01AB 91E4      LPM	R30,0(Z)
+    01AC BBEB      OUT	0x1B,R30
+(0067) 		PORTC=ACT[7];break;
+    01AD E6E5      LDI	R30,0x65
+    01AE E0F0      LDI	R31,0
+    01AF 91E4      LPM	R30,0(Z)
+    01B0 BBE5      OUT	0x15,R30
+(0068)  default:break;
+(0069)  }
+(0070)  if(key_cnt==0)		
+    01B1 90200066  LDS	R2,key_cnt
+    01B3 90300067  LDS	R3,key_cnt+1
+    01B5 2022      TST	R2
+    01B6 F009      BEQ	0x01B8
+    01B7 C049      RJMP	0x0201
+    01B8 2033      TST	R3
+    01B9 F009      BEQ	0x01BB
+    01BA C046      RJMP	0x0201
+(0071)  {
+(0072)  if(S1==0){sec++;if(sec>59)sec=0;}
+    01BB 9984      SBIC	0x10,4
+    01BC C00D      RJMP	0x01CA
+    01BD 91800063  LDS	R24,sec
+    01BF 5F8F      SUBI	R24,0xFF
+    01C0 93800063  STS	sec,R24
+    01C2 E38B      LDI	R24,0x3B
+    01C3 90200063  LDS	R2,sec
+    01C5 1582      CP	R24,R2
+    01C6 F418      BCC	0x01CA
+    01C7 2422      CLR	R2
+    01C8 92200063  STS	sec,R2
+(0073)  if(S2==0){min++;if(min>59)min=0;}
+    01CA 9985      SBIC	0x10,5
+    01CB C00D      RJMP	0x01D9
+    01CC 91800062  LDS	R24,min
+    01CE 5F8F      SUBI	R24,0xFF
+    01CF 93800062  STS	min,R24
+    01D1 E38B      LDI	R24,0x3B
+    01D2 90200062  LDS	R2,min
+    01D4 1582      CP	R24,R2
+    01D5 F418      BCC	0x01D9
+    01D6 2422      CLR	R2
+    01D7 92200062  STS	min,R2
+(0074)  if(S3==0){set_sec++;if(set_sec>59)set_sec=0;} 
+    01D9 9986      SBIC	0x10,6
+    01DA C00D      RJMP	0x01E8
+    01DB 91800061  LDS	R24,set_sec
+    01DD 5F8F      SUBI	R24,0xFF
+    01DE 93800061  STS	set_sec,R24
+    01E0 E38B      LDI	R24,0x3B
+    01E1 90200061  LDS	R2,set_sec
+    01E3 1582      CP	R24,R2
+    01E4 F418      BCC	0x01E8
+    01E5 2422      CLR	R2
+    01E6 92200061  STS	set_sec,R2
+(0075)  if(S4==0){set_min++;if(set_min>59)set_min=0;} 
+    01E8 9987      SBIC	0x10,7
+    01E9 C00D      RJMP	0x01F7
+    01EA 91800060  LDS	R24,set_min
+    01EC 5F8F      SUBI	R24,0xFF
+    01ED 93800060  STS	set_min,R24
+    01EF E38B      LDI	R24,0x3B
+    01F0 90200060  LDS	R2,set_min
+    01F2 1582      CP	R24,R2
+    01F3 F418      BCC	0x01F7
+    01F4 2422      CLR	R2
+    01F5 92200060  STS	set_min,R2
+(0076)  if(SINT0==0){time_flag=1;} 
+    01F7 9982      SBIC	0x10,2
+    01F8 C003      RJMP	0x01FC
+    01F9 E081      LDI	R24,1
+    01FA 93800069  STS	time_flag,R24
+(0077)  if(SINT1==0){write_flag=1;}
+    01FC 9983      SBIC	0x10,3
+    01FD C003      RJMP	0x0201
+    01FE E081      LDI	R24,1
+    01FF 9380006A  STS	write_flag,R24
+(0078)  }
+    0201 940E02D8  CALL	pop_gset1
+    0203 9029      LD	R2,Y+
+    0204 BE2F      OUT	0x3F,R2
+    0205 91F9      LD	R31,Y+
+    0206 91E9      LD	R30,Y+
+    0207 9199      LD	R25,Y+
+    0208 9189      LD	R24,Y+
+    0209 9139      LD	R19,Y+
+    020A 9129      LD	R18,Y+
+    020B 9119      LD	R17,Y+
+    020C 9109      LD	R16,Y+
+    020D 9039      LD	R3,Y+
+    020E 9029      LD	R2,Y+
+    020F 9518      RETI
+_delay:
+  i                    --> R20
+  j                    --> R22
+  k                    --> R16
+    0210 940E02D3  CALL	push_gset2
+(0079) }
+(0080) /***********************/
+(0081) void delay(uint k)	
+(0082) {
+(0083) uint i,j;
+(0084) 	 for(i=0;i<k;i++)
+    0212 2744      CLR	R20
+    0213 2755      CLR	R21
+    0214 C00B      RJMP	0x0220
+(0085) 	 {	 
+(0086) 	 for(j=0;j<140;j++); 
+    0215 2766      CLR	R22
+    0216 2777      CLR	R23
+    0217 C002      RJMP	0x021A
+    0218 5F6F      SUBI	R22,0xFF
+    0219 4F7F      SBCI	R23,0xFF
+    021A 386C      CPI	R22,0x8C
+    021B E0E0      LDI	R30,0
+    021C 077E      CPC	R23,R30
+    021D F3D0      BCS	0x0218
+    021E 5F4F      SUBI	R20,0xFF
+    021F 4F5F      SBCI	R21,0xFF
+    0220 1740      CP	R20,R16
+    0221 0751      CPC	R21,R17
+    0222 F390      BCS	0x0215
+    0223 940E02C7  CALL	pop_gset2
+    0225 9508      RET
+_main:
+    0226 9722      SBIW	R28,2
+(0087) 	 }
+(0088) }
+(0089) /***********************/
+(0090) void main(void)	
+(0091) {	 					
+(0092) init_devices();		
+    0227 DE3C      RCALL	_init_devices
+    0228 C061      RJMP	0x028A
+(0093)   while(1)			
+(0094)   {						
+(0095)    		if(write_flag==1) 
+    0229 9180006A  LDS	R24,write_flag
+    022B 3081      CPI	R24,1
+    022C F519      BNE	0x0250
+(0096) 		{SREG=0x00;	
+    022D 2422      CLR	R2
+    022E BE2F      OUT	0x3F,R2
+(0097) 		EEPROM_WRITE(200,set_sec);delay(10); 
+    022F E081      LDI	R24,1
+    0230 E090      LDI	R25,0
+    0231 8399      STD	Y+1,R25
+    0232 8388      STD	Y+0,R24
+    0233 E621      LDI	R18,0x61
+    0234 E030      LDI	R19,0
+    0235 EC08      LDI	R16,0xC8
+    0236 E010      LDI	R17,0
+    0237 940E0326  CALL	_EEPROMWriteBytes
+    0239 E00A      LDI	R16,0xA
+    023A E010      LDI	R17,0
+    023B DFD4      RCALL	_delay
+(0098) 		EEPROM_WRITE(201,set_min);delay(10); 
+    023C E081      LDI	R24,1
+    023D E090      LDI	R25,0
+    023E 8399      STD	Y+1,R25
+    023F 8388      STD	Y+0,R24
+    0240 E620      LDI	R18,0x60
+    0241 E030      LDI	R19,0
+    0242 EC09      LDI	R16,0xC9
+    0243 E010      LDI	R17,0
+    0244 940E0326  CALL	_EEPROMWriteBytes
+    0246 E00A      LDI	R16,0xA
+    0247 E010      LDI	R17,0
+    0248 DFC7      RCALL	_delay
+(0099) 		write_flag=0;	
+    0249 2422      CLR	R2
+    024A 9220006A  STS	write_flag,R2
+(0100) 		dpw=1;			
+    024C E081      LDI	R24,1
+    024D 9380006C  STS	dpw,R24
+(0101) 		SREG|=0x80;
+    024F 9478      BSET	7
+(0102) 		}
+(0103) 		if(time_flag==1)
+    0250 91800069  LDS	R24,time_flag
+    0252 3081      CPI	R24,1
+    0253 F519      BNE	0x0277
+(0104) 		{SREG=0x00;		
+    0254 2422      CLR	R2
+    0255 BE2F      OUT	0x3F,R2
+(0105) 		EEPROM_READ(200,set_sec);delay(10);
+    0256 E081      LDI	R24,1
+    0257 E090      LDI	R25,0
+    0258 8399      STD	Y+1,R25
+    0259 8388      STD	Y+0,R24
+    025A E621      LDI	R18,0x61
+    025B E030      LDI	R19,0
+    025C EC08      LDI	R16,0xC8
+    025D E010      LDI	R17,0
+    025E 940E0302  CALL	_EEPROMReadBytes
+    0260 E00A      LDI	R16,0xA
+    0261 E010      LDI	R17,0
+    0262 DFAD      RCALL	_delay
+(0106) 		EEPROM_READ(201,set_min);delay(10); 
+    0263 E081      LDI	R24,1
+    0264 E090      LDI	R25,0
+    0265 8399      STD	Y+1,R25
+    0266 8388      STD	Y+0,R24
+    0267 E620      LDI	R18,0x60
+    0268 E030      LDI	R19,0
+    0269 EC09      LDI	R16,0xC9
+    026A E010      LDI	R17,0
+    026B 940E0302  CALL	_EEPROMReadBytes
+    026D E00A      LDI	R16,0xA
+    026E E010      LDI	R17,0
+    026F DFA0      RCALL	_delay
+(0107) 		SREG|=0x80;	
+    0270 9478      BSET	7
+(0108) 		dpt=1;		
+    0271 E081      LDI	R24,1
+    0272 9380006B  STS	dpt,R24
+(0109) 		time_flag=0;
+    0274 2422      CLR	R2
+    0275 92200069  STS	time_flag,R2
+(0110) 		}
+(0111) 		if(dpt==1)	
+    0277 9180006B  LDS	R24,dpt
+    0279 3081      CPI	R24,1
+    027A F479      BNE	0x028A
+(0112) 		{
+(0113) 		if((sec==set_sec)&&(min==set_min))LED1_0;
+FILE: <library>
+    027B 90200061  LDS	R2,set_sec
+    027D 90300063  LDS	R3,sec
+    027F 1432      CP	R3,R2
+    0280 F449      BNE	0x028A
+    0281 90200060  LDS	R2,set_min
+    0283 90300062  LDS	R3,min
+    0285 1432      CP	R3,R2
+    0286 F419      BNE	0x028A
+    0287 B388      IN	R24,0x18
+    0288 7F8E      ANDI	R24,0xFE
+    0289 BB88      OUT	0x18,R24
+    028A CF9E      RJMP	0x0229
+    028B 9622      ADIW	R28,2
+    028C 9508      RET
+mod16s:
+    028D 9468      BSET	6
+    028E 92DA      ST	R13,-Y
+    028F 2ED1      MOV	R13,R17
+    0290 C004      RJMP	0x0295
+div16s:
+    0291 94E8      BCLR	6
+    0292 92DA      ST	R13,-Y
+    0293 2ED1      MOV	R13,R17
+    0294 26D3      EOR	R13,R19
+    0295 FF17      SBRS	R17,7
+    0296 C004      RJMP	0x029B
+    0297 9510      COM	R17
+    0298 9500      COM	R16
+    0299 5F0F      SUBI	R16,0xFF
+    029A 4F1F      SBCI	R17,0xFF
+    029B FF37      SBRS	R19,7
+    029C C004      RJMP	0x02A1
+    029D 9530      COM	R19
+    029E 9520      COM	R18
+    029F 5F2F      SUBI	R18,0xFF
+    02A0 4F3F      SBCI	R19,0xFF
+    02A1 940E02AE  CALL	xdiv16u
+    02A3 FED7      SBRS	R13,7
+    02A4 C004      RJMP	0x02A9
+    02A5 9510      COM	R17
+    02A6 9500      COM	R16
+    02A7 5F0F      SUBI	R16,0xFF
+    02A8 4F1F      SBCI	R17,0xFF
+    02A9 90D9      LD	R13,Y+
+    02AA 9508      RET
+mod16u:
+    02AB 9468      BSET	6
+    02AC C001      RJMP	xdiv16u
+div16u:
+    02AD 94E8      BCLR	6
+xdiv16u:
+    02AE 92EA      ST	R14,-Y
+    02AF 92FA      ST	R15,-Y
+    02B0 938A      ST	R24,-Y
+    02B1 24EE      CLR	R14
+    02B2 24FF      CLR	R15
+    02B3 E180      LDI	R24,0x10
+    02B4 0F00      LSL	R16
+    02B5 1F11      ROL	R17
+    02B6 1CEE      ROL	R14
+    02B7 1CFF      ROL	R15
+    02B8 16E2      CP	R14,R18
+    02B9 06F3      CPC	R15,R19
+    02BA F018      BCS	0x02BE
+    02BB 1AE2      SUB	R14,R18
+    02BC 0AF3      SBC	R15,R19
+    02BD 9503      INC	R16
+    02BE 958A      DEC	R24
+    02BF F7A1      BNE	0x02B4
+    02C0 F416      BRTC	0x02C3
+    02C1 2D0E      MOV	R16,R14
+    02C2 2D1F      MOV	R17,R15
+    02C3 9189      LD	R24,Y+
+    02C4 90F9      LD	R15,Y+
+    02C5 90E9      LD	R14,Y+
+    02C6 9508      RET
+pop_gset2:
+    02C7 E0E2      LDI	R30,2
+    02C8 940C02D9  JMP	pop
+pop_gset4:
+    02CA E0E8      LDI	R30,0x8
+    02CB 940C02D9  JMP	pop
+push_gset5:
+    02CD 92FA      ST	R15,-Y
+    02CE 92EA      ST	R14,-Y
+push_gset4:
+    02CF 92DA      ST	R13,-Y
+    02D0 92CA      ST	R12,-Y
+push_gset3:
+    02D1 92BA      ST	R11,-Y
+    02D2 92AA      ST	R10,-Y
+push_gset2:
+    02D3 937A      ST	R23,-Y
+    02D4 936A      ST	R22,-Y
+push_gset1:
+    02D5 935A      ST	R21,-Y
+    02D6 934A      ST	R20,-Y
+    02D7 9508      RET
+pop_gset1:
+    02D8 E0E1      LDI	R30,1
+pop:
+    02D9 9149      LD	R20,Y+
+    02DA 9159      LD	R21,Y+
+    02DB FDE0      SBRC	R30,0
+    02DC 9508      RET
+    02DD 9169      LD	R22,Y+
+    02DE 9179      LD	R23,Y+
+    02DF FDE1      SBRC	R30,1
+    02E0 9508      RET
+    02E1 90A9      LD	R10,Y+
+    02E2 90B9      LD	R11,Y+
+    02E3 FDE2      SBRC	R30,2
+    02E4 9508      RET
+    02E5 90C9      LD	R12,Y+
+    02E6 90D9      LD	R13,Y+
+    02E7 FDE3      SBRC	R30,3
+    02E8 9508      RET
+    02E9 90E9      LD	R14,Y+
+    02EA 90F9      LD	R15,Y+
+    02EB 9508      RET
+_EEPROMread:
+    02EC BB1F      OUT	0x1F,R17
+    02ED BB0E      OUT	0x1E,R16
+    02EE 9AE0      SBI	0x1C,0
+    02EF B30D      IN	R16,0x1D
+    02F0 9508      RET
+_EEPROMwrite:
+    02F1 940E02D5  CALL	push_gset1
+    02F3 BB1F      OUT	0x1F,R17
+    02F4 BB0E      OUT	0x1E,R16
+    02F5 BB2D      OUT	0x1D,R18
+    02F6 B74F      IN	R20,0x3F
+    02F7 94F8      BCLR	7
+    02F8 9AE2      SBI	0x1C,2
+    02F9 9AE1      SBI	0x1C,1
+    02FA 99E1      SBIC	0x1C,1
+    02FB CFFE      RJMP	0x02FA
+    02FC BF4F      OUT	0x3F,R20
+    02FD 2700      CLR	R16
+    02FE 2711      CLR	R17
+    02FF 940E02D8  CALL	pop_gset1
+    0301 9508      RET
+_EEPROMReadBytes:
+    0302 940E02CF  CALL	push_gset4
+    0304 2EC2      MOV	R12,R18
+    0305 2ED3      MOV	R13,R19
+    0306 2EA0      MOV	R10,R16
+    0307 2EB1      MOV	R11,R17
+    0308 8568      LDD	R22,Y+8
+    0309 8579      LDD	R23,Y+9
+    030A 2D4C      MOV	R20,R12
+    030B 2D5D      MOV	R21,R13
+    030C C00E      RJMP	0x031B
+    030D 2D0A      MOV	R16,R10
+    030E 2D1B      MOV	R17,R11
+    030F 940E02EC  CALL	_EEPROMread
+    0311 2FE4      MOV	R30,R20
+    0312 2FF5      MOV	R31,R21
+    0313 8300      STD	Z+0,R16
+    0314 2D8A      MOV	R24,R10
+    0315 2D9B      MOV	R25,R11
+    0316 9601      ADIW	R24,1
+    0317 2EA8      MOV	R10,R24
+    0318 2EB9      MOV	R11,R25
+    0319 5F4F      SUBI	R20,0xFF
+    031A 4F5F      SBCI	R21,0xFF
+    031B 2E26      MOV	R2,R22
+    031C 2E37      MOV	R3,R23
+    031D 5061      SUBI	R22,1
+    031E 4070      SBCI	R23,0
+    031F 2022      TST	R2
+    0320 F761      BNE	0x030D
+    0321 2033      TST	R3
+    0322 F751      BNE	0x030D
+    0323 940E02CA  CALL	pop_gset4
+    0325 9508      RET
+_EEPROMWriteBytes:
+    0326 940E02CF  CALL	push_gset4
+    0328 2EC2      MOV	R12,R18
+    0329 2ED3      MOV	R13,R19
+    032A 2EA0      MOV	R10,R16
+    032B 2EB1      MOV	R11,R17
+    032C 8568      LDD	R22,Y+8
+    032D 8579      LDD	R23,Y+9
+    032E 2D4C      MOV	R20,R12
+    032F 2D5D      MOV	R21,R13
+    0330 C00E      RJMP	0x033F
+    0331 2FE4      MOV	R30,R20
+    0332 2FF5      MOV	R31,R21
+    0333 8120      LDD	R18,Z+0
+    0334 2D0A      MOV	R16,R10
+    0335 2D1B      MOV	R17,R11
+    0336 940E02F1  CALL	_EEPROMwrite
+    0338 2D8A      MOV	R24,R10
+    0339 2D9B      MOV	R25,R11
+    033A 9601      ADIW	R24,1
+    033B 2EA8      MOV	R10,R24
+    033C 2EB9      MOV	R11,R25
+    033D 5F4F      SUBI	R20,0xFF
+    033E 4F5F      SBCI	R21,0xFF
+    033F 2E26      MOV	R2,R22
+    0340 2E37      MOV	R3,R23
+    0341 5061      SUBI	R22,1
+    0342 4070      SBCI	R23,0
+    0343 2022      TST	R2
+    0344 F761      BNE	0x0331
+    0345 2033      TST	R3
+    0346 F751      BNE	0x0331
+    0347 940E02CA  CALL	pop_gset4
+    0349 9508      RET

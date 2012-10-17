@@ -1,0 +1,142 @@
+__start:
+__text_start:
+    002A E5CF      LDI	R28,0x5F
+    002B E0D4      LDI	R29,4
+    002C BFCD      OUT	0x3D,R28
+    002D BFDE      OUT	0x3E,R29
+    002E 51C0      SUBI	R28,0x10
+    002F 40D0      SBCI	R29,0
+    0030 EA0A      LDI	R16,0xAA
+    0031 8308      STD	Y+0,R16
+    0032 2400      CLR	R0
+    0033 E6E0      LDI	R30,0x60
+    0034 E0F0      LDI	R31,0
+    0035 E010      LDI	R17,0
+    0036 36E0      CPI	R30,0x60
+    0037 07F1      CPC	R31,R17
+    0038 F011      BEQ	0x003B
+    0039 9201      ST	R0,Z+
+    003A CFFB      RJMP	0x0036
+    003B 8300      STD	Z+0,R16
+    003C E5E4      LDI	R30,0x54
+    003D E0F0      LDI	R31,0
+    003E E6A0      LDI	R26,0x60
+    003F E0B0      LDI	R27,0
+    0040 E010      LDI	R17,0
+    0041 35E4      CPI	R30,0x54
+    0042 07F1      CPC	R31,R17
+    0043 F021      BEQ	0x0048
+    0044 95C8      LPM
+    0045 9631      ADIW	R30,1
+    0046 920D      ST	R0,X+
+    0047 CFF9      RJMP	0x0041
+    0048 940E006E  CALL	_main
+_exit:
+    004A CFFF      RJMP	_exit
+FILE: d:\MYDOCU~1\ac13-1\ac13-1.c
+(0001) #include <iom16v.h>
+(0002) #include <macros.h>
+(0003) //==================================
+(0004) void port_init(void)
+(0005) {
+(0006)  PORTA = 0xFF; 
+_port_init:
+    004B EF8F      LDI	R24,0xFF
+    004C BB8B      OUT	0x1B,R24
+(0007)  DDRA  = 0x00; 
+    004D 2422      CLR	R2
+    004E BA2A      OUT	0x1A,R2
+(0008)  PORTB = 0xFF; 
+    004F BB88      OUT	0x18,R24
+(0009)  DDRB  = 0xFF; 
+    0050 BB87      OUT	0x17,R24
+(0010)  PORTC = 0xFF; 
+    0051 BB85      OUT	0x15,R24
+(0011)  DDRC  = 0x00; 
+    0052 BA24      OUT	0x14,R2
+(0012)  PORTD = 0xFF; 
+    0053 BB82      OUT	0x12,R24
+(0013)  DDRD  = 0x02; 
+    0054 E082      LDI	R24,2
+    0055 BB81      OUT	0x11,R24
+    0056 9508      RET
+(0014) }
+(0015) //**********************************************
+(0016) void uart0_init(void)
+(0017) {
+(0018)  UCSRB = 0x00; 
+_uart0_init:
+    0057 2422      CLR	R2
+    0058 B82A      OUT	0x0A,R2
+(0019)  UCSRA = 0x02;
+    0059 E082      LDI	R24,2
+    005A B98B      OUT	0x0B,R24
+(0020)  UCSRC = 0x06;
+    005B E086      LDI	R24,6
+    005C BD80      OUT	0x20,R24
+(0021)  UBRRL = 0x67;
+    005D E687      LDI	R24,0x67
+    005E B989      OUT	0x09,R24
+(0022)  UBRRH = 0x00; 
+    005F BC20      OUT	0x20,R2
+(0023)  UCSRB = 0x18;
+    0060 E188      LDI	R24,0x18
+    0061 B98A      OUT	0x0A,R24
+    0062 9508      RET
+(0024) }
+(0025) //**********************************************
+(0026) void init_devices(void) 
+(0027) {
+(0028)  port_init();
+_init_devices:
+    0063 DFE7      RCALL	_port_init
+(0029)  uart0_init();
+    0064 DFF2      RCALL	_uart0_init
+    0065 9508      RET
+(0030)  }
+(0031) //**********************************************
+(0032) void uart0_send(unsigned char i)
+(0033) {
+(0034) while(!(UCSRA&(1<<UDRE)));
+_uart0_send:
+  i                    --> R16
+    0066 9B5D      SBIS	0x0B,5
+    0067 CFFE      RJMP	_uart0_send
+(0035) UDR=i;
+    0068 B90C      OUT	0x0C,R16
+    0069 9508      RET
+(0036) }
+(0037) //************************************************
+(0038) unsigned char uart0_receive(void) 
+(0039) {
+(0040) while(!(UCSRA&(1<<RXC)));
+_uart0_receive:
+    006A 9B5F      SBIS	0x0B,7
+    006B CFFE      RJMP	_uart0_receive
+(0041) return UDR;
+    006C B10C      IN	R16,0x0C
+    006D 9508      RET
+(0042) }
+(0043) //---------------------------------------------------------------
+(0044) void main(void)
+(0045) {
+(0046) unsigned char temp;
+(0047) init_devices();
+_main:
+  temp                 --> R20
+    006E DFF4      RCALL	_init_devices
+    006F C006      RJMP	0x0076
+(0048)  while(1) 
+(0049)  {
+(0050)  temp=uart0_receive();
+    0070 DFF9      RCALL	_uart0_receive
+    0071 2F40      MOV	R20,R16
+(0051)  PORTB=~temp; 
+    0072 2E24      MOV	R2,R20
+    0073 9420      COM	R2
+    0074 BA28      OUT	0x18,R2
+(0052)  uart0_send(temp);
+FILE: <library>
+    0075 DFF0      RCALL	_uart0_send
+    0076 CFF9      RJMP	0x0070
+    0077 9508      RET
