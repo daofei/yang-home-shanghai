@@ -1,0 +1,285 @@
+                        .module ac13-2.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac13-2\ac13-2.c
+ 0000                   .dbfunc e port_init _port_init fV
+                        .even
+ 0000           _port_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 5
+ 0000           ; #include <iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; /*************************************************/
+ 0000           ; void port_init(void) 
+ 0000           ; {
+ 0000                   .dbline 6
+ 0000           ;  PORTA = 0xFF; 
+ 0000 8FEF              ldi R24,255
+ 0002 8BBB              out 0x1b,R24
+ 0004                   .dbline 7
+ 0004           ;  DDRA  = 0x00; 
+ 0004 2224              clr R2
+ 0006 2ABA              out 0x1a,R2
+ 0008                   .dbline 8
+ 0008           ;  PORTB = 0xFF; 
+ 0008 88BB              out 0x18,R24
+ 000A                   .dbline 9
+ 000A           ;  DDRB  = 0xFF; 
+ 000A 87BB              out 0x17,R24
+ 000C                   .dbline 10
+ 000C           ;  PORTC = 0xFF; 
+ 000C 85BB              out 0x15,R24
+ 000E                   .dbline 11
+ 000E           ;  DDRC  = 0x00; 
+ 000E 24BA              out 0x14,R2
+ 0010                   .dbline 12
+ 0010           ;  PORTD = 0xFF; 
+ 0010 82BB              out 0x12,R24
+ 0012                   .dbline 13
+ 0012           ;  DDRD  = 0x02;
+ 0012 82E0              ldi R24,2
+ 0014 81BB              out 0x11,R24
+ 0016                   .dbline -2
+ 0016           L1:
+ 0016                   .dbline 0 ; func end
+ 0016 0895              ret
+ 0018                   .dbend
+ 0018                   .dbfunc e uart0_init _uart0_init fV
+                        .even
+ 0018           _uart0_init::
+ 0018                   .dbline -1
+ 0018                   .dbline 17
+ 0018           ; }
+ 0018           ; /**************************************************/
+ 0018           ; void uart0_init(void) 
+ 0018           ; {
+ 0018                   .dbline 18
+ 0018           ;  UCSRB = 0x00; 
+ 0018 2224              clr R2
+ 001A 2AB8              out 0xa,R2
+ 001C                   .dbline 19
+ 001C           ;  UCSRA = 0x02;
+ 001C 82E0              ldi R24,2
+ 001E 8BB9              out 0xb,R24
+ 0020                   .dbline 20
+ 0020           ;  UCSRC = 0x06;
+ 0020 86E0              ldi R24,6
+ 0022 80BD              out 0x20,R24
+ 0024                   .dbline 21
+ 0024           ;  UBRRL = 0x67; 
+ 0024 87E6              ldi R24,103
+ 0026 89B9              out 0x9,R24
+ 0028                   .dbline 22
+ 0028           ;  UBRRH = 0x00; 
+ 0028 20BC              out 0x20,R2
+ 002A                   .dbline 23
+ 002A           ;  UCSRB = 0x18;
+ 002A 88E1              ldi R24,24
+ 002C 8AB9              out 0xa,R24
+ 002E                   .dbline -2
+ 002E           L2:
+ 002E                   .dbline 0 ; func end
+ 002E 0895              ret
+ 0030                   .dbend
+ 0030                   .dbfunc e init_devices _init_devices fV
+                        .even
+ 0030           _init_devices::
+ 0030                   .dbline -1
+ 0030                   .dbline 27
+ 0030           ; }
+ 0030           ; /********************************************************/
+ 0030           ; void init_devices(void) 
+ 0030           ; {
+ 0030                   .dbline 28
+ 0030           ;  port_init();
+ 0030 E7DF              xcall _port_init
+ 0032                   .dbline 29
+ 0032           ;  uart0_init();
+ 0032 F2DF              xcall _uart0_init
+ 0034                   .dbline -2
+ 0034           L3:
+ 0034                   .dbline 0 ; func end
+ 0034 0895              ret
+ 0036                   .dbend
+ 0036                   .dbfunc e uart0_send _uart0_send fV
+ 0036           ;              i -> R16
+                        .even
+ 0036           _uart0_send::
+ 0036                   .dbline -1
+ 0036                   .dbline 33
+ 0036           ;  }
+ 0036           ; //**********************************************
+ 0036           ; void uart0_send(unsigned char i)
+ 0036           ; {
+ 0036           L5:
+ 0036                   .dbline 34
+ 0036           L6:
+ 0036                   .dbline 34
+ 0036           ; while(!(UCSRA&(1<<UDRE)));
+ 0036 5D9B              sbis 0xb,5
+ 0038 FECF              rjmp L5
+ 003A                   .dbline 35
+ 003A           ; UDR=i;
+ 003A 0CB9              out 0xc,R16
+ 003C                   .dbline -2
+ 003C           L4:
+ 003C                   .dbline 0 ; func end
+ 003C 0895              ret
+ 003E                   .dbsym r i 16 c
+ 003E                   .dbend
+ 003E                   .dbfunc e str_send _str_send fV
+ 003E           ;              s -> R20,R21
+                        .even
+ 003E           _str_send::
+ 003E 0E940000          xcall push_gset1
+ 0042 A801              movw R20,R16
+ 0044                   .dbline -1
+ 0044                   .dbline 39
+ 0044           ; }
+ 0044           ; /*******************************************/
+ 0044           ; void str_send(char *s) 
+ 0044           ; {
+ 0044 05C0              xjmp L10
+ 0046           L9:
+ 0046                   .dbline 41
+ 0046                   .dbline 42
+ 0046 FA01              movw R30,R20
+ 0048 0081              ldd R16,z+0
+ 004A F5DF              xcall _uart0_send
+ 004C                   .dbline 43
+ 004C 4F5F              subi R20,255  ; offset = 1
+ 004E 5F4F              sbci R21,255
+ 0050                   .dbline 44
+ 0050           L10:
+ 0050                   .dbline 40
+ 0050           ;  while(*s)
+ 0050 FA01              movw R30,R20
+ 0052 2080              ldd R2,z+0
+ 0054 2220              tst R2
+ 0056 B9F7              brne L9
+ 0058                   .dbline -2
+ 0058           L8:
+ 0058 0E940000          xcall pop_gset1
+ 005C                   .dbline 0 ; func end
+ 005C 0895              ret
+ 005E                   .dbsym r s 20 pc
+ 005E                   .dbend
+ 005E                   .dbfunc e uart0_receive _uart0_receive fc
+                        .even
+ 005E           _uart0_receive::
+ 005E                   .dbline -1
+ 005E                   .dbline 48
+ 005E           ;  {
+ 005E           ;  uart0_send(*s); 
+ 005E           ;  s++;
+ 005E           ;  }
+ 005E           ; }
+ 005E           ; /*********************************************/
+ 005E           ; unsigned char uart0_receive(void) 
+ 005E           ; {
+ 005E           L13:
+ 005E                   .dbline 49
+ 005E           L14:
+ 005E                   .dbline 49
+ 005E           ; while(!(UCSRA&(1<<RXC)));
+ 005E 5F9B              sbis 0xb,7
+ 0060 FECF              rjmp L13
+ 0062                   .dbline 50
+ 0062           ; return UDR;
+ 0062 0CB1              in R16,0xc
+ 0064                   .dbline -2
+ 0064           L12:
+ 0064                   .dbline 0 ; func end
+ 0064 0895              ret
+ 0066                   .dbend
+ 0066                   .dbfunc e main _main fV
+ 0066           ;           temp -> R20
+                        .even
+ 0066           _main::
+ 0066                   .dbline -1
+ 0066                   .dbline 54
+ 0066           ; }
+ 0066           ; /********************************************/
+ 0066           ; void main(void)
+ 0066           ; {
+ 0066                   .dbline 56
+ 0066           ; unsigned char temp; 
+ 0066           ; init_devices();
+ 0066 E4DF              xcall _init_devices
+ 0068                   .dbline 57
+ 0068           ; str_send("上海红棱电子有限公司  ");
+ 0068 00E0              ldi R16,<L17
+ 006A 10E0              ldi R17,>L17
+ 006C E8DF              xcall _str_send
+ 006E                   .dbline 58
+ 006E           ; str_send("AVR单片机RS232通信测试程序  ");
+ 006E 00E0              ldi R16,<L18
+ 0070 10E0              ldi R17,>L18
+ 0072 E5DF              xcall _str_send
+ 0074                   .dbline 59
+ 0074           ; str_send("http://www.hlelectron.com  ");
+ 0074 00E0              ldi R16,<L19
+ 0076 10E0              ldi R17,>L19
+ 0078 E2DF              xcall _str_send
+ 007A 0AC0              xjmp L21
+ 007C           L20:
+ 007C                   .dbline 61
+ 007C                   .dbline 62
+ 007C F0DF              xcall _uart0_receive
+ 007E 402F              mov R20,R16
+ 0080                   .dbline 63
+ 0080 00E0              ldi R16,<L23
+ 0082 10E0              ldi R17,>L23
+ 0084 DCDF              xcall _str_send
+ 0086                   .dbline 64
+ 0086 042F              mov R16,R20
+ 0088 D6DF              xcall _uart0_send
+ 008A                   .dbline 65
+ 008A 00E0              ldi R16,<L24
+ 008C 10E0              ldi R17,>L24
+ 008E D7DF              xcall _str_send
+ 0090                   .dbline 66
+ 0090           L21:
+ 0090                   .dbline 60
+ 0090 F5CF              xjmp L20
+ 0092           X0:
+ 0092                   .dbline -2
+ 0092           L16:
+ 0092                   .dbline 0 ; func end
+ 0092 0895              ret
+ 0094                   .dbsym r temp 20 c
+ 0094                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac13-2\ac13-2.c
+ 0000           L24:
+ 0000                   .blkb 3
+                        .area idata
+ 0000 202000            .byte 32,32,0
+                        .area data(ram, con, rel)
+ 0003                   .dbfile d:\MYDOCU~1\ac13-2\ac13-2.c
+ 0003           L23:
+ 0003                   .blkb 13
+                        .area idata
+ 0003 B5B1C7B0B0B4BCFCCAC7A3BA00        .byte 181,177,199,176,176,180,188,252,202,199,163,186,0
+                        .area data(ram, con, rel)
+ 0010                   .dbfile d:\MYDOCU~1\ac13-2\ac13-2.c
+ 0010           L19:
+ 0010                   .blkb 28
+                        .area idata
+ 0010 687474703A2F2F7777772E686C656C65  .byte 'h,'t,'t,'p,58,47,47,'w,'w,'w,46,'h,'l,'e,'l,'e
+ 0020 6374726F6E2E636F6D202000  .byte 'c,'t,'r,'o,'n,46,'c,'o,'m,32,32,0
+                        .area data(ram, con, rel)
+ 002C                   .dbfile d:\MYDOCU~1\ac13-2\ac13-2.c
+ 002C           L18:
+ 002C                   .blkb 29
+                        .area idata
+ 002C 415652B5A5C6ACBBFA5253323332CDA8  .byte 'A,'V,'R,181,165,198,172,187,250,'R,'S,50,51,50,205,168
+ 003C D0C5B2E2CAD4B3CCD0F2202000        .byte 208,197,178,226,202,212,179,204,208,242,32,32,0
+                        .area data(ram, con, rel)
+ 0049                   .dbfile d:\MYDOCU~1\ac13-2\ac13-2.c
+ 0049           L17:
+ 0049                   .blkb 23
+                        .area idata
+ 0049 C9CFBAA3BAECC0E2B5E7D7D3D3D0CFDE  .byte 201,207,186,163,186,236,192,226,181,231,215,211,211,208,207,222
+ 0059 B9ABCBBE202000    .byte 185,171,203,190,32,32,0
+                        .area data(ram, con, rel)
+ 0060                   .dbfile d:\MYDOCU~1\ac13-2\ac13-2.c

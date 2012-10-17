@@ -1,0 +1,259 @@
+                        .module ac17-1.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac17-1\ac17-1.c
+ 0000                   .dbfunc e delay_1ms _delay_1ms fV
+ 0000           ;              i -> R16,R17
+                        .even
+ 0000           _delay_1ms::
+ 0000                   .dbline -1
+ 0000                   .dbline 8
+ 0000           ; #include <iom16v.h>   
+ 0000           ; #include <macros.h>
+ 0000           ; #define  uchar unsigned char  
+ 0000           ; #define  uint unsigned int
+ 0000           ; //----------------------------------------
+ 0000           ; #define xtal 8        
+ 0000           ; void delay_1ms(void)  
+ 0000           ; {
+ 0000                   .dbline 10
+ 0000           ; uint i;
+ 0000           ; for(i=1;i<(uint)(xtal*143-2);i++)
+ 0000 01E0              ldi R16,1
+ 0002 10E0              ldi R17,0
+ 0004 02C0              xjmp L5
+ 0006           L2:
+ 0006                   .dbline 11
+ 0006           L3:
+ 0006                   .dbline 10
+ 0006 0F5F              subi R16,255  ; offset = 1
+ 0008 1F4F              sbci R17,255
+ 000A           L5:
+ 000A                   .dbline 10
+ 000A 0637              cpi R16,118
+ 000C E4E0              ldi R30,4
+ 000E 1E07              cpc R17,R30
+ 0010 D0F3              brlo L2
+ 0012                   .dbline -2
+ 0012           L1:
+ 0012                   .dbline 0 ; func end
+ 0012 0895              ret
+ 0014                   .dbsym r i 16 i
+ 0014                   .dbend
+ 0014                   .dbfunc e delay_ms _delay_ms fV
+ 0014           ;              i -> R20,R21
+ 0014           ;              n -> R22,R23
+                        .even
+ 0014           _delay_ms::
+ 0014 0E940000          xcall push_gset2
+ 0018 B801              movw R22,R16
+ 001A                   .dbline -1
+ 001A                   .dbline 15
+ 001A           ;       ;
+ 001A           ; }
+ 001A           ; //=========================================
+ 001A           ; void delay_ms(uint n)
+ 001A           ; {
+ 001A                   .dbline 16
+ 001A           ; uint i=0;
+ 001A 4427              clr R20
+ 001C 5527              clr R21
+ 001E 03C0              xjmp L8
+ 0020           L7:
+ 0020                   .dbline 18
+ 0020                   .dbline 19
+ 0020 EFDF              xcall _delay_1ms
+ 0022                   .dbline 20
+ 0022 4F5F              subi R20,255  ; offset = 1
+ 0024 5F4F              sbci R21,255
+ 0026                   .dbline 21
+ 0026           L8:
+ 0026                   .dbline 17
+ 0026           ;  while(i<n)
+ 0026 4617              cp R20,R22
+ 0028 5707              cpc R21,R23
+ 002A D0F3              brlo L7
+ 002C                   .dbline -2
+ 002C           L6:
+ 002C 0E940000          xcall pop_gset2
+ 0030                   .dbline 0 ; func end
+ 0030 0895              ret
+ 0032                   .dbsym r i 20 i
+ 0032                   .dbsym r n 22 i
+ 0032                   .dbend
+ 0032                   .dbfunc e port_init _port_init fV
+                        .even
+ 0032           _port_init::
+ 0032                   .dbline -1
+ 0032                   .dbline 25
+ 0032           ;  {
+ 0032           ;  delay_1ms();
+ 0032           ;  i++;
+ 0032           ;  }
+ 0032           ; }
+ 0032           ; //-------------------------------------------
+ 0032           ; void port_init(void)
+ 0032           ; {
+ 0032                   .dbline 26
+ 0032           ;  PORTA = 0x00;
+ 0032 2224              clr R2
+ 0034 2BBA              out 0x1b,R2
+ 0036                   .dbline 27
+ 0036           ;  DDRA  = 0x00;
+ 0036 2ABA              out 0x1a,R2
+ 0038                   .dbline 28
+ 0038           ;  PORTB = 0xFF;        
+ 0038 8FEF              ldi R24,255
+ 003A 88BB              out 0x18,R24
+ 003C                   .dbline 29
+ 003C           ;  DDRB  = 0xFF;
+ 003C 87BB              out 0x17,R24
+ 003E                   .dbline 30
+ 003E           ;  PORTC = 0x00; 
+ 003E 25BA              out 0x15,R2
+ 0040                   .dbline 31
+ 0040           ;  DDRC  = 0x00;
+ 0040 24BA              out 0x14,R2
+ 0042                   .dbline 32
+ 0042           ;  PORTD = 0x00;
+ 0042 22BA              out 0x12,R2
+ 0044                   .dbline 33
+ 0044           ;  DDRD  = 0x00;
+ 0044 21BA              out 0x11,R2
+ 0046                   .dbline -2
+ 0046           L10:
+ 0046                   .dbline 0 ; func end
+ 0046 0895              ret
+ 0048                   .dbend
+ 0048                   .dbfunc e watchdog_init _watchdog_init fV
+                        .even
+ 0048           _watchdog_init::
+ 0048                   .dbline -1
+ 0048                   .dbline 37
+ 0048           ; }
+ 0048           ; //**************
+ 0048           ; void watchdog_init(void)
+ 0048           ; {
+ 0048                   .dbline 38
+ 0048           ;  WDR(); 
+ 0048 A895              wdr
+ 004A                   .dbline 39
+ 004A           ;  WDTCR = 0x08; 
+ 004A 88E0              ldi R24,8
+ 004C 81BD              out 0x21,R24
+ 004E                   .dbline -2
+ 004E           L11:
+ 004E                   .dbline 0 ; func end
+ 004E 0895              ret
+ 0050                   .dbend
+ 0050                   .dbfunc e init_devices _init_devices fV
+                        .even
+ 0050           _init_devices::
+ 0050                   .dbline -1
+ 0050                   .dbline 43
+ 0050           ; }
+ 0050           ; //=========================================
+ 0050           ; void init_devices(void)
+ 0050           ; {
+ 0050                   .dbline 44
+ 0050           ;  port_init();
+ 0050 F0DF              xcall _port_init
+ 0052                   .dbline 45
+ 0052           ;  watchdog_init();
+ 0052 FADF              xcall _watchdog_init
+ 0054                   .dbline -2
+ 0054           L12:
+ 0054                   .dbline 0 ; func end
+ 0054 0895              ret
+ 0056                   .dbend
+ 0056                   .dbfunc e main _main fV
+                        .even
+ 0056           _main::
+ 0056                   .dbline -1
+ 0056                   .dbline 49
+ 0056           ;  }
+ 0056           ; //*****************************************
+ 0056           ; void main(void) 
+ 0056           ; {
+ 0056                   .dbline 50
+ 0056           ;  init_devices();      
+ 0056 FCDF              xcall _init_devices
+ 0058 2FC0              xjmp L15
+ 005A           L14:
+ 005A                   .dbline 52
+ 005A                   .dbline 53
+ 005A 8EEF              ldi R24,254
+ 005C 88BB              out 0x18,R24
+ 005E                   .dbline 54
+ 005E 03E0              ldi R16,3
+ 0060 10E0              ldi R17,0
+ 0062 D8DF              xcall _delay_ms
+ 0064                   .dbline 55
+ 0064 8DEF              ldi R24,253
+ 0066 88BB              out 0x18,R24
+ 0068                   .dbline 56
+ 0068 03E0              ldi R16,3
+ 006A 10E0              ldi R17,0
+ 006C D3DF              xcall _delay_ms
+ 006E                   .dbline 57
+ 006E 8BEF              ldi R24,251
+ 0070 88BB              out 0x18,R24
+ 0072                   .dbline 58
+ 0072 03E0              ldi R16,3
+ 0074 10E0              ldi R17,0
+ 0076 CEDF              xcall _delay_ms
+ 0078                   .dbline 59
+ 0078 87EF              ldi R24,247
+ 007A 88BB              out 0x18,R24
+ 007C                   .dbline 60
+ 007C 03E0              ldi R16,3
+ 007E 10E0              ldi R17,0
+ 0080 C9DF              xcall _delay_ms
+ 0082                   .dbline 61
+ 0082 A895              wdr
+ 0084                   .dbline 62
+ 0084 8FEE              ldi R24,239
+ 0086 88BB              out 0x18,R24
+ 0088                   .dbline 63
+ 0088 03E0              ldi R16,3
+ 008A 10E0              ldi R17,0
+ 008C C3DF              xcall _delay_ms
+ 008E                   .dbline 64
+ 008E 8FED              ldi R24,223
+ 0090 88BB              out 0x18,R24
+ 0092                   .dbline 65
+ 0092 03E0              ldi R16,3
+ 0094 10E0              ldi R17,0
+ 0096 BEDF              xcall _delay_ms
+ 0098                   .dbline 66
+ 0098 8FEB              ldi R24,191
+ 009A 88BB              out 0x18,R24
+ 009C                   .dbline 67
+ 009C 03E0              ldi R16,3
+ 009E 10E0              ldi R17,0
+ 00A0 B9DF              xcall _delay_ms
+ 00A2                   .dbline 68
+ 00A2 8FE7              ldi R24,127
+ 00A4 88BB              out 0x18,R24
+ 00A6                   .dbline 69
+ 00A6 03E0              ldi R16,3
+ 00A8 10E0              ldi R17,0
+ 00AA B4DF              xcall _delay_ms
+ 00AC                   .dbline 70
+ 00AC 8FEF              ldi R24,255
+ 00AE 88BB              out 0x18,R24
+ 00B0                   .dbline 71
+ 00B0 03E0              ldi R16,3
+ 00B2 10E0              ldi R17,0
+ 00B4 AFDF              xcall _delay_ms
+ 00B6                   .dbline 72
+ 00B6 A895              wdr
+ 00B8                   .dbline 73
+ 00B8           L15:
+ 00B8                   .dbline 51
+ 00B8 D0CF              xjmp L14
+ 00BA           X0:
+ 00BA                   .dbline -2
+ 00BA           L13:
+ 00BA                   .dbline 0 ; func end
+ 00BA 0895              ret
+ 00BC                   .dbend

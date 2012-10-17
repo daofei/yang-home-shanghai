@@ -1,0 +1,542 @@
+                        .module ac9-3.c
+                        .area lit(rom, con, rel)
+ 0000           _SEG7::
+ 0000 3F06              .byte 63,6
+ 0002 5B4F              .byte 91,'O
+ 0004 666D              .byte 'f,'m
+ 0006 7D07              .byte 125,7
+ 0008 7F6F              .byte 127,'o
+ 000A                   .dbfile d:\MYDOCU~1\ac9-3\ac9-3.c
+ 000A                   .dbsym e SEG7 _SEG7 A[10:10]kc
+ 000A           _ACT::
+ 000A FEFD              .byte 254,253
+ 000C FBF7              .byte 251,247
+ 000E                   .dbsym e ACT _ACT A[4:4]kc
+                        .area text(rom, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac9-3\ac9-3.c
+ 0000                   .dbfunc e port_init _port_init fV
+                        .even
+ 0000           _port_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 13
+ 0000           ; #include <iom16v.h>   
+ 0000           ; #define uchar unsigned char
+ 0000           ; #define uint unsigned int
+ 0000           ; uchar const SEG7[10]={0x3f,0x06,0x5b, 
+ 0000           ;         0x4f,0x66,0x6d,0x7d,0x07,0x7f,0x6f};
+ 0000           ; uchar const ACT[4]={0xfe,0xfd,0xfb,0xf7}; 
+ 0000           ; uint cnt; 
+ 0000           ; uchar start_flag; 
+ 0000           ; uchar i; 
+ 0000           ; #define S1 (PIND&0x10)        
+ 0000           ; 
+ 0000           ; void port_init(void)
+ 0000           ; {
+ 0000                   .dbline 14
+ 0000           ;  PORTA = 0x00; 
+ 0000 2224              clr R2
+ 0002 2BBA              out 0x1b,R2
+ 0004                   .dbline 15
+ 0004           ;  DDRA  = 0xFF; 
+ 0004 8FEF              ldi R24,255
+ 0006 8ABB              out 0x1a,R24
+ 0008                   .dbline 16
+ 0008           ;  PORTC = 0xFF; 
+ 0008 85BB              out 0x15,R24
+ 000A                   .dbline 17
+ 000A           ;  DDRC  = 0xFF; 
+ 000A 84BB              out 0x14,R24
+ 000C                   .dbline 18
+ 000C           ;  PORTD = 0xFF; 
+ 000C 82BB              out 0x12,R24
+ 000E                   .dbline 19
+ 000E           ;  DDRD  = 0x00; 
+ 000E 21BA              out 0x11,R2
+ 0010                   .dbline -2
+ 0010           L1:
+ 0010                   .dbline 0 ; func end
+ 0010 0895              ret
+ 0012                   .dbend
+ 0012                   .dbfunc e timer0_init _timer0_init fV
+                        .even
+ 0012           _timer0_init::
+ 0012                   .dbline -1
+ 0012                   .dbline 23
+ 0012           ; }
+ 0012           ; 
+ 0012           ; void timer0_init(void)
+ 0012           ; {
+ 0012                   .dbline 24
+ 0012           ;  TCNT0 = 0x83; 
+ 0012 83E8              ldi R24,131
+ 0014 82BF              out 0x32,R24
+ 0016                   .dbline 25
+ 0016           ;  TCCR0 = 0x03; 
+ 0016 83E0              ldi R24,3
+ 0018 83BF              out 0x33,R24
+ 001A                   .dbline -2
+ 001A           L2:
+ 001A                   .dbline 0 ; func end
+ 001A 0895              ret
+ 001C                   .dbend
+                        .area vector(rom, abs)
+                        .org 36
+ 0024 0C940E00          jmp _timer0_ovf_isr
+                        .area text(rom, con, rel)
+ 001C                   .dbfile d:\MYDOCU~1\ac9-3\ac9-3.c
+ 001C                   .dbfunc e timer0_ovf_isr _timer0_ovf_isr fV
+                        .even
+ 001C           _timer0_ovf_isr::
+ 001C 2A92              st -y,R2
+ 001E 0A93              st -y,R16
+ 0020 1A93              st -y,R17
+ 0022 2A93              st -y,R18
+ 0024 3A93              st -y,R19
+ 0026 8A93              st -y,R24
+ 0028 9A93              st -y,R25
+ 002A EA93              st -y,R30
+ 002C FA93              st -y,R31
+ 002E 2FB6              in R2,0x3f
+ 0030 2A92              st -y,R2
+ 0032 0E940000          xcall push_gset1
+ 0036                   .dbline -1
+ 0036                   .dbline 30
+ 0036           ; }
+ 0036           ; 
+ 0036           ; #pragma interrupt_handler timer0_ovf_isr:10
+ 0036           ; void timer0_ovf_isr(void)
+ 0036           ; {
+ 0036                   .dbline 31
+ 0036           ;  SREG=0x80;
+ 0036 80E8              ldi R24,128
+ 0038 8FBF              out 0x3f,R24
+ 003A                   .dbline 32
+ 003A           ;  TCNT0 = 0x83; 
+ 003A 83E8              ldi R24,131
+ 003C 82BF              out 0x32,R24
+ 003E                   .dbline 33
+ 003E           ;  if(++i>3)i=0; 
+ 003E 80910000          lds R24,_i
+ 0042 8F5F              subi R24,255    ; addi 1
+ 0044 282E              mov R2,R24
+ 0046 20920000          sts _i,R2
+ 004A 83E0              ldi R24,3
+ 004C 8215              cp R24,R2
+ 004E 18F4              brsh L4
+ 0050                   .dbline 33
+ 0050 2224              clr R2
+ 0052 20920000          sts _i,R2
+ 0056           L4:
+ 0056                   .dbline 34
+ 0056           ;  switch(i)
+ 0056 40910000          lds R20,_i
+ 005A 5527              clr R21
+ 005C 4030              cpi R20,0
+ 005E 4507              cpc R20,R21
+ 0060 79F0              breq L9
+ 0062           X0:
+ 0062 4130              cpi R20,1
+ 0064 E0E0              ldi R30,0
+ 0066 5E07              cpc R21,R30
+ 0068 21F1              breq L10
+ 006A 4230              cpi R20,2
+ 006C E0E0              ldi R30,0
+ 006E 5E07              cpc R21,R30
+ 0070 09F4              brne X2
+ 0072 3CC0              xjmp L11
+ 0074           X2:
+ 0074 4330              cpi R20,3
+ 0076 E0E0              ldi R30,0
+ 0078 5E07              cpc R21,R30
+ 007A 09F4              brne X3
+ 007C 55C0              xjmp L12
+ 007E           X3:
+ 007E 6CC0              xjmp L7
+ 0080           X1:
+ 0080                   .dbline 35
+ 0080           ;  {
+ 0080           L9:
+ 0080                   .dbline 36
+ 0080           ;  case 0: PORTA=SEG7[cnt%10]; PORTC=ACT[i];break;
+ 0080 2AE0              ldi R18,10
+ 0082 30E0              ldi R19,0
+ 0084 00910200          lds R16,_cnt
+ 0088 10910300          lds R17,_cnt+1
+ 008C 0E940000          xcall mod16u
+ 0090 F801              movw R30,R16
+ 0092 80E0              ldi R24,<_SEG7
+ 0094 90E0              ldi R25,>_SEG7
+ 0096 E80F              add R30,R24
+ 0098 F91F              adc R31,R25
+ 009A E491              lpm R30,Z
+ 009C EBBB              out 0x1b,R30
+ 009E                   .dbline 36
+ 009E 80E0              ldi R24,<_ACT
+ 00A0 90E0              ldi R25,>_ACT
+ 00A2 E0910000          lds R30,_i
+ 00A6 FF27              clr R31
+ 00A8 E80F              add R30,R24
+ 00AA F91F              adc R31,R25
+ 00AC E491              lpm R30,Z
+ 00AE E5BB              out 0x15,R30
+ 00B0                   .dbline 36
+ 00B0 53C0              xjmp L7
+ 00B2           L10:
+ 00B2                   .dbline 37
+ 00B2           ;  case 1: PORTA=SEG7[(cnt/10)%10]; PORTC=ACT[i];break;
+ 00B2 2AE0              ldi R18,10
+ 00B4 30E0              ldi R19,0
+ 00B6 00910200          lds R16,_cnt
+ 00BA 10910300          lds R17,_cnt+1
+ 00BE 0E940000          xcall div16u
+ 00C2 2AE0              ldi R18,10
+ 00C4 30E0              ldi R19,0
+ 00C6 0E940000          xcall mod16u
+ 00CA F801              movw R30,R16
+ 00CC 80E0              ldi R24,<_SEG7
+ 00CE 90E0              ldi R25,>_SEG7
+ 00D0 E80F              add R30,R24
+ 00D2 F91F              adc R31,R25
+ 00D4 E491              lpm R30,Z
+ 00D6 EBBB              out 0x1b,R30
+ 00D8                   .dbline 37
+ 00D8 80E0              ldi R24,<_ACT
+ 00DA 90E0              ldi R25,>_ACT
+ 00DC E0910000          lds R30,_i
+ 00E0 FF27              clr R31
+ 00E2 E80F              add R30,R24
+ 00E4 F91F              adc R31,R25
+ 00E6 E491              lpm R30,Z
+ 00E8 E5BB              out 0x15,R30
+ 00EA                   .dbline 37
+ 00EA 36C0              xjmp L7
+ 00EC           L11:
+ 00EC                   .dbline 38
+ 00EC           ;  case 2: PORTA=SEG7[(cnt/100)%10]|0x80; PORTC=ACT[i];break;
+ 00EC 24E6              ldi R18,100
+ 00EE 30E0              ldi R19,0
+ 00F0 00910200          lds R16,_cnt
+ 00F4 10910300          lds R17,_cnt+1
+ 00F8 0E940000          xcall div16u
+ 00FC 2AE0              ldi R18,10
+ 00FE 30E0              ldi R19,0
+ 0100 0E940000          xcall mod16u
+ 0104 F801              movw R30,R16
+ 0106 80E0              ldi R24,<_SEG7
+ 0108 90E0              ldi R25,>_SEG7
+ 010A E80F              add R30,R24
+ 010C F91F              adc R31,R25
+ 010E E491              lpm R30,Z
+ 0110 E068              ori R30,128
+ 0112 EBBB              out 0x1b,R30
+ 0114                   .dbline 38
+ 0114 80E0              ldi R24,<_ACT
+ 0116 90E0              ldi R25,>_ACT
+ 0118 E0910000          lds R30,_i
+ 011C FF27              clr R31
+ 011E E80F              add R30,R24
+ 0120 F91F              adc R31,R25
+ 0122 E491              lpm R30,Z
+ 0124 E5BB              out 0x15,R30
+ 0126                   .dbline 38
+ 0126 18C0              xjmp L7
+ 0128           L12:
+ 0128                   .dbline 39
+ 0128 28EE              ldi R18,1000
+ 012A 33E0              ldi R19,3
+ 012C 00910200          lds R16,_cnt
+ 0130 10910300          lds R17,_cnt+1
+ 0134 0E940000          xcall div16u
+ 0138 F801              movw R30,R16
+ 013A 80E0              ldi R24,<_SEG7
+ 013C 90E0              ldi R25,>_SEG7
+ 013E E80F              add R30,R24
+ 0140 F91F              adc R31,R25
+ 0142 E491              lpm R30,Z
+ 0144 EBBB              out 0x1b,R30
+ 0146                   .dbline 39
+ 0146 80E0              ldi R24,<_ACT
+ 0148 90E0              ldi R25,>_ACT
+ 014A E0910000          lds R30,_i
+ 014E FF27              clr R31
+ 0150 E80F              add R30,R24
+ 0152 F91F              adc R31,R25
+ 0154 E491              lpm R30,Z
+ 0156 E5BB              out 0x15,R30
+ 0158                   .dbline 39
+ 0158                   .dbline 40
+ 0158           L7:
+ 0158                   .dbline -2
+ 0158           L3:
+ 0158 0E940000          xcall pop_gset1
+ 015C 2990              ld R2,y+
+ 015E 2FBE              out 0x3f,R2
+ 0160 F991              ld R31,y+
+ 0162 E991              ld R30,y+
+ 0164 9991              ld R25,y+
+ 0166 8991              ld R24,y+
+ 0168 3991              ld R19,y+
+ 016A 2991              ld R18,y+
+ 016C 1991              ld R17,y+
+ 016E 0991              ld R16,y+
+ 0170 2990              ld R2,y+
+ 0172                   .dbline 0 ; func end
+ 0172 1895              reti
+ 0174                   .dbend
+ 0174                   .dbfunc e timer1_init _timer1_init fV
+                        .even
+ 0174           _timer1_init::
+ 0174                   .dbline -1
+ 0174                   .dbline 45
+ 0174           ;  case 3: PORTA=SEG7[cnt/1000]; PORTC=ACT[i];break;
+ 0174           ;  default:break;
+ 0174           ;  }
+ 0174           ; }
+ 0174           ; 
+ 0174           ; void timer1_init(void) 
+ 0174           ; {
+ 0174                   .dbline 46
+ 0174           ;  TCNT1H = 0xD8; 
+ 0174 88ED              ldi R24,216
+ 0176 8DBD              out 0x2d,R24
+ 0178                   .dbline 47
+ 0178           ;  TCNT1L = 0xF0;
+ 0178 80EF              ldi R24,240
+ 017A 8CBD              out 0x2c,R24
+ 017C                   .dbline -2
+ 017C           L13:
+ 017C                   .dbline 0 ; func end
+ 017C 0895              ret
+ 017E                   .dbend
+                        .area vector(rom, abs)
+                        .org 32
+ 0020 0C94BF00          jmp _timer1_ovf_isr
+                        .area text(rom, con, rel)
+ 017E                   .dbfile d:\MYDOCU~1\ac9-3\ac9-3.c
+ 017E                   .dbfunc e timer1_ovf_isr _timer1_ovf_isr fV
+                        .even
+ 017E           _timer1_ovf_isr::
+ 017E 2A92              st -y,R2
+ 0180 3A92              st -y,R3
+ 0182 8A93              st -y,R24
+ 0184 9A93              st -y,R25
+ 0186 2FB6              in R2,0x3f
+ 0188 2A92              st -y,R2
+ 018A                   .dbline -1
+ 018A                   .dbline 52
+ 018A                   .dbline 53
+ 018A 88ED              ldi R24,216
+ 018C 8DBD              out 0x2d,R24
+ 018E                   .dbline 54
+ 018E 80EF              ldi R24,240
+ 0190 8CBD              out 0x2c,R24
+ 0192                   .dbline 55
+ 0192 80910200          lds R24,_cnt
+ 0196 90910300          lds R25,_cnt+1
+ 019A 0196              adiw R24,1
+ 019C 1C01              movw R2,R24
+ 019E 30920300          sts _cnt+1,R3
+ 01A2 20920200          sts _cnt,R2
+ 01A6 8FE0              ldi R24,9999
+ 01A8 97E2              ldi R25,39
+ 01AA 8215              cp R24,R2
+ 01AC 9305              cpc R25,R3
+ 01AE 30F4              brsh L15
+ 01B0                   .dbline 55
+ 01B0 2224              clr R2
+ 01B2 3324              clr R3
+ 01B4 30920300          sts _cnt+1,R3
+ 01B8 20920200          sts _cnt,R2
+ 01BC           L15:
+ 01BC                   .dbline -2
+ 01BC           L14:
+ 01BC 2990              ld R2,y+
+ 01BE 2FBE              out 0x3f,R2
+ 01C0 9991              ld R25,y+
+ 01C2 8991              ld R24,y+
+ 01C4 3990              ld R3,y+
+ 01C6 2990              ld R2,y+
+ 01C8                   .dbline 0 ; func end
+ 01C8 1895              reti
+ 01CA                   .dbend
+                        .area vector(rom, abs)
+                        .org 4
+ 0004 0C94E500          jmp _int0_isr
+                        .area text(rom, con, rel)
+ 01CA                   .dbfile d:\MYDOCU~1\ac9-3\ac9-3.c
+ 01CA                   .dbfunc e int0_isr _int0_isr fV
+                        .even
+ 01CA           _int0_isr::
+ 01CA 2A92              st -y,R2
+ 01CC 8A93              st -y,R24
+ 01CE 9A93              st -y,R25
+ 01D0 EA93              st -y,R30
+ 01D2 2FB6              in R2,0x3f
+ 01D4 2A92              st -y,R2
+ 01D6                   .dbline -1
+ 01D6                   .dbline 60
+ 01D6           ; }
+ 01D6           ; 
+ 01D6           ; #pragma interrupt_handler timer1_ovf_isr:9
+ 01D6           ; void timer1_ovf_isr(void)
+ 01D6           ; {
+ 01D6           ;  TCNT1H = 0xD8; 
+ 01D6           ;  TCNT1L = 0xF0; 
+ 01D6           ;  if(++cnt>9999)cnt=0;
+ 01D6           ; }
+ 01D6           ; 
+ 01D6           ; #pragma interrupt_handler int0_isr:2
+ 01D6           ; void int0_isr(void)
+ 01D6           ; {
+ 01D6                   .dbline 61
+ 01D6           ; if(cnt<10)start_flag=0xff;
+ 01D6 80910200          lds R24,_cnt
+ 01DA 90910300          lds R25,_cnt+1
+ 01DE 8A30              cpi R24,10
+ 01E0 E0E0              ldi R30,0
+ 01E2 9E07              cpc R25,R30
+ 01E4 20F4              brsh L18
+ 01E6                   .dbline 61
+ 01E6 8FEF              ldi R24,255
+ 01E8 80930100          sts _start_flag,R24
+ 01EC 03C0              xjmp L19
+ 01EE           L18:
+ 01EE                   .dbline 62
+ 01EE 2224              clr R2
+ 01F0 20920100          sts _start_flag,R2
+ 01F4           L19:
+ 01F4                   .dbline -2
+ 01F4           L17:
+ 01F4 2990              ld R2,y+
+ 01F6 2FBE              out 0x3f,R2
+ 01F8 E991              ld R30,y+
+ 01FA 9991              ld R25,y+
+ 01FC 8991              ld R24,y+
+ 01FE 2990              ld R2,y+
+ 0200                   .dbline 0 ; func end
+ 0200 1895              reti
+ 0202                   .dbend
+ 0202                   .dbfunc e init_devices _init_devices fV
+                        .even
+ 0202           _init_devices::
+ 0202                   .dbline -1
+ 0202                   .dbline 66
+ 0202           ; else start_flag=0x00;
+ 0202           ; }
+ 0202           ; 
+ 0202           ; void init_devices(void)
+ 0202           ; {
+ 0202                   .dbline 67
+ 0202           ;  port_init();
+ 0202 FEDE              xcall _port_init
+ 0204                   .dbline 68
+ 0204           ;  timer0_init();
+ 0204 06DF              xcall _timer0_init
+ 0206                   .dbline 69
+ 0206           ;  timer1_init();
+ 0206 B6DF              xcall _timer1_init
+ 0208                   .dbline 70
+ 0208           ;  MCUCR = 0x02; 
+ 0208 82E0              ldi R24,2
+ 020A 85BF              out 0x35,R24
+ 020C                   .dbline 71
+ 020C           ;  GICR  = 0x40; 
+ 020C 80E4              ldi R24,64
+ 020E 8BBF              out 0x3b,R24
+ 0210                   .dbline 72
+ 0210           ;  TIMSK = 0x05; 
+ 0210 85E0              ldi R24,5
+ 0212 89BF              out 0x39,R24
+ 0214                   .dbline 73
+ 0214           ;  SREG=0x80; 
+ 0214 80E8              ldi R24,128
+ 0216 8FBF              out 0x3f,R24
+ 0218                   .dbline -2
+ 0218           L20:
+ 0218                   .dbline 0 ; func end
+ 0218 0895              ret
+ 021A                   .dbend
+ 021A                   .dbfunc e scan_s1 _scan_s1 fV
+                        .even
+ 021A           _scan_s1::
+ 021A                   .dbline -1
+ 021A                   .dbline 77
+ 021A                   .dbline 78
+ 021A 8499              sbic 0x10,4
+ 021C 06C0              rjmp L22
+ 021E                   .dbline 78
+ 021E 2224              clr R2
+ 0220 3324              clr R3
+ 0222 30920300          sts _cnt+1,R3
+ 0226 20920200          sts _cnt,R2
+ 022A           L22:
+ 022A                   .dbline -2
+ 022A           L21:
+ 022A                   .dbline 0 ; func end
+ 022A 0895              ret
+ 022C                   .dbend
+ 022C                   .dbfunc e main _main fV
+                        .even
+ 022C           _main::
+ 022C                   .dbline -1
+ 022C                   .dbline 82
+ 022C           ; }
+ 022C           ; 
+ 022C           ; void scan_s1(void)
+ 022C           ; {
+ 022C           ; if(S1==0)cnt=0;
+ 022C           ; }
+ 022C           ; 
+ 022C           ; void main(void) 
+ 022C           ; {
+ 022C                   .dbline 83
+ 022C           ; init_devices();
+ 022C EADF              xcall _init_devices
+ 022E 0DC0              xjmp L26
+ 0230           L25:
+ 0230                   .dbline 85
+ 0230           ;   while(1) 
+ 0230           ;   {
+ 0230                   .dbline 86
+ 0230           ;   if(start_flag==0xff)TCCR1B = 0x02; 
+ 0230 80910100          lds R24,_start_flag
+ 0234 8F3F              cpi R24,255
+ 0236 11F4              brne L28
+ 0238                   .dbline 86
+ 0238 82E0              ldi R24,2
+ 023A 8EBD              out 0x2e,R24
+ 023C           L28:
+ 023C                   .dbline 87
+ 023C           ; if(start_flag==0x00){TCCR1B = 0x00;scan_s1();}
+ 023C 20900100          lds R2,_start_flag
+ 0240 2220              tst R2
+ 0242 19F4              brne L30
+ 0244                   .dbline 87
+ 0244                   .dbline 87
+ 0244 2224              clr R2
+ 0246 2EBC              out 0x2e,R2
+ 0248                   .dbline 87
+ 0248 E8DF              xcall _scan_s1
+ 024A                   .dbline 87
+ 024A           L30:
+ 024A                   .dbline 89
+ 024A           L26:
+ 024A                   .dbline 84
+ 024A F2CF              xjmp L25
+ 024C           X4:
+ 024C                   .dbline -2
+ 024C           L24:
+ 024C                   .dbline 0 ; func end
+ 024C 0895              ret
+ 024E                   .dbend
+                        .area bss(ram, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac9-3\ac9-3.c
+ 0000           _i::
+ 0000                   .blkb 1
+ 0001                   .dbsym e i _i c
+ 0001           _start_flag::
+ 0001                   .blkb 1
+ 0002                   .dbsym e start_flag _start_flag c
+ 0002           _cnt::
+ 0002                   .blkb 2
+ 0004                   .dbsym e cnt _cnt i

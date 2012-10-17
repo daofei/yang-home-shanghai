@@ -1,0 +1,492 @@
+__start:
+__text_start:
+    003B E5CF      LDI	R28,0x5F
+    003C E0D4      LDI	R29,4
+    003D BFCD      OUT	0x3D,R28
+    003E BFDE      OUT	0x3E,R29
+    003F 51C0      SUBI	R28,0x10
+    0040 40D0      SBCI	R29,0
+    0041 EA0A      LDI	R16,0xAA
+    0042 8308      STD	Y+0,R16
+    0043 2400      CLR	R0
+    0044 E6E0      LDI	R30,0x60
+    0045 E0F0      LDI	R31,0
+    0046 E010      LDI	R17,0
+    0047 36E0      CPI	R30,0x60
+    0048 07F1      CPC	R31,R17
+    0049 F011      BEQ	0x004C
+    004A 9201      ST	R0,Z+
+    004B CFFB      RJMP	0x0047
+    004C 8300      STD	Z+0,R16
+    004D E7E5      LDI	R30,0x75
+    004E E0F0      LDI	R31,0
+    004F E6A0      LDI	R26,0x60
+    0050 E0B0      LDI	R27,0
+    0051 E010      LDI	R17,0
+    0052 37E5      CPI	R30,0x75
+    0053 07F1      CPC	R31,R17
+    0054 F021      BEQ	0x0059
+    0055 95C8      LPM
+    0056 9631      ADIW	R30,1
+    0057 920D      ST	R0,X+
+    0058 CFF9      RJMP	0x0052
+    0059 940E005C  CALL	_main
+_exit:
+    005B CFFF      RJMP	_exit
+_main:
+  temp                 --> R20
+    005C 9722      SBIW	R28,2
+FILE: d:\MYDOCU~1\ac14-2\ac14-2.c
+(0001) #include <iom16v.h>
+(0002) #include <macros.h>
+(0003) //----------------------------
+(0004) #define uchar unsigned char
+(0005) #define uint unsigned int
+(0006) //----------------------------
+(0007) #define LCM_RS_1 PORTB|=BIT(PB0)
+(0008) #define LCM_RS_0 PORTB&=~BIT(PB0)
+(0009) #define LCM_RW_1 PORTB|=BIT(PB1)
+(0010) #define LCM_RW_0 PORTB&=~BIT(PB1)
+(0011) #define LCM_EN_1 PORTB|=BIT(PB2)
+(0012) #define LCM_EN_0 PORTB&=~BIT(PB2)
+(0013) //------------------------------
+(0014) #define DataPort PORTA
+(0015) #define Busy 0x80
+(0016) #define xtal 8   			
+(0017) //---------------------------------
+(0018) const uchar exampl[]="--ELECTRONICS--  WORLD magazine\n";
+(0019) void Delay_1ms(void);
+(0020) void Delay_nms(uint n);
+(0021) void WaitForEnable(void);
+(0022) void LcdWriteData(uchar W);
+(0023) void LcdWriteCommand(uchar CMD,uchar Attribc);
+(0024) void InitLcd(void);
+(0025) void Display(uchar dd);
+(0026) void DisplayOneChar(uchar x,uchar y,uchar Wdata);
+(0027) void ePutstr(uchar x,uchar y,uchar const *ptr);
+(0028) //******************************************
+(0029) void main(void)
+(0030) {
+(0031)     uchar temp;
+(0032) 	Delay_nms(400);
+    005D E900      LDI	R16,0x90
+    005E E011      LDI	R17,1
+    005F D0E5      RCALL	_Delay_nms
+(0033) 	DDRA=0xff;PORTA=0x00;
+    0060 EF8F      LDI	R24,0xFF
+    0061 BB8A      OUT	0x1A,R24
+    0062 2422      CLR	R2
+    0063 BA2B      OUT	0x1B,R2
+(0034) 	DDRB=0xff;PORTB=0x00;
+    0064 BB87      OUT	0x17,R24
+    0065 BA28      OUT	0x18,R2
+(0035) 	InitLcd();
+    0066 D07C      RCALL	_InitLcd
+(0036) 	temp=32;
+    0067 E240      LDI	R20,0x20
+(0037) 	ePutstr(0,0,exampl);
+    0068 E584      LDI	R24,0x54
+    0069 E090      LDI	R25,0
+    006A 8399      STD	Y+1,R25
+    006B 8388      STD	Y+0,R24
+    006C 2722      CLR	R18
+    006D 2700      CLR	R16
+    006E D012      RCALL	_ePutstr
+(0038) 	Delay_nms(3200);
+    006F E800      LDI	R16,0x80
+    0070 E01C      LDI	R17,0xC
+    0071 D0D3      RCALL	_Delay_nms
+    0072 C00B      RJMP	0x007E
+(0039) 	while(1)
+(0040) 	{
+(0041) 		temp&=0x7f;
+    0073 774F      ANDI	R20,0x7F
+(0042) 		if(temp<32)temp=32;
+    0074 3240      CPI	R20,0x20
+    0075 F408      BCC	0x0077
+    0076 E240      LDI	R20,0x20
+(0043) 		Display(temp++);
+    0077 2E24      MOV	R2,R20
+    0078 5F4F      SUBI	R20,0xFF
+    0079 2D02      MOV	R16,R2
+    007A D034      RCALL	_Display
+(0044) 		Delay_nms(400);
+    007B E900      LDI	R16,0x90
+    007C E011      LDI	R17,1
+    007D D0C7      RCALL	_Delay_nms
+    007E CFF4      RJMP	0x0073
+    007F 9622      ADIW	R28,2
+    0080 9508      RET
+_ePutstr:
+  l                    --> R20
+  i                    --> R22
+  ptr                  --> R10
+  y                    --> R12
+  x                    --> R14
+    0081 940E015D  CALL	push_gset5
+    0083 2EC2      MOV	R12,R18
+    0084 2EE0      MOV	R14,R16
+    0085 9721      SBIW	R28,1
+    0086 84AB      LDD	R10,Y+11
+    0087 84BC      LDD	R11,Y+12
+(0045) 	}
+(0046) }
+(0047) //************************************
+(0048) void ePutstr(uchar x,uchar y,uchar const *ptr)
+(0049) {
+(0050) uchar i,l=0;
+    0088 2744      CLR	R20
+    0089 C001      RJMP	0x008B
+(0051) 	while(ptr[l]>31){l++;}
+    008A 9543      INC	R20
+    008B 2FE4      MOV	R30,R20
+    008C 27FF      CLR	R31
+    008D 0DEA      ADD	R30,R10
+    008E 1DFB      ADC	R31,R11
+    008F 91E4      LPM	R30,0(Z)
+    0090 E18F      LDI	R24,0x1F
+    0091 178E      CP	R24,R30
+    0092 F3B8      BCS	0x008A
+(0052) 	for(i=0;i<l;i++){
+    0093 2766      CLR	R22
+    0094 C014      RJMP	0x00A9
+(0053) 	DisplayOneChar(x++,y,ptr[i]);
+    0095 2FE6      MOV	R30,R22
+    0096 27FF      CLR	R31
+    0097 0DEA      ADD	R30,R10
+    0098 1DFB      ADC	R31,R11
+    0099 91E4      LPM	R30,0(Z)
+    009A 83E8      STD	Y+0,R30
+    009B 2D2C      MOV	R18,R12
+    009C 2C2E      MOV	R2,R14
+    009D 2D82      MOV	R24,R2
+    009E 5F8F      SUBI	R24,0xFF
+    009F 2EE8      MOV	R14,R24
+    00A0 2D02      MOV	R16,R2
+    00A1 D035      RCALL	_DisplayOneChar
+(0054) 	if(x==16){
+    00A2 2D8E      MOV	R24,R14
+    00A3 3180      CPI	R24,0x10
+    00A4 F419      BNE	0x00A8
+(0055) 		x=0;y^=1;
+    00A5 24EE      CLR	R14
+    00A6 E081      LDI	R24,1
+    00A7 26C8      EOR	R12,R24
+    00A8 9563      INC	R22
+    00A9 1764      CP	R22,R20
+    00AA F350      BCS	0x0095
+    00AB 9621      ADIW	R28,1
+    00AC 940E015A  CALL	pop_gset5
+    00AE 9508      RET
+_Display:
+  i                    --> R20
+  dd                   --> R22
+    00AF 940E0163  CALL	push_gset2
+    00B1 2F60      MOV	R22,R16
+    00B2 9721      SBIW	R28,1
+(0056) 	}
+(0057)   }
+(0058) }
+(0059) //*************************************
+(0060) void Display(uchar dd)
+(0061) {
+(0062) uchar i;
+(0063) 	for(i=0;i<16;i++){
+    00B3 2744      CLR	R20
+    00B4 C00B      RJMP	0x00C0
+(0064) 	DisplayOneChar(i,1,dd++);
+    00B5 2E26      MOV	R2,R22
+    00B6 5F6F      SUBI	R22,0xFF
+    00B7 8228      STD	Y+0,R2
+    00B8 E021      LDI	R18,1
+    00B9 2F04      MOV	R16,R20
+    00BA D01C      RCALL	_DisplayOneChar
+(0065) 	dd&=0x7f;
+    00BB 776F      ANDI	R22,0x7F
+(0066) 	if(dd<32)dd=32;
+    00BC 3260      CPI	R22,0x20
+    00BD F408      BCC	0x00BF
+    00BE E260      LDI	R22,0x20
+    00BF 9543      INC	R20
+    00C0 3140      CPI	R20,0x10
+    00C1 F398      BCS	0x00B5
+    00C2 9621      ADIW	R28,1
+    00C3 940E0154  CALL	pop_gset2
+    00C5 9508      RET
+_LocateXY:
+  temp                 --> R20
+  posy                 --> R22
+  posx                 --> R10
+    00C6 940E0161  CALL	push_gset3
+    00C8 2F62      MOV	R22,R18
+    00C9 2EA0      MOV	R10,R16
+(0067) 	}
+(0068) }
+(0069) //*************************************
+(0070) void LocateXY(char posx,char posy)
+(0071) {
+(0072) uchar temp;
+(0073) 	temp&=0x7f;
+    00CA 774F      ANDI	R20,0x7F
+(0074) 	temp=posx&0x0f;
+    00CB 2D4A      MOV	R20,R10
+    00CC 704F      ANDI	R20,0xF
+(0075) 	posy&=0x01;
+    00CD 7061      ANDI	R22,1
+(0076) 	if(posy)temp|=0x40;
+    00CE F009      BEQ	0x00D0
+    00CF 6440      ORI	R20,0x40
+(0077) 	temp|=0x80;
+    00D0 6840      ORI	R20,0x80
+(0078) 	LcdWriteCommand(temp,0);
+    00D1 2722      CLR	R18
+    00D2 2F04      MOV	R16,R20
+    00D3 D031      RCALL	_LcdWriteCommand
+    00D4 940E0157  CALL	pop_gset3
+    00D6 9508      RET
+_DisplayOneChar:
+  Wdata                --> Y+4
+  y                    --> R22
+  x                    --> R20
+    00D7 940E0163  CALL	push_gset2
+    00D9 2F62      MOV	R22,R18
+    00DA 2F40      MOV	R20,R16
+(0079) }
+(0080) //**************************************
+(0081) void DisplayOneChar(uchar x,uchar y,uchar Wdata)
+(0082) {
+(0083) LocateXY(x,y);
+    00DB 2F26      MOV	R18,R22
+    00DC 2F04      MOV	R16,R20
+    00DD DFE8      RCALL	_LocateXY
+(0084) LcdWriteData(Wdata);
+    00DE 810C      LDD	R16,Y+4
+    00DF D038      RCALL	_LcdWriteData
+    00E0 940E0154  CALL	pop_gset2
+    00E2 9508      RET
+(0085) }
+(0086) //****************************************
+(0087) void InitLcd(void)
+(0088) {
+(0089) LcdWriteCommand(0x38,0);
+_InitLcd:
+    00E3 2722      CLR	R18
+    00E4 E308      LDI	R16,0x38
+    00E5 D01F      RCALL	_LcdWriteCommand
+(0090) Delay_nms(5);
+    00E6 E005      LDI	R16,5
+    00E7 E010      LDI	R17,0
+    00E8 D05C      RCALL	_Delay_nms
+(0091) LcdWriteCommand(0x38,0);
+    00E9 2722      CLR	R18
+    00EA E308      LDI	R16,0x38
+    00EB D019      RCALL	_LcdWriteCommand
+(0092) Delay_nms(5);
+    00EC E005      LDI	R16,5
+    00ED E010      LDI	R17,0
+    00EE D056      RCALL	_Delay_nms
+(0093) LcdWriteCommand(0x38,0);
+    00EF 2722      CLR	R18
+    00F0 E308      LDI	R16,0x38
+    00F1 D013      RCALL	_LcdWriteCommand
+(0094) Delay_nms(5);
+    00F2 E005      LDI	R16,5
+    00F3 E010      LDI	R17,0
+    00F4 D050      RCALL	_Delay_nms
+(0095) LcdWriteCommand(0x38,1);
+    00F5 E021      LDI	R18,1
+    00F6 E308      LDI	R16,0x38
+    00F7 D00D      RCALL	_LcdWriteCommand
+(0096) LcdWriteCommand(0x08,1);
+    00F8 E021      LDI	R18,1
+    00F9 E008      LDI	R16,0x8
+    00FA D00A      RCALL	_LcdWriteCommand
+(0097) LcdWriteCommand(0x01,1);
+    00FB E021      LDI	R18,1
+    00FC E001      LDI	R16,1
+    00FD D007      RCALL	_LcdWriteCommand
+(0098) LcdWriteCommand(0x06,1);
+    00FE E021      LDI	R18,1
+    00FF E006      LDI	R16,6
+    0100 D004      RCALL	_LcdWriteCommand
+(0099) LcdWriteCommand(0x0c,1);
+    0101 E021      LDI	R18,1
+    0102 E00C      LDI	R16,0xC
+    0103 D001      RCALL	_LcdWriteCommand
+    0104 9508      RET
+_LcdWriteCommand:
+  Attribc              --> R22
+  CMD                  --> R20
+    0105 940E0163  CALL	push_gset2
+    0107 2F62      MOV	R22,R18
+    0108 2F40      MOV	R20,R16
+(0100) }
+(0101) //****************************************
+(0102) void LcdWriteCommand(uchar CMD,uchar Attribc)
+(0103) {
+(0104) if(Attribc)WaitForEnable();
+    0109 2366      TST	R22
+    010A F009      BEQ	0x010C
+    010B D01C      RCALL	_WaitForEnable
+(0105) LCM_RS_0;LCM_RW_0;_NOP();
+    010C 98C0      CBI	0x18,0
+    010D 98C1      CBI	0x18,1
+    010E 0000      NOP
+(0106) DataPort=CMD;_NOP();
+    010F BB4B      OUT	0x1B,R20
+    0110 0000      NOP
+(0107) LCM_EN_1;_NOP();_NOP();LCM_EN_0;
+    0111 9AC2      SBI	0x18,2
+    0112 0000      NOP
+    0113 0000      NOP
+    0114 98C2      CBI	0x18,2
+    0115 940E0154  CALL	pop_gset2
+    0117 9508      RET
+_LcdWriteData:
+  dataW                --> R20
+    0118 940E0165  CALL	push_gset1
+    011A 2F40      MOV	R20,R16
+(0108) }
+(0109) //***************************************
+(0110) void LcdWriteData(uchar dataW)
+(0111) {
+(0112) WaitForEnable();
+    011B D00C      RCALL	_WaitForEnable
+(0113) LCM_RS_1;LCM_RW_0;_NOP();
+    011C 9AC0      SBI	0x18,0
+    011D 98C1      CBI	0x18,1
+    011E 0000      NOP
+(0114) DataPort=dataW;_NOP();
+    011F BB4B      OUT	0x1B,R20
+    0120 0000      NOP
+(0115) LCM_EN_1;_NOP();_NOP();LCM_EN_0;
+    0121 9AC2      SBI	0x18,2
+    0122 0000      NOP
+    0123 0000      NOP
+    0124 98C2      CBI	0x18,2
+    0125 940E0168  CALL	pop_gset1
+    0127 9508      RET
+(0116) }
+(0117) //****************************************
+(0118) void WaitForEnable(void)
+(0119) {
+(0120) uchar val;
+(0121) DataPort=0xff;
+_WaitForEnable:
+  val                  --> R16
+    0128 EF8F      LDI	R24,0xFF
+    0129 BB8B      OUT	0x1B,R24
+(0122) LCM_RS_0;LCM_RW_1;_NOP();
+    012A 98C0      CBI	0x18,0
+    012B 9AC1      SBI	0x18,1
+    012C 0000      NOP
+(0123) LCM_EN_1;_NOP();_NOP();
+    012D 9AC2      SBI	0x18,2
+    012E 0000      NOP
+    012F 0000      NOP
+(0124) DDRA=0x00;
+    0130 2422      CLR	R2
+    0131 BA2A      OUT	0x1A,R2
+(0125) val=PINA;
+    0132 B309      IN	R16,0x19
+    0133 C001      RJMP	0x0135
+(0126) while(val&Busy)val=PINA;
+    0134 B309      IN	R16,0x19
+    0135 FD07      SBRC	R16,7
+    0136 CFFD      RJMP	0x0134
+(0127) LCM_EN_0;
+    0137 98C2      CBI	0x18,2
+(0128) DDRA=0xff;
+    0138 EF8F      LDI	R24,0xFF
+    0139 BB8A      OUT	0x1A,R24
+    013A 9508      RET
+(0129) }
+(0130) //****************************************
+(0131) void Delay_1ms(void)		
+(0132) { uint i;
+(0133)  for(i=1;i<(uint)(xtal*143-2);i++)
+_Delay_1ms:
+  i                    --> R16
+    013B E001      LDI	R16,1
+    013C E010      LDI	R17,0
+    013D C002      RJMP	0x0140
+    013E 5F0F      SUBI	R16,0xFF
+    013F 4F1F      SBCI	R17,0xFF
+    0140 3706      CPI	R16,0x76
+    0141 E0E4      LDI	R30,4
+    0142 071E      CPC	R17,R30
+    0143 F3D0      BCS	0x013E
+    0144 9508      RET
+_Delay_nms:
+  i                    --> R20
+  n                    --> R22
+    0145 940E0163  CALL	push_gset2
+    0147 01B8      MOVW	R22,R16
+(0134)     ;
+(0135) }
+(0136) //=============================================
+(0137) void Delay_nms(uint n)		
+(0138) {
+(0139)  uint i=0;
+    0148 2744      CLR	R20
+    0149 2755      CLR	R21
+    014A C003      RJMP	0x014E
+(0140)    while(i<n)
+(0141)    {Delay_1ms();
+    014B DFEF      RCALL	_Delay_1ms
+(0142)     i++;
+FILE: <library>
+    014C 5F4F      SUBI	R20,0xFF
+    014D 4F5F      SBCI	R21,0xFF
+    014E 1746      CP	R20,R22
+    014F 0757      CPC	R21,R23
+    0150 F3D0      BCS	0x014B
+    0151 940E0154  CALL	pop_gset2
+    0153 9508      RET
+pop_gset2:
+    0154 E0E2      LDI	R30,2
+    0155 940C0169  JMP	pop
+pop_gset3:
+    0157 E0E4      LDI	R30,4
+    0158 940C0169  JMP	pop
+pop_gset5:
+    015A 27EE      CLR	R30
+    015B 940C0169  JMP	pop
+push_gset5:
+    015D 92FA      ST	R15,-Y
+    015E 92EA      ST	R14,-Y
+push_gset4:
+    015F 92DA      ST	R13,-Y
+    0160 92CA      ST	R12,-Y
+push_gset3:
+    0161 92BA      ST	R11,-Y
+    0162 92AA      ST	R10,-Y
+push_gset2:
+    0163 937A      ST	R23,-Y
+    0164 936A      ST	R22,-Y
+push_gset1:
+    0165 935A      ST	R21,-Y
+    0166 934A      ST	R20,-Y
+    0167 9508      RET
+pop_gset1:
+    0168 E0E1      LDI	R30,1
+pop:
+    0169 9149      LD	R20,Y+
+    016A 9159      LD	R21,Y+
+    016B FDE0      SBRC	R30,0
+    016C 9508      RET
+    016D 9169      LD	R22,Y+
+    016E 9179      LD	R23,Y+
+    016F FDE1      SBRC	R30,1
+    0170 9508      RET
+    0171 90A9      LD	R10,Y+
+    0172 90B9      LD	R11,Y+
+    0173 FDE2      SBRC	R30,2
+    0174 9508      RET
+    0175 90C9      LD	R12,Y+
+    0176 90D9      LD	R13,Y+
+    0177 FDE3      SBRC	R30,3
+    0178 9508      RET
+    0179 90E9      LD	R14,Y+
+    017A 90F9      LD	R15,Y+
+    017B 9508      RET

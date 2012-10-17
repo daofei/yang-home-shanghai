@@ -1,0 +1,71 @@
+XL
+H 4 areas 5 global symbols
+M ac9
+A text size 7E flags 0
+dbfile d:\MYDOCU~1\ac9-2\ac9-2.c
+dbfunc e main 0 fV
+dbline FFFFFFFF 0
+dbline A 0
+dbline B 0
+dbline C 4
+dbline D 8
+dbline E A
+dbline F C
+dbline 10 10
+dbline 11 14
+dbline 12 18
+dbline 13 1C
+dbline 13 1C
+dbline FFFFFFFE 1E
+dbline 0 1E
+dbfunc e timer0_ovf_isr 20 fV
+dbline FFFFFFFF 2E
+dbline 18 2E
+dbline 19 2E
+dbline 1A 32
+dbline 1A 44
+dbline 1B 4A
+dbline 1C 5C
+dbline FFFFFFFE 6E
+dbline 0 7C
+S _main Def0000
+S _timer0_ovf_isr Def0020
+A lit size 12 flags 0
+dbfile d:\MYDOCU~1\ac9-2\ac9-2.c
+dbsym e SEG7 0 A[10:10]kc
+dbsym e ACT A A[8:8]kc
+S _ACT Def000A
+S _SEG7 Def0000
+A vector size 28 flags C
+A bss size 1 flags 20
+dbfile d:\MYDOCU~1\ac9-2\ac9-2.c
+dbsym e i 0 c
+S _i Def0000
+T 00 00 3F 06 5B 4F 66 6D 7D 07 7F 6F FE FD FB F7
+R 00 00 01 00
+T 0E 00 EF DF BF 7F
+R 00 00 01 00
+T 00 00 22 24 2B BA 8F EF 8A BB 85 BB 84 BB 83 E8
+R 00 00 00 00
+T 0E 00 82 BF 83 E0 83 BF 81 E0 89 BF 80 E8 8F BF
+R 00 00 00 00
+T 1C 00 FF CF 08 95
+R 00 00 00 00
+T 24 00 0C 94 10 00
+R 00 00 02 00 10 04 00 00
+T 20 00 2A 92 8A 93 9A 93 EA 93 FA 93 2F B6 2A 92
+R 00 00 00 00
+T 2E 00 83 E8 82 BF 80 91 00 00 8F 5F 28 2E 20 92
+R 00 00 00 00 00 08 03 00
+T 3C 00 00 00 87 E0 82 15 18 F4 22 24 20 92 00 00
+R 00 00 00 00 00 02 03 00 00 0E 03 00
+T 4A 00 80 E0 90 E0 E0 91
+R 00 00 00 00 20 02 01 00 00 00 40 04 01 00 00 00
+T 50 00 00 00 FF 27 E8 0F F9 1F E4 91 EB BB 80 E0
+R 00 00 00 00 00 02 03 00 20 0E 01 00 0A 00
+T 5E 00 90 E0 E0 91 00 00 FF 27 E8 0F F9 1F E4 91
+R 00 00 00 00 40 02 01 00 0A 00 00 06 03 00
+T 6C 00 E5 BB 29 90 2F BE F9 91 E9 91 99 91 89 91
+R 00 00 00 00
+T 7A 00 29 90 18 95
+R 00 00 00 00

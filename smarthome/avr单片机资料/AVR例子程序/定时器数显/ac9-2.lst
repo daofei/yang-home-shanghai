@@ -1,0 +1,125 @@
+__start:
+__text_start:
+    0033 E5CF      LDI	R28,0x5F
+    0034 E0D4      LDI	R29,4
+    0035 BFCD      OUT	0x3D,R28
+    0036 BFDE      OUT	0x3E,R29
+    0037 51C0      SUBI	R28,0x10
+    0038 40D0      SBCI	R29,0
+    0039 EA0A      LDI	R16,0xAA
+    003A 8308      STD	Y+0,R16
+    003B 2400      CLR	R0
+    003C E6E0      LDI	R30,0x60
+    003D E0F0      LDI	R31,0
+    003E E010      LDI	R17,0
+    003F 36E1      CPI	R30,0x61
+    0040 07F1      CPC	R31,R17
+    0041 F011      BEQ	0x0044
+    0042 9201      ST	R0,Z+
+    0043 CFFB      RJMP	0x003F
+    0044 8300      STD	Z+0,R16
+    0045 E6E6      LDI	R30,0x66
+    0046 E0F0      LDI	R31,0
+    0047 E6A0      LDI	R26,0x60
+    0048 E0B0      LDI	R27,0
+    0049 E010      LDI	R17,0
+    004A 36E6      CPI	R30,0x66
+    004B 07F1      CPC	R31,R17
+    004C F021      BEQ	0x0051
+    004D 95C8      LPM
+    004E 9631      ADIW	R30,1
+    004F 920D      ST	R0,X+
+    0050 CFF9      RJMP	0x004A
+    0051 940E0054  CALL	_main
+_exit:
+    0053 CFFF      RJMP	_exit
+FILE: d:\MYDOCU~1\ac9-2\ac9-2.c
+(0001) #include <iom16v.h> 
+(0002) #define uchar unsigned char	
+(0003) #define uint unsigned int
+(0004) uchar const SEG7[10]={0x3f,0x06,0x5b, 
+(0005) 0x4f,0x66,	0x6d,0x7d,0x07,0x7f,0x6f};
+(0006) uchar const ACT[8]={0xfe,0xfd,0xfb,0xf7, 
+(0007) 0xef,0xdf,0xbf,0x7f};
+(0008) uchar i;			
+(0009) void main(void) 
+(0010)  {			
+(0011)  PORTA = 0x00; 
+_main:
+    0054 2422      CLR	R2
+    0055 BA2B      OUT	0x1B,R2
+(0012)  DDRA  = 0xFF; 
+    0056 EF8F      LDI	R24,0xFF
+    0057 BB8A      OUT	0x1A,R24
+(0013)  PORTC = 0xFF; 
+    0058 BB85      OUT	0x15,R24
+(0014)  DDRC  = 0xFF; 
+    0059 BB84      OUT	0x14,R24
+(0015)  TCNT0 = 0x83;
+    005A E883      LDI	R24,0x83
+    005B BF82      OUT	0x32,R24
+(0016)  TCCR0 = 0x03;
+    005C E083      LDI	R24,3
+    005D BF83      OUT	0x33,R24
+(0017)  TIMSK = 0x01;
+    005E E081      LDI	R24,1
+    005F BF89      OUT	0x39,R24
+(0018)  SREG=0x80; 
+    0060 E880      LDI	R24,0x80
+    0061 BF8F      OUT	0x3F,R24
+(0019) while(1);
+    0062 CFFF      RJMP	0x0062
+    0063 9508      RET
+_timer0_ovf_isr:
+    0064 922A      ST	R2,-Y
+    0065 938A      ST	R24,-Y
+    0066 939A      ST	R25,-Y
+    0067 93EA      ST	R30,-Y
+    0068 93FA      ST	R31,-Y
+    0069 B62F      IN	R2,0x3F
+    006A 922A      ST	R2,-Y
+(0020)  }
+(0021) 
+(0022) #pragma interrupt_handler timer0_ovf_isr:10
+(0023) void timer0_ovf_isr(void)
+(0024) {
+(0025)  TCNT0 = 0x83; 
+    006B E883      LDI	R24,0x83
+    006C BF82      OUT	0x32,R24
+(0026)  if(++i>7)i=0;
+    006D 91800060  LDS	R24,i
+    006F 5F8F      SUBI	R24,0xFF
+    0070 2E28      MOV	R2,R24
+    0071 92200060  STS	i,R2
+    0073 E087      LDI	R24,7
+    0074 1582      CP	R24,R2
+    0075 F418      BCC	0x0079
+    0076 2422      CLR	R2
+    0077 92200060  STS	i,R2
+(0027)  PORTA=SEG7[i];
+    0079 E584      LDI	R24,0x54
+    007A E090      LDI	R25,0
+    007B 91E00060  LDS	R30,i
+    007D 27FF      CLR	R31
+    007E 0FE8      ADD	R30,R24
+    007F 1FF9      ADC	R31,R25
+    0080 91E4      LPM	R30,0(Z)
+    0081 BBEB      OUT	0x1B,R30
+(0028)  PORTC=ACT[i];
+FILE: <library>
+    0082 E58E      LDI	R24,0x5E
+    0083 E090      LDI	R25,0
+    0084 91E00060  LDS	R30,i
+    0086 27FF      CLR	R31
+    0087 0FE8      ADD	R30,R24
+    0088 1FF9      ADC	R31,R25
+    0089 91E4      LPM	R30,0(Z)
+    008A BBE5      OUT	0x15,R30
+    008B 9029      LD	R2,Y+
+    008C BE2F      OUT	0x3F,R2
+    008D 91F9      LD	R31,Y+
+    008E 91E9      LD	R30,Y+
+    008F 9199      LD	R25,Y+
+    0090 9189      LD	R24,Y+
+    0091 9029      LD	R2,Y+
+    0092 9518      RETI

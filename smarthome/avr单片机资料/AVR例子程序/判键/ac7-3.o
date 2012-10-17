@@ -1,0 +1,29 @@
+XL
+H 1 areas 1 global symbols
+M ac7
+A text size 2A flags 0
+dbfile d:\MYDOCU~1\ac7-3\ac7-3.c
+dbfunc e main 0 fV
+dbline FFFFFFFF 0
+dbline 4 0
+dbline 5 0
+dbline 6 4
+dbline 7 6
+dbline 8 A
+dbline A E
+dbline B E
+dbline C 12
+dbline D 18
+dbline E 1C
+dbline 10 22
+dbline 11 26
+dbline 9 26
+dbline FFFFFFFE 28
+dbline 0 28
+S _main Def0000
+T 00 00 8F EF 87 BB 88 BB 22 24 21 BA 82 BB 0C C0
+R 00 00 00 00
+T 0E 00 84 99 03 C0 8A EA 88 BB 07 C0 85 99 03 C0
+R 00 00 00 00
+T 1C 00 85 E5 88 BB 02 C0 8F EF 88 BB F3 CF 08 95
+R 00 00 00 00

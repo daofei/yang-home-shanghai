@@ -1,0 +1,48 @@
+XL
+H 1 areas 1 global symbols
+M ac9
+A text size 3E flags 0
+dbfile d:\MYDOCU~1\ac9-1\ac9-1.c
+dbfunc e main 0 fV
+dbsym r cnt 10 c
+dbsym r status 12 c
+dbline FFFFFFFF 0
+dbline 8 0
+dbline A 0
+dbline B 4
+dbline C 6
+dbline D A
+dbline E E
+dbline F 12
+dbline 10 12
+dbline 11 12
+dbline 11 12
+dbline 11 16
+dbline 11 16
+dbline 12 1A
+dbline 13 1E
+dbline 14 22
+dbline 15 26
+dbline 16 28
+dbline 16 2C
+dbline 17 32
+dbline 17 36
+dbline 17 36
+dbline 17 38
+dbline 17 3A
+dbline 18 3A
+dbline F 3A
+dbline F 3A
+dbline FFFFFFFE 3C
+dbline 0 3C
+S _main Def0000
+T 00 00 81 E0 88 BB 87 BB 8F EC 8D BD 8C E2 8C BD
+R 00 00 00 00
+T 0E 00 83 E0 8E BD 28 B7 24 70 24 30 E1 F7 84 E0
+R 00 00 00 00
+T 1C 00 88 BF 8F EC 8D BD 8C E2 8C BD 03 95 09 30
+R 00 00 00 00
+T 2A 00 19 F4 88 B3 8E 7F 88 BB 0A 30 70 F3 00 27
+R 00 00 00 00
+T 38 00 C0 9A EB CF 08 95
+R 00 00 00 00

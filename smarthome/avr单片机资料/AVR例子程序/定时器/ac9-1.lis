@@ -1,0 +1,99 @@
+                        .module ac9-1.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac9-1\ac9-1.c
+ 0000                   .dbfunc e main _main fV
+ 0000           ;            cnt -> R16
+ 0000           ;         status -> R18
+                        .even
+ 0000           _main::
+ 0000                   .dbline -1
+ 0000                   .dbline 8
+ 0000           ; #include<iom16v.h>    
+ 0000           ; #define uchar unsigned char   
+ 0000           ; /************************************/
+ 0000           ; #define FLASH_0  (PORTB=PORTB&0xfe) 
+ 0000           ; #define FLASH_1  (PORTB=PORTB|0x01) 
+ 0000           ; /************************************/
+ 0000           ; void main(void) 
+ 0000           ; {                     
+ 0000                   .dbline 10
+ 0000           ; uchar cnt,status; 
+ 0000           ;  PORTB = 0x01; 
+ 0000 81E0              ldi R24,1
+ 0002 88BB              out 0x18,R24
+ 0004                   .dbline 11
+ 0004           ;  DDRB  = 0x01; 
+ 0004 87BB              out 0x17,R24
+ 0006                   .dbline 12
+ 0006           ;  TCNT1H = 0xCF;
+ 0006 8FEC              ldi R24,207
+ 0008 8DBD              out 0x2d,R24
+ 000A                   .dbline 13
+ 000A           ;  TCNT1L = 0x2C;
+ 000A 8CE2              ldi R24,44
+ 000C 8CBD              out 0x2c,R24
+ 000E                   .dbline 14
+ 000E           ;  TCCR1B = 0x03;
+ 000E 83E0              ldi R24,3
+ 0010 8EBD              out 0x2e,R24
+ 0012                   .dbline 15
+ 0012           ;       for(;;) 
+ 0012           L2:
+ 0012                   .dbline 16
+ 0012           ;       {       
+ 0012           L6:
+ 0012                   .dbline 17
+ 0012                   .dbline 17
+ 0012 28B7              in R18,0x38
+ 0014 2470              andi R18,4
+ 0016                   .dbline 17
+ 0016           L7:
+ 0016                   .dbline 17
+ 0016           ;               do {status=TIFR&0x04;}while(status!=0x04); 
+ 0016 2430              cpi R18,4
+ 0018 E1F7              brne L6
+ 001A                   .dbline 18
+ 001A           ;               TIFR=0x04;
+ 001A 84E0              ldi R24,4
+ 001C 88BF              out 0x38,R24
+ 001E                   .dbline 19
+ 001E           ;               TCNT1H = 0xCF; 
+ 001E 8FEC              ldi R24,207
+ 0020 8DBD              out 0x2d,R24
+ 0022                   .dbline 20
+ 0022           ;               TCNT1L = 0x2C; 
+ 0022 8CE2              ldi R24,44
+ 0024 8CBD              out 0x2c,R24
+ 0026                   .dbline 21
+ 0026           ;               cnt++;          
+ 0026 0395              inc R16
+ 0028                   .dbline 22
+ 0028           ;               if(cnt==9)FLASH_0;
+ 0028 0930              cpi R16,9
+ 002A 19F4              brne L9
+ 002C                   .dbline 22
+ 002C 88B3              in R24,0x18
+ 002E 8E7F              andi R24,254
+ 0030 88BB              out 0x18,R24
+ 0032           L9:
+ 0032                   .dbline 23
+ 0032 0A30              cpi R16,10
+ 0034 70F3              brlo L2
+ 0036                   .dbline 23
+ 0036                   .dbline 23
+ 0036 0027              clr R16
+ 0038                   .dbline 23
+ 0038 C09A              sbi 0x18,0
+ 003A                   .dbline 23
+ 003A                   .dbline 24
+ 003A                   .dbline 15
+ 003A                   .dbline 15
+ 003A EBCF              xjmp L2
+ 003C           X0:
+ 003C                   .dbline -2
+ 003C           L1:
+ 003C                   .dbline 0 ; func end
+ 003C 0895              ret
+ 003E                   .dbsym r cnt 16 c
+ 003E                   .dbsym r status 18 c
+ 003E                   .dbend

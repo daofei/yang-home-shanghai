@@ -1,0 +1,72 @@
+XL
+H 1 areas 6 global symbols
+M ac12
+S push_gset2 Ref0000
+S pop_gset2 Ref0000
+A text size 5C flags 0
+dbfile d:\MYDOCU~1\ac12-1\ac12-1.c
+dbfunc e delay_1ms 0 fV
+dbsym r i 10 i
+dbline FFFFFFFF 0
+dbline 7 0
+dbline 8 0
+dbline 9 6
+dbline 8 6
+dbline 8 A
+dbline FFFFFFFE 12
+dbline 0 12
+dbfunc e delay_ms 14 fV
+dbsym r i 14 i
+dbsym r n 16 i
+dbline FFFFFFFF 1A
+dbline D 1A
+dbline E 1A
+dbline 10 20
+dbline 10 20
+dbline 11 22
+dbline 12 26
+dbline F 26
+dbline FFFFFFFE 2C
+dbline 0 30
+dbfunc e init_IO 32 fV
+dbline FFFFFFFF 32
+dbline 16 32
+dbline 17 32
+dbline 18 36
+dbline 19 3A
+dbline FFFFFFFE 3E
+dbline 0 3E
+dbfunc e main 40 fV
+dbsym r wide 14 c
+dbline FFFFFFFF 40
+dbline 1D 40
+dbline 1E 40
+dbline 20 44
+dbline 21 44
+dbline 22 4A
+dbline 22 54
+dbline 23 56
+dbline 24 58
+dbline 1F 58
+dbline FFFFFFFE 5A
+dbline 0 5A
+S _main Def0040
+S _init_IO Def0032
+S _delay_ms Def0014
+S _delay_1ms Def0000
+T 00 00 01 E0 10 E0 02 C0 0F 5F 1F 4F 06 37 E4 E0
+R 00 00 00 00
+T 0E 00 1E 07 D0 F3 08 95
+R 00 00 00 00
+T 14 00 0E 94 00 00 B8 01 44 27 55 27 03 C0 EF DF
+R 00 00 00 00 12 04 00 00
+T 22 00 4F 5F 5F 4F 46 17 57 07 D0 F3 0E 94 00 00
+R 00 00 00 00 12 0E 01 00
+T 30 00 08 95
+R 00 00 00 00
+T 32 00 8F EF 81 BB 22 24 22 BA 81 E7 85 BD 08 95
+R 00 00 00 00
+T 40 00 F8 DF 0A C0 04 E1 10 E0 E5 DF 84 2F 8F 5F
+R 00 00 00 00
+T 4E 00 48 2F 4F 3F 09 F4 44 27 43 BD F5 CF 08 95
+R 00 00 00 00

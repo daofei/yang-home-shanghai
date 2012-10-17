@@ -1,0 +1,181 @@
+                        .module AVRSYS~1.C
+                        .area text(rom, con, rel)
+ 0000                   .dbfile F:\AVRSYS~1/timee.h
+ 0000                   .dbfunc e delaym _delaym fV
+ 0000           ;              i -> R20,R21
+ 0000           ;              j -> R22,R23
+ 0000           ;              n -> R16,R17
+                        .even
+ 0000           _delaym::
+ 0000 0E940000          xcall push_gset2
+ 0004                   .dbline -1
+ 0004                   .dbline 5
+ 0004           ; /*********************************************************/
+ 0004           ; /* Target : ATmage16/32                                  */
+ 0004           ; /* Crystal: 8.00MHz                                      */
+ 0004           ; /* PCB£ºAVR SYSTEM                                       */
+ 0004           ; /*********************************************************/
+ 0004                   .dbline 7
+ 0004           ; //********************************************************/
+ 0004           ;  #include <iom16v.h>
+ 0004 4427              clr R20
+ 0006 5527              clr R21
+ 0008 0AC0              xjmp L5
+ 000A           L2:
+ 000A                   .dbline 8
+ 000A           ;  #include <macros.h>
+ 000A 6CE2              ldi R22,1324
+ 000C 75E0              ldi R23,5
+ 000E 02C0              xjmp L9
+ 0010           L6:
+ 0010                   .dbline 9
+ 0010           L7:
+ 0010                   .dbline 8
+ 0010 6150              subi R22,1
+ 0012 7040              sbci R23,0
+ 0014           L9:
+ 0014                   .dbline 8
+ 0014 6030              cpi R22,0
+ 0016 6707              cpc R22,R23
+ 0018 D9F7              brne L6
+ 001A           X0:
+ 001A           L3:
+ 001A                   .dbline 7
+ 001A 4F5F              subi R20,255  ; offset = 1
+ 001C 5F4F              sbci R21,255
+ 001E           L5:
+ 001E                   .dbline 7
+ 001E 4017              cp R20,R16
+ 0020 5107              cpc R21,R17
+ 0022 98F3              brlo L2
+ 0024                   .dbline -2
+ 0024           L1:
+ 0024 0E940000          xcall pop_gset2
+ 0028                   .dbline 0 ; func end
+ 0028 0895              ret
+ 002A                   .dbsym r i 20 i
+ 002A                   .dbsym r j 22 i
+ 002A                   .dbsym r n 16 i
+ 002A                   .dbend
+ 002A                   .dbfile F:\AVRSYS~1\AVRSYS~1.C
+ 002A                   .dbfunc e port_init _port_init fV
+                        .even
+ 002A           _port_init::
+ 002A                   .dbline -1
+ 002A                   .dbline 22
+ 002A           ;  #include <eeprom.h>
+ 002A           ;  
+ 002A           ;  #define  uchar unsigned char 
+ 002A           ;  #define  uint unsigned int  
+ 002A           ; //================LED(PB7)==============
+ 002A           ;  #define CLED_0  PORTB&=~BIT(PB7)   
+ 002A           ;  #define CLED_1  PORTB|=BIT(PB7)     
+ 002A           ; //======================================
+ 002A           ;  #include "timee.h" 
+ 002A           ; //======================================
+ 002A           ; //======================================
+ 002A           ; //*************I/O init*****************
+ 002A           ;  void port_init(void)
+ 002A           ;   { 
+ 002A                   .dbline 23
+ 002A           ;    DDRA  = 0x00;   
+ 002A 2224              clr R2
+ 002C 2ABA              out 0x1a,R2
+ 002E                   .dbline 24
+ 002E           ;    _NOP();  
+ 002E 0000              nop
+ 0030                   .dbline 25
+ 0030           ;    PORTA = 0x00;   
+ 0030 2BBA              out 0x1b,R2
+ 0032                   .dbline 26
+ 0032           ;    _NOP();    
+ 0032 0000              nop
+ 0034                   .dbline 27
+ 0034           ;    DDRB  = 0x80;   
+ 0034 80E8              ldi R24,128
+ 0036 87BB              out 0x17,R24
+ 0038                   .dbline 28
+ 0038           ;    _NOP();  
+ 0038 0000              nop
+ 003A                   .dbline 29
+ 003A           ;    PORTB = 0x80;   
+ 003A 88BB              out 0x18,R24
+ 003C                   .dbline 30
+ 003C           ;    _NOP();       
+ 003C 0000              nop
+ 003E                   .dbline 31
+ 003E           ;    DDRC  = 0x00;   
+ 003E 24BA              out 0x14,R2
+ 0040                   .dbline 32
+ 0040           ;    _NOP();
+ 0040 0000              nop
+ 0042                   .dbline 33
+ 0042           ;    PORTC = 0x00;   
+ 0042 25BA              out 0x15,R2
+ 0044                   .dbline 34
+ 0044           ;    _NOP();    
+ 0044 0000              nop
+ 0046                   .dbline 35
+ 0046           ;    DDRD  = 0x00;   
+ 0046 21BA              out 0x11,R2
+ 0048                   .dbline 36
+ 0048           ;    _NOP();
+ 0048 0000              nop
+ 004A                   .dbline 37
+ 004A           ;    PORTD = 0x00;   
+ 004A 22BA              out 0x12,R2
+ 004C                   .dbline -2
+ 004C           L10:
+ 004C                   .dbline 0 ; func end
+ 004C 0895              ret
+ 004E                   .dbend
+ 004E                   .dbfunc e main _main fV
+                        .even
+ 004E           _main::
+ 004E                   .dbline -1
+ 004E                   .dbline 41
+ 004E           ;   }
+ 004E           ;  //**********************main**************************
+ 004E           ;   void main(void)
+ 004E           ;   {  
+ 004E                   .dbline 42
+ 004E           ;     port_init();             //I/O init
+ 004E EDDF              xcall _port_init
+ 0050                   .dbline 43
+ 0050           ;       delaym(10);
+ 0050 0AE0              ldi R16,10
+ 0052 10E0              ldi R17,0
+ 0054 D5DF              xcall _delaym
+ 0056                   .dbline 44
+ 0056           ;       port_init();             //I/O init again
+ 0056 E9DF              xcall _port_init
+ 0058                   .dbline 45
+ 0058           ;     delaym(10);
+ 0058 0AE0              ldi R16,10
+ 005A 10E0              ldi R17,0
+ 005C D1DF              xcall _delaym
+ 005E 08C0              xjmp L13
+ 0060           L12:
+ 0060                   .dbline 48
+ 0060                   .dbline 49
+ 0060 C798              cbi 0x18,7
+ 0062                   .dbline 50
+ 0062 04E6              ldi R16,100
+ 0064 10E0              ldi R17,0
+ 0066 CCDF              xcall _delaym
+ 0068                   .dbline 51
+ 0068 C79A              sbi 0x18,7
+ 006A                   .dbline 52
+ 006A 04E6              ldi R16,100
+ 006C 10E0              ldi R17,0
+ 006E C8DF              xcall _delaym
+ 0070                   .dbline 53
+ 0070           L13:
+ 0070                   .dbline 47
+ 0070 F7CF              xjmp L12
+ 0072           X1:
+ 0072                   .dbline -2
+ 0072           L11:
+ 0072                   .dbline 0 ; func end
+ 0072 0895              ret
+ 0074                   .dbend

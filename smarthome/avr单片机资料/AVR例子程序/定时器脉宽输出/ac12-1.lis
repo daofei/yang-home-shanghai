@@ -1,0 +1,155 @@
+                        .module ac12-1.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile d:\MYDOCU~1\ac12-1\ac12-1.c
+ 0000                   .dbfunc e delay_1ms _delay_1ms fV
+ 0000           ;              i -> R16,R17
+                        .even
+ 0000           _delay_1ms::
+ 0000                   .dbline -1
+ 0000                   .dbline 7
+ 0000           ; #include<iom16v.h>                    
+ 0000           ; #define uchar unsigned char 
+ 0000           ; #define uint unsigned int
+ 0000           ; //=============================================
+ 0000           ; #define xtal 8                        
+ 0000           ; void delay_1ms(void)          
+ 0000           ; { uint i;
+ 0000                   .dbline 8
+ 0000           ;  for(i=1;i<(uint)(xtal*143-2);i++)
+ 0000 01E0              ldi R16,1
+ 0002 10E0              ldi R17,0
+ 0004 02C0              xjmp L5
+ 0006           L2:
+ 0006                   .dbline 9
+ 0006           L3:
+ 0006                   .dbline 8
+ 0006 0F5F              subi R16,255  ; offset = 1
+ 0008 1F4F              sbci R17,255
+ 000A           L5:
+ 000A                   .dbline 8
+ 000A 0637              cpi R16,118
+ 000C E4E0              ldi R30,4
+ 000E 1E07              cpc R17,R30
+ 0010 D0F3              brlo L2
+ 0012                   .dbline -2
+ 0012           L1:
+ 0012                   .dbline 0 ; func end
+ 0012 0895              ret
+ 0014                   .dbsym r i 16 i
+ 0014                   .dbend
+ 0014                   .dbfunc e delay_ms _delay_ms fV
+ 0014           ;              i -> R20,R21
+ 0014           ;              n -> R22,R23
+                        .even
+ 0014           _delay_ms::
+ 0014 0E940000          xcall push_gset2
+ 0018 B801              movw R22,R16
+ 001A                   .dbline -1
+ 001A                   .dbline 13
+ 001A           ;     ;
+ 001A           ; }
+ 001A           ; //=============================================
+ 001A           ; void delay_ms(uint n) 
+ 001A           ; {
+ 001A                   .dbline 14
+ 001A           ;  uint i=0;
+ 001A 4427              clr R20
+ 001C 5527              clr R21
+ 001E 03C0              xjmp L8
+ 0020           L7:
+ 0020                   .dbline 16
+ 0020                   .dbline 16
+ 0020 EFDF              xcall _delay_1ms
+ 0022                   .dbline 17
+ 0022 4F5F              subi R20,255  ; offset = 1
+ 0024 5F4F              sbci R21,255
+ 0026                   .dbline 18
+ 0026           L8:
+ 0026                   .dbline 15
+ 0026           ;    while(i<n)
+ 0026 4617              cp R20,R22
+ 0028 5707              cpc R21,R23
+ 002A D0F3              brlo L7
+ 002C                   .dbline -2
+ 002C           L6:
+ 002C 0E940000          xcall pop_gset2
+ 0030                   .dbline 0 ; func end
+ 0030 0895              ret
+ 0032                   .dbsym r i 20 i
+ 0032                   .dbsym r n 22 i
+ 0032                   .dbend
+ 0032                   .dbfunc e init_IO _init_IO fV
+                        .even
+ 0032           _init_IO::
+ 0032                   .dbline -1
+ 0032                   .dbline 22
+ 0032           ;    {delay_1ms();
+ 0032           ;     i++;
+ 0032           ;    }
+ 0032           ; }
+ 0032           ; //================================================
+ 0032           ; void init_IO(void)      
+ 0032           ; {
+ 0032                   .dbline 23
+ 0032           ;  DDRD=0xff;           
+ 0032 8FEF              ldi R24,255
+ 0034 81BB              out 0x11,R24
+ 0036                   .dbline 24
+ 0036           ;  PORTD=0x00;  
+ 0036 2224              clr R2
+ 0038 22BA              out 0x12,R2
+ 003A                   .dbline 25
+ 003A           ;  TCCR2=0x71;  
+ 003A 81E7              ldi R24,113
+ 003C 85BD              out 0x25,R24
+ 003E                   .dbline -2
+ 003E           L10:
+ 003E                   .dbline 0 ; func end
+ 003E 0895              ret
+ 0040                   .dbend
+ 0040                   .dbfunc e main _main fV
+ 0040           ;           wide -> R20
+                        .even
+ 0040           _main::
+ 0040                   .dbline -1
+ 0040                   .dbline 29
+ 0040           ; }
+ 0040           ; /******************Ö÷º¯Êý******************/
+ 0040           ; void main(void)       
+ 0040           ; {     uchar wide;     
+ 0040                   .dbline 30
+ 0040           ; init_IO();            
+ 0040 F8DF              xcall _init_IO
+ 0042 0AC0              xjmp L13
+ 0044           L12:
+ 0044                   .dbline 32
+ 0044           ;       while(1)        
+ 0044           ;     { 
+ 0044                   .dbline 33
+ 0044           ;       delay_ms(20);   
+ 0044 04E1              ldi R16,20
+ 0046 10E0              ldi R17,0
+ 0048 E5DF              xcall _delay_ms
+ 004A                   .dbline 34
+ 004A           ;       if(++wide==255)wide=0;
+ 004A 842F              mov R24,R20
+ 004C 8F5F              subi R24,255    ; addi 1
+ 004E 482F              mov R20,R24
+ 0050 4F3F              cpi R20,255
+ 0052 09F4              brne L15
+ 0054                   .dbline 34
+ 0054 4427              clr R20
+ 0056           L15:
+ 0056                   .dbline 35
+ 0056 43BD              out 0x23,R20
+ 0058                   .dbline 36
+ 0058           L13:
+ 0058                   .dbline 31
+ 0058 F5CF              xjmp L12
+ 005A           X0:
+ 005A                   .dbline -2
+ 005A           L11:
+ 005A                   .dbline 0 ; func end
+ 005A 0895              ret
+ 005C                   .dbsym r wide 20 c
+ 005C                   .dbend

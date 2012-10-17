@@ -1,0 +1,222 @@
+__text_start:
+__start:
+    005A E5CF      LDI	R28,0x5F
+    005B E0D4      LDI	R29,4
+    005C BFCD      OUT	0x3D,R28
+    005D BFDE      OUT	0x3E,R29
+    005E 51C0      SUBI	R28,0x10
+    005F 40D0      SBCI	R29,0
+    0060 EA0A      LDI	R16,0xAA
+    0061 8308      STD	Y+0,R16
+    0062 2400      CLR	R0
+    0063 ECE0      LDI	R30,0xC0
+    0064 E0F0      LDI	R31,0
+    0065 E010      LDI	R17,0
+    0066 3CE0      CPI	R30,0xC0
+    0067 07F1      CPC	R31,R17
+    0068 F011      BEQ	0x006B
+    0069 9201      ST	R0,Z+
+    006A CFFB      RJMP	0x0066
+    006B 8300      STD	Z+0,R16
+    006C E5E4      LDI	R30,0x54
+    006D E0F0      LDI	R31,0
+    006E E6A0      LDI	R26,0x60
+    006F E0B0      LDI	R27,0
+    0070 E010      LDI	R17,0
+    0071 3BE4      CPI	R30,0xB4
+    0072 07F1      CPC	R31,R17
+    0073 F021      BEQ	0x0078
+    0074 95C8      LPM
+    0075 9631      ADIW	R30,1
+    0076 920D      ST	R0,X+
+    0077 CFF9      RJMP	0x0071
+    0078 940E00AE  CALL	_main
+_exit:
+    007A CFFF      RJMP	_exit
+FILE: d:\MYDOCU~1\ac13-2\ac13-2.c
+(0001) #include <iom16v.h>
+(0002) #include <macros.h>
+(0003) /*************************************************/
+(0004) void port_init(void) 
+(0005) {
+(0006)  PORTA = 0xFF; 
+_port_init:
+    007B EF8F      LDI	R24,0xFF
+    007C BB8B      OUT	0x1B,R24
+(0007)  DDRA  = 0x00; 
+    007D 2422      CLR	R2
+    007E BA2A      OUT	0x1A,R2
+(0008)  PORTB = 0xFF; 
+    007F BB88      OUT	0x18,R24
+(0009)  DDRB  = 0xFF; 
+    0080 BB87      OUT	0x17,R24
+(0010)  PORTC = 0xFF; 
+    0081 BB85      OUT	0x15,R24
+(0011)  DDRC  = 0x00; 
+    0082 BA24      OUT	0x14,R2
+(0012)  PORTD = 0xFF; 
+    0083 BB82      OUT	0x12,R24
+(0013)  DDRD  = 0x02;
+    0084 E082      LDI	R24,2
+    0085 BB81      OUT	0x11,R24
+    0086 9508      RET
+(0014) }
+(0015) /**************************************************/
+(0016) void uart0_init(void) 
+(0017) {
+(0018)  UCSRB = 0x00; 
+_uart0_init:
+    0087 2422      CLR	R2
+    0088 B82A      OUT	0x0A,R2
+(0019)  UCSRA = 0x02;
+    0089 E082      LDI	R24,2
+    008A B98B      OUT	0x0B,R24
+(0020)  UCSRC = 0x06;
+    008B E086      LDI	R24,6
+    008C BD80      OUT	0x20,R24
+(0021)  UBRRL = 0x67; 
+    008D E687      LDI	R24,0x67
+    008E B989      OUT	0x09,R24
+(0022)  UBRRH = 0x00; 
+    008F BC20      OUT	0x20,R2
+(0023)  UCSRB = 0x18;
+    0090 E188      LDI	R24,0x18
+    0091 B98A      OUT	0x0A,R24
+    0092 9508      RET
+(0024) }
+(0025) /********************************************************/
+(0026) void init_devices(void) 
+(0027) {
+(0028)  port_init();
+_init_devices:
+    0093 DFE7      RCALL	_port_init
+(0029)  uart0_init();
+    0094 DFF2      RCALL	_uart0_init
+    0095 9508      RET
+(0030)  }
+(0031) //**********************************************
+(0032) void uart0_send(unsigned char i)
+(0033) {
+(0034) while(!(UCSRA&(1<<UDRE)));
+_uart0_send:
+  i                    --> R16
+    0096 9B5D      SBIS	0x0B,5
+    0097 CFFE      RJMP	_uart0_send
+(0035) UDR=i;
+    0098 B90C      OUT	0x0C,R16
+    0099 9508      RET
+_str_send:
+  s                    --> R20
+    009A 940E00CD  CALL	push_gset1
+    009C 01A8      MOVW	R20,R16
+(0036) }
+(0037) /*******************************************/
+(0038) void str_send(char *s) 
+(0039) {
+    009D C005      RJMP	0x00A3
+(0040)  while(*s)
+(0041)  {
+(0042)  uart0_send(*s); 
+    009E 01FA      MOVW	R30,R20
+    009F 8100      LDD	R16,Z+0
+    00A0 DFF5      RCALL	_uart0_send
+(0043)  s++;
+    00A1 5F4F      SUBI	R20,0xFF
+    00A2 4F5F      SBCI	R21,0xFF
+    00A3 01FA      MOVW	R30,R20
+    00A4 8020      LDD	R2,Z+0
+    00A5 2022      TST	R2
+    00A6 F7B9      BNE	0x009E
+    00A7 940E00D0  CALL	pop_gset1
+    00A9 9508      RET
+(0044)  }
+(0045) }
+(0046) /*********************************************/
+(0047) unsigned char uart0_receive(void) 
+(0048) {
+(0049) while(!(UCSRA&(1<<RXC)));
+_uart0_receive:
+    00AA 9B5F      SBIS	0x0B,7
+    00AB CFFE      RJMP	_uart0_receive
+(0050) return UDR;
+    00AC B10C      IN	R16,0x0C
+    00AD 9508      RET
+(0051) }
+(0052) /********************************************/
+(0053) void main(void)
+(0054) {
+(0055) unsigned char temp; 
+(0056) init_devices();
+_main:
+  temp                 --> R20
+    00AE DFE4      RCALL	_init_devices
+(0057) str_send("上海红棱电子有限公司  ");
+    00AF EA09      LDI	R16,0xA9
+    00B0 E010      LDI	R17,0
+    00B1 DFE8      RCALL	_str_send
+(0058) str_send("AVR单片机RS232通信测试程序  ");
+    00B2 E80C      LDI	R16,0x8C
+    00B3 E010      LDI	R17,0
+    00B4 DFE5      RCALL	_str_send
+(0059) str_send("http://www.hlelectron.com  ");
+    00B5 E700      LDI	R16,0x70
+    00B6 E010      LDI	R17,0
+    00B7 DFE2      RCALL	_str_send
+    00B8 C00A      RJMP	0x00C3
+(0060)  while(1) 
+(0061)  {
+(0062)  temp=uart0_receive();
+    00B9 DFF0      RCALL	_uart0_receive
+    00BA 2F40      MOV	R20,R16
+(0063)  str_send("当前按键是：");
+    00BB E603      LDI	R16,0x63
+    00BC E010      LDI	R17,0
+    00BD DFDC      RCALL	_str_send
+(0064)  uart0_send(temp); 
+    00BE 2F04      MOV	R16,R20
+    00BF DFD6      RCALL	_uart0_send
+(0065)  str_send("  ");
+FILE: <library>
+    00C0 E600      LDI	R16,0x60
+    00C1 E010      LDI	R17,0
+    00C2 DFD7      RCALL	_str_send
+    00C3 CFF5      RJMP	0x00B9
+    00C4 9508      RET
+push_gset5:
+    00C5 92FA      ST	R15,-Y
+    00C6 92EA      ST	R14,-Y
+push_gset4:
+    00C7 92DA      ST	R13,-Y
+    00C8 92CA      ST	R12,-Y
+push_gset3:
+    00C9 92BA      ST	R11,-Y
+    00CA 92AA      ST	R10,-Y
+push_gset2:
+    00CB 937A      ST	R23,-Y
+    00CC 936A      ST	R22,-Y
+push_gset1:
+    00CD 935A      ST	R21,-Y
+    00CE 934A      ST	R20,-Y
+    00CF 9508      RET
+pop_gset1:
+    00D0 E0E1      LDI	R30,1
+pop:
+    00D1 9149      LD	R20,Y+
+    00D2 9159      LD	R21,Y+
+    00D3 FDE0      SBRC	R30,0
+    00D4 9508      RET
+    00D5 9169      LD	R22,Y+
+    00D6 9179      LD	R23,Y+
+    00D7 FDE1      SBRC	R30,1
+    00D8 9508      RET
+    00D9 90A9      LD	R10,Y+
+    00DA 90B9      LD	R11,Y+
+    00DB FDE2      SBRC	R30,2
+    00DC 9508      RET
+    00DD 90C9      LD	R12,Y+
+    00DE 90D9      LD	R13,Y+
+    00DF FDE3      SBRC	R30,3
+    00E0 9508      RET
+    00E1 90E9      LD	R14,Y+
+    00E2 90F9      LD	R15,Y+
+    00E3 9508      RET
