@@ -1,0 +1,90 @@
+                        .module main.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+ 0000                   .dbfunc e main _main fI
+                        .even
+ 0000           _main::
+ 0000                   .dbline -1
+ 0000                   .dbline 15
+ 0000           ; #include <stdio.h>
+ 0000           ; #include <string.h>
+ 0000           ; #include <stdlib.h>
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; 
+ 0000           ; #include "init.h"
+ 0000           ; #include "uart.h"
+ 0000           ; #include "wg26.h"
+ 0000           ; #include "util.h"
+ 0000           ; 
+ 0000           ; extern unsigned char interr;
+ 0000           ; 
+ 0000           ; int main(void)
+ 0000           ; {
+ 0000                   .dbline 16
+ 0000           ;  port_init();
+ 0000 0E940000          xcall _port_init
+ 0004                   .dbline 17
+ 0004           ;  uart0_init();
+ 0004 0E940000          xcall _uart0_init
+ 0008                   .dbline 18
+ 0008           ;  init_interrupt1();
+ 0008 0E940000          xcall _init_interrupt1
+ 000C                   .dbline 19
+ 000C           ;  uart0_send_string("uart send...\n");
+ 000C 00E0              ldi R16,<L2
+ 000E 10E0              ldi R17,>L2
+ 0010 0E940000          xcall _uart0_send_string
+ 0014                   .dbline 20
+ 0014           ;  PORTB = 0xff;
+ 0014 8FEF              ldi R24,255
+ 0016 88BB              out 0x18,R24
+ 0018 07C0              xjmp L4
+ 001A           L3:
+ 001A                   .dbline 22
+ 001A           ;  while(1)
+ 001A           ;  {
+ 001A                   .dbline 25
+ 001A           ;   //uart0_send_string("uart send testing...\n");
+ 001A           ;   //PORTB = 0xff;
+ 001A           ;   if(interr)
+ 001A 20900000          lds R2,_interr
+ 001E 2220              tst R2
+ 0020 11F0              breq L6
+ 0022                   .dbline 26
+ 0022           ;   {
+ 0022                   .dbline 28
+ 0022           ;     //delay_ms(500);
+ 0022           ;     PORTB = 0x00;
+ 0022 2224              clr R2
+ 0024 28BA              out 0x18,R2
+ 0026                   .dbline 29
+ 0026           ;   }
+ 0026           L6:
+ 0026                   .dbline 30
+ 0026 7894              sei
+ 0028                   .dbline 32
+ 0028           L4:
+ 0028                   .dbline 21
+ 0028 F8CF              xjmp L3
+ 002A           X0:
+ 002A                   .dbline 33
+ 002A           ;   SEI();
+ 002A           ;   //delay_ms(500);
+ 002A           ;  }
+ 002A           ;  return 0;
+ 002A 0027              clr R16
+ 002C 1127              clr R17
+ 002E                   .dbline -2
+ 002E           L1:
+ 002E                   .dbline 0 ; func end
+ 002E 0895              ret
+ 0030                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+ 0000           L2:
+ 0000                   .blkb 14
+                        .area idata
+ 0000 756172742073656E642E2E2E0A00      .byte 'u,'a,'r,'t,32,'s,'e,'n,'d,46,46,46,10,0
+                        .area data(ram, con, rel)
+ 000E                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c

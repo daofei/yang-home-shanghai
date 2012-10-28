@@ -1,0 +1,131 @@
+                        .module uart.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
+ 0000                   .dbfunc e uart0_init _uart0_init fV
+                        .even
+ 0000           _uart0_init::
+ 0000                   .dbline -1
+ 0000                   .dbline 8
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; 
+ 0000           ; #include "uart.h"
+ 0000           ; 
+ 0000           ; //uart0 init.
+ 0000           ; void uart0_init(void)
+ 0000           ; {
+ 0000                   .dbline 9
+ 0000           ;  UCSRB = 0x00;                //禁止UART发送和接收
+ 0000 2224              clr R2
+ 0002 2AB8              out 0xa,R2
+ 0004                   .dbline 10
+ 0004           ;  UCSRA = 0x02;                                  //倍速
+ 0004 82E0              ldi R24,2
+ 0006 8BB9              out 0xb,R24
+ 0008                   .dbline 11
+ 0008           ;  UCSRC = 0x06;                                  //8位数据
+ 0008 86E0              ldi R24,6
+ 000A 80BD              out 0x20,R24
+ 000C                   .dbline 12
+ 000C           ;  UBRRL = 0x67;                                  //9600bps
+ 000C 87E6              ldi R24,103
+ 000E 89B9              out 0x9,R24
+ 0010                   .dbline 13
+ 0010           ;  UBRRH = 0x00;
+ 0010 20BC              out 0x20,R2
+ 0012                   .dbline 14
+ 0012           ;  UCSRB = 0x18;
+ 0012 88E1              ldi R24,24
+ 0014 8AB9              out 0xa,R24
+ 0016                   .dbline -2
+ 0016           L1:
+ 0016                   .dbline 0 ; func end
+ 0016 0895              ret
+ 0018                   .dbend
+ 0018                   .dbfunc e uart0_send _uart0_send fV
+ 0018           ;              i -> R16
+                        .even
+ 0018           _uart0_send::
+ 0018                   .dbline -1
+ 0018                   .dbline 18
+ 0018           ; }
+ 0018           ; //uart0 send char.
+ 0018           ; void uart0_send(unsigned char i)
+ 0018           ; {
+ 0018           L3:
+ 0018                   .dbline 19
+ 0018           L4:
+ 0018                   .dbline 19
+ 0018           ;  while(!(UCSRA&(1<<UDRE)));
+ 0018 5D9B              sbis 0xb,5
+ 001A FECF              rjmp L3
+ 001C                   .dbline 20
+ 001C           ;  UDR = i;
+ 001C 0CB9              out 0xc,R16
+ 001E                   .dbline -2
+ 001E           L2:
+ 001E                   .dbline 0 ; func end
+ 001E 0895              ret
+ 0020                   .dbsym r i 16 c
+ 0020                   .dbend
+ 0020                   .dbfunc e uart0_receive _uart0_receive fc
+                        .even
+ 0020           _uart0_receive::
+ 0020                   .dbline -1
+ 0020                   .dbline 24
+ 0020           ; }
+ 0020           ; //uart0 receive.
+ 0020           ; unsigned char uart0_receive(void)
+ 0020           ; {
+ 0020           L7:
+ 0020                   .dbline 25
+ 0020           L8:
+ 0020                   .dbline 25
+ 0020           ;  while(!(UCSRA&(1<<RXC)));
+ 0020 5F9B              sbis 0xb,7
+ 0022 FECF              rjmp L7
+ 0024                   .dbline 26
+ 0024           ;  return UDR;
+ 0024 0CB1              in R16,0xc
+ 0026                   .dbline -2
+ 0026           L6:
+ 0026                   .dbline 0 ; func end
+ 0026 0895              ret
+ 0028                   .dbend
+ 0028                   .dbfunc e uart0_send_string _uart0_send_string fV
+ 0028           ;         string -> R20,R21
+                        .even
+ 0028           _uart0_send_string::
+ 0028 0E940000          xcall push_gset1
+ 002C A801              movw R20,R16
+ 002E                   .dbline -1
+ 002E                   .dbline 30
+ 002E           ; }
+ 002E           ; //uart0 send string
+ 002E           ; void uart0_send_string(char* string)
+ 002E           ; {
+ 002E 05C0              xjmp L12
+ 0030           L11:
+ 0030                   .dbline 32
+ 0030                   .dbline 33
+ 0030 FA01              movw R30,R20
+ 0032 0081              ldd R16,z+0
+ 0034 F1DF              xcall _uart0_send
+ 0036                   .dbline 34
+ 0036 4F5F              subi R20,255  ; offset = 1
+ 0038 5F4F              sbci R21,255
+ 003A                   .dbline 35
+ 003A           L12:
+ 003A                   .dbline 31
+ 003A           ;  while(*string)
+ 003A FA01              movw R30,R20
+ 003C 2080              ldd R2,z+0
+ 003E 2220              tst R2
+ 0040 B9F7              brne L11
+ 0042                   .dbline -2
+ 0042           L10:
+ 0042 0E940000          xcall pop_gset1
+ 0046                   .dbline 0 ; func end
+ 0046 0895              ret
+ 0048                   .dbsym r string 20 pc
+ 0048                   .dbend
