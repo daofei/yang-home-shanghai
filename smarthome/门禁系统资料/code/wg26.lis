@@ -1,0 +1,67 @@
+                        .module wg26.c
+                        .area text(rom, con, rel)
+ 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0000                   .dbfunc e init_interrupt1 _init_interrupt1 fV
+                        .even
+ 0000           _init_interrupt1::
+ 0000                   .dbline -1
+ 0000                   .dbline 7
+ 0000           ; #include<iom16v.h>
+ 0000           ; #include <macros.h>
+ 0000           ; 
+ 0000           ; #include "uart.h"
+ 0000           ; 
+ 0000           ; void init_interrupt1(void)
+ 0000           ; {
+ 0000                   .dbline 9
+ 0000           ;  //DDRD = 0x00;
+ 0000           ;  SREG = 0x80;
+ 0000 80E8              ldi R24,128
+ 0002 8FBF              out 0x3f,R24
+ 0004                   .dbline 10
+ 0004           ;  GICR = 0x80;
+ 0004 8BBF              out 0x3b,R24
+ 0006                   .dbline 11
+ 0006           ;  MCUCR = 0x08; //INT1下降沿触发。
+ 0006 88E0              ldi R24,8
+ 0008 85BF              out 0x35,R24
+ 000A                   .dbline 12
+ 000A           ;  return;
+ 000A                   .dbline -2
+ 000A           L1:
+ 000A                   .dbline 0 ; func end
+ 000A 0895              ret
+ 000C                   .dbend
+                        .area data(ram, con, rel)
+ 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0000           _interr::
+ 0000                   .blkb 1
+                        .area idata
+ 0000 00                .byte 0
+                        .area data(ram, con, rel)
+ 0001                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0001                   .dbsym e interr _interr c
+                        .area text(rom, con, rel)
+ 000C                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 000C                   .dbfunc e intsb _intsb fV
+                        .even
+ 000C           _intsb::
+ 000C                   .dbline -1
+ 000C                   .dbline 19
+ 000C           ; }
+ 000C           ; 
+ 000C           ; unsigned char interr = 0;
+ 000C           ; 
+ 000C           ; #pragma interrupt_hander intsb:3
+ 000C           ; void intsb(void)
+ 000C           ; {
+ 000C                   .dbline 21
+ 000C           ;  //uart0_send_string("int1 enable.\n");
+ 000C           ;  interr = 1;
+ 000C 81E0              ldi R24,1
+ 000E 80930000          sts _interr,R24
+ 0012                   .dbline -2
+ 0012           L2:
+ 0012                   .dbline 0 ; func end
+ 0012 0895              ret
+ 0014                   .dbend
