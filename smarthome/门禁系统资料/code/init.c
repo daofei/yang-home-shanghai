@@ -9,6 +9,6 @@ void port_init(void)
  DDRB = 0xff;
  //PORTC = 0xff;
  //DDRC = 0x00;
- PORTD = 0xff;
- DDRD = 0x00;
+ //PORTD = 0xff;
+ //DDRD = 0x00;
 }

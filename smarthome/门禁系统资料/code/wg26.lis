@@ -1,67 +1,189 @@
                         .module wg26.c
                         .area text(rom, con, rel)
  0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
- 0000                   .dbfunc e init_interrupt1 _init_interrupt1 fV
+ 0000                   .dbfunc e init_interrupt _init_interrupt fV
                         .even
- 0000           _init_interrupt1::
+ 0000           _init_interrupt::
  0000                   .dbline -1
- 0000                   .dbline 7
+ 0000                   .dbline 11
+ 0000           ; #include <stdio.h>
+ 0000           ; #include <stdlib.h>
+ 0000           ; #include <string.h>
+ 0000           ; 
  0000           ; #include<iom16v.h>
  0000           ; #include <macros.h>
  0000           ; 
  0000           ; #include "uart.h"
  0000           ; 
- 0000           ; void init_interrupt1(void)
+ 0000           ; void init_interrupt(void)
  0000           ; {
- 0000                   .dbline 9
- 0000           ;  //DDRD = 0x00;
- 0000           ;  SREG = 0x80;
- 0000 80E8              ldi R24,128
- 0002 8FBF              out 0x3f,R24
- 0004                   .dbline 10
- 0004           ;  GICR = 0x80;
- 0004 8BBF              out 0x3b,R24
- 0006                   .dbline 11
- 0006           ;  MCUCR = 0x08; //INT1下降沿触发。
- 0006 88E0              ldi R24,8
- 0008 85BF              out 0x35,R24
- 000A                   .dbline 12
- 000A           ;  return;
- 000A                   .dbline -2
- 000A           L1:
- 000A                   .dbline 0 ; func end
- 000A 0895              ret
- 000C                   .dbend
+ 0000                   .dbline 13
+ 0000           ;  //pd2,pd3 input mode.
+ 0000           ;  DDRD &= 0xf3;
+ 0000 81B3              in R24,0x11
+ 0002 837F              andi R24,243
+ 0004 81BB              out 0x11,R24
+ 0006                   .dbline 15
+ 0006           ;  //上拉。
+ 0006           ;  PORTD |= 0x0c;
+ 0006 82B3              in R24,0x12
+ 0008 8C60              ori R24,12
+ 000A 82BB              out 0x12,R24
+ 000C                   .dbline 17
+ 000C           ;  //enable interrupt.
+ 000C           ;  SREG |= 0x80;
+ 000C 7894              bset 7
+ 000E                   .dbline 19
+ 000E           ;  //int1 int0 enable.
+ 000E           ;  GICR |= 0xc0;
+ 000E 8BB7              in R24,0x3b
+ 0010 806C              ori R24,192
+ 0012 8BBF              out 0x3b,R24
+ 0014                   .dbline 21
+ 0014           ;   //int1 int0 fall edge.
+ 0014           ;  MCUCR |= 0x0a;
+ 0014 85B7              in R24,0x35
+ 0016 8A60              ori R24,10
+ 0018 85BF              out 0x35,R24
+ 001A                   .dbline 22
+ 001A           ;  return;
+ 001A                   .dbline -2
+ 001A           L1:
+ 001A                   .dbline 0 ; func end
+ 001A 0895              ret
+ 001C                   .dbend
                         .area data(ram, con, rel)
  0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
- 0000           _interr::
- 0000                   .blkb 1
+ 0000           _id_code::
+ 0000                   .blkb 4
                         .area idata
- 0000 00                .byte 0
+ 0000 00000000          .word 0,0
                         .area data(ram, con, rel)
- 0001                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
- 0001                   .dbsym e interr _interr c
+ 0004                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0004                   .dbsym e id_code _id_code l
+                        .area vector(rom, abs)
+                        .org 8
+ 0008 0C940E00          jmp _int1_isr
+                        .area data(ram, con, rel)
+ 0004                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
                         .area text(rom, con, rel)
- 000C                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
- 000C                   .dbfunc e intsb _intsb fV
+ 001C                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 001C                   .dbfunc e int1_isr _int1_isr fV
                         .even
- 000C           _intsb::
- 000C                   .dbline -1
- 000C                   .dbline 19
- 000C           ; }
- 000C           ; 
- 000C           ; unsigned char interr = 0;
- 000C           ; 
- 000C           ; #pragma interrupt_hander intsb:3
- 000C           ; void intsb(void)
- 000C           ; {
- 000C                   .dbline 21
- 000C           ;  //uart0_send_string("int1 enable.\n");
- 000C           ;  interr = 1;
- 000C 81E0              ldi R24,1
- 000E 80930000          sts _interr,R24
- 0012                   .dbline -2
- 0012           L2:
- 0012                   .dbline 0 ; func end
- 0012 0895              ret
- 0014                   .dbend
+ 001C           _int1_isr::
+ 001C 2A92              st -y,R2
+ 001E 3A92              st -y,R3
+ 0020 4A92              st -y,R4
+ 0022 5A92              st -y,R5
+ 0024 0A93              st -y,R16
+ 0026 1A93              st -y,R17
+ 0028 2A93              st -y,R18
+ 002A 3A93              st -y,R19
+ 002C EA93              st -y,R30
+ 002E 2FB6              in R2,0x3f
+ 0030 2A92              st -y,R2
+ 0032 0E940000          xcall push_gset2
+ 0036                   .dbline -1
+ 0036                   .dbline 29
+ 0036           ; }
+ 0036           ; 
+ 0036           ; unsigned long id_code = 0;
+ 0036           ; 
+ 0036           ; #pragma interrupt_handler int1_isr:3
+ 0036           ; void int1_isr(void)
+ 0036           ; {
+ 0036                   .dbline 30
+ 0036           ;  id_code <<= 1;
+ 0036 40900200          lds R4,_id_code+2
+ 003A 50900300          lds R5,_id_code+2+1
+ 003E 20900000          lds R2,_id_code
+ 0042 30900100          lds R3,_id_code+1
+ 0046 220C              lsl R2
+ 0048 331C              rol R3
+ 004A 441C              rol R4
+ 004C 551C              rol R5
+ 004E 30920100          sts _id_code+1,R3
+ 0052 20920000          sts _id_code,R2
+ 0056 50920300          sts _id_code+2+1,R5
+ 005A 40920200          sts _id_code+2,R4
+ 005E                   .dbline 31
+ 005E           ;  id_code |= 1;
+ 005E 41E0              ldi R20,1
+ 0060 50E0              ldi R21,0
+ 0062 60E0              ldi R22,0
+ 0064 70E0              ldi R23,0
+ 0066 242A              or R2,R20
+ 0068 352A              or R3,R21
+ 006A 462A              or R4,R22
+ 006C 572A              or R5,R23
+ 006E 30920100          sts _id_code+1,R3
+ 0072 20920000          sts _id_code,R2
+ 0076 50920300          sts _id_code+2+1,R5
+ 007A 40920200          sts _id_code+2,R4
+ 007E                   .dbline -2
+ 007E           L2:
+ 007E 0E940000          xcall pop_gset2
+ 0082 2990              ld R2,y+
+ 0084 2FBE              out 0x3f,R2
+ 0086 E991              ld R30,y+
+ 0088 3991              ld R19,y+
+ 008A 2991              ld R18,y+
+ 008C 1991              ld R17,y+
+ 008E 0991              ld R16,y+
+ 0090 5990              ld R5,y+
+ 0092 4990              ld R4,y+
+ 0094 3990              ld R3,y+
+ 0096 2990              ld R2,y+
+ 0098                   .dbline 0 ; func end
+ 0098 1895              reti
+ 009A                   .dbend
+                        .area vector(rom, abs)
+                        .org 4
+ 0004 0C944D00          jmp _int0_isr
+                        .area text(rom, con, rel)
+ 009A                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 009A                   .dbfunc e int0_isr _int0_isr fV
+                        .even
+ 009A           _int0_isr::
+ 009A 0A92              st -y,R0
+ 009C 1A92              st -y,R1
+ 009E 2A92              st -y,R2
+ 00A0 3A92              st -y,R3
+ 00A2 4A92              st -y,R4
+ 00A4 5A92              st -y,R5
+ 00A6 0FB6              in R0,0x3f
+ 00A8 0A92              st -y,R0
+ 00AA                   .dbline -1
+ 00AA                   .dbline 36
+ 00AA           ; }
+ 00AA           ; 
+ 00AA           ; #pragma interrupt_handler int0_isr:2
+ 00AA           ; void int0_isr(void)
+ 00AA           ; {
+ 00AA                   .dbline 37
+ 00AA           ;  id_code <<= 1;
+ 00AA 40900200          lds R4,_id_code+2
+ 00AE 50900300          lds R5,_id_code+2+1
+ 00B2 20900000          lds R2,_id_code
+ 00B6 30900100          lds R3,_id_code+1
+ 00BA 220C              lsl R2
+ 00BC 331C              rol R3
+ 00BE 441C              rol R4
+ 00C0 551C              rol R5
+ 00C2 30920100          sts _id_code+1,R3
+ 00C6 20920000          sts _id_code,R2
+ 00CA 50920300          sts _id_code+2+1,R5
+ 00CE 40920200          sts _id_code+2,R4
+ 00D2                   .dbline -2
+ 00D2           L3:
+ 00D2 0990              ld R0,y+
+ 00D4 0FBE              out 0x3f,R0
+ 00D6 5990              ld R5,y+
+ 00D8 4990              ld R4,y+
+ 00DA 3990              ld R3,y+
+ 00DC 2990              ld R2,y+
+ 00DE 1990              ld R1,y+
+ 00E0 0990              ld R0,y+
+ 00E2                   .dbline 0 ; func end
+ 00E2 1895              reti
+ 00E4                   .dbend

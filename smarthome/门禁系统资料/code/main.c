@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <string.h>
+
 #include<iom16v.h>
 #include <macros.h>
 
@@ -9,26 +11,35 @@
 #include "wg26.h"
 #include "util.h"
 
-extern unsigned char interr;
+extern unsigned long id_code;
 
 int main(void)
 {
+ char buf[10];
  port_init();
  uart0_init();
- init_interrupt1();
- uart0_send_string("uart send...\n");
+ init_interrupt();
+ //uart0_send_string("uart send...\n");
  PORTB = 0xff;
  while(1)
  {
   //uart0_send_string("uart send testing...\n");
   //PORTB = 0xff;
-  if(interr)
+  //SEI();
+  
+  delay_ms(500);
+  if(id_code)
   {
-    //delay_ms(500);
-    PORTB = 0x00;
+   printf("sizeof(long)=%x", sizeof(long));
+   id_code &= 0x01fffffe;
+   id_code >>= 1;
+   printf("id_code=%d", id_code);
   }
-  SEI();
-  //delay_ms(500);
+  
+  if(id_code == 1392618)
+  {
+   PORTB = 0x0;
+  }
  }
  return 0;
 }

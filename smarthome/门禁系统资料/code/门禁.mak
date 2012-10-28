@@ -12,11 +12,13 @@ uart.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
 init.o: C:/icc/include/iom16v.h C:/icc/include/macros.h
 init.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\init.c
 	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\init.c
-main.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C:/icc/include/string.h C:/icc/include/_const.h C:/icc/include/stdlib.h C:/icc/include/_const.h C:/icc/include/limits.h C:/icc/include/iom16v.h C:/icc/include/macros.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code/init.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/wg26.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h
+main.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C:/icc/include/string.h C:/icc/include/_const.h C:/icc/include/stdlib.h C:/icc/include/_const.h C:/icc/include/limits.h C:/icc/include/string.h C:/icc/include/iom16v.h\
+ C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/init.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/wg26.h\
+ D:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h
 main.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
 	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
-wg26.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h
+wg26.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C:/icc/include/stdlib.h C:/icc/include/_const.h C:/icc/include/limits.h C:/icc/include/string.h C:/icc/include/_const.h C:/icc/include/iom16v.h C:/icc/include/macros.h\
+ D:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h
 wg26.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 util.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C:/icc/include/string.h C:/icc/include/_const.h C:/icc/include/stdlib.h C:/icc/include/_const.h C:/icc/include/limits.h\

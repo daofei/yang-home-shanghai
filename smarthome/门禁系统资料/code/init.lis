@@ -18,17 +18,8 @@
  0000           ;  DDRB = 0xff;
  0000 8FEF              ldi R24,255
  0002 87BB              out 0x17,R24
- 0004                   .dbline 12
- 0004           ;  //PORTC = 0xff;
- 0004           ;  //DDRC = 0x00;
- 0004           ;  PORTD = 0xff;
- 0004 82BB              out 0x12,R24
- 0006                   .dbline 13
- 0006           ;  DDRD = 0x00;
- 0006 2224              clr R2
- 0008 21BA              out 0x11,R2
- 000A                   .dbline -2
- 000A           L1:
- 000A                   .dbline 0 ; func end
- 000A 0895              ret
- 000C                   .dbend
+ 0004                   .dbline -2
+ 0004           L1:
+ 0004                   .dbline 0 ; func end
+ 0004 0895              ret
+ 0006                   .dbend

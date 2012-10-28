@@ -11,7 +11,7 @@ _uart0_init::
 ; 
 ; #include "uart.h"
 ; 
-; //uart0 init.
+; //uart0 init. for printf.
 ; void uart0_init(void)
 ; {
 	.dbline 9
@@ -41,91 +41,4 @@ _uart0_init::
 L1:
 	.dbline 0 ; func end
 	ret
-	.dbend
-	.dbfunc e uart0_send _uart0_send fV
-;              i -> R16
-	.even
-_uart0_send::
-	.dbline -1
-	.dbline 18
-; }
-; //uart0 send char.
-; void uart0_send(unsigned char i)
-; {
-L3:
-	.dbline 19
-L4:
-	.dbline 19
-;  while(!(UCSRA&(1<<UDRE)));
-	sbis 0xb,5
-	rjmp L3
-	.dbline 20
-;  UDR = i;
-	out 0xc,R16
-	.dbline -2
-L2:
-	.dbline 0 ; func end
-	ret
-	.dbsym r i 16 c
-	.dbend
-	.dbfunc e uart0_receive _uart0_receive fc
-	.even
-_uart0_receive::
-	.dbline -1
-	.dbline 24
-; }
-; //uart0 receive.
-; unsigned char uart0_receive(void)
-; {
-L7:
-	.dbline 25
-L8:
-	.dbline 25
-;  while(!(UCSRA&(1<<RXC)));
-	sbis 0xb,7
-	rjmp L7
-	.dbline 26
-;  return UDR;
-	in R16,0xc
-	.dbline -2
-L6:
-	.dbline 0 ; func end
-	ret
-	.dbend
-	.dbfunc e uart0_send_string _uart0_send_string fV
-;         string -> R20,R21
-	.even
-_uart0_send_string::
-	xcall push_gset1
-	movw R20,R16
-	.dbline -1
-	.dbline 30
-; }
-; //uart0 send string
-; void uart0_send_string(char* string)
-; {
-	xjmp L12
-L11:
-	.dbline 32
-	.dbline 33
-	movw R30,R20
-	ldd R16,z+0
-	xcall _uart0_send
-	.dbline 34
-	subi R20,255  ; offset = 1
-	sbci R21,255
-	.dbline 35
-L12:
-	.dbline 31
-;  while(*string)
-	movw R30,R20
-	ldd R2,z+0
-	tst R2
-	brne L11
-	.dbline -2
-L10:
-	xcall pop_gset1
-	.dbline 0 ; func end
-	ret
-	.dbsym r string 20 pc
 	.dbend

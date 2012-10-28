@@ -18,15 +18,6 @@ _port_init::
 ;  DDRB = 0xff;
 	ldi R24,255
 	out 0x17,R24
-	.dbline 12
-;  //PORTC = 0xff;
-;  //DDRC = 0x00;
-;  PORTD = 0xff;
-	out 0x12,R24
-	.dbline 13
-;  DDRD = 0x00;
-	clr R2
-	out 0x11,R2
 	.dbline -2
 L1:
 	.dbline 0 ; func end
