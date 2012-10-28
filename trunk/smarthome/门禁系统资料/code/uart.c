@@ -3,7 +3,7 @@
 
 #include "uart.h"
 
-//uart0 init.
+//uart0 init. for printf.
 void uart0_init(void)
 {
  UCSRB = 0x00;                //禁止UART发送和接收
@@ -13,6 +13,8 @@ void uart0_init(void)
  UBRRH = 0x00;
  UCSRB = 0x18;
 }
+
+#ifdef NO_PRINTF
 //uart0 send char.
 void uart0_send(unsigned char i)
 {
@@ -34,3 +36,4 @@ void uart0_send_string(char* string)
   string++;
  }
 }
+#endif
