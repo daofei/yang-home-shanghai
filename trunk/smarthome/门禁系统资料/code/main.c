@@ -16,7 +16,6 @@ extern unsigned long id_code;
 
 int main(void)
 {
- //char buf[10];
  port_init();
  uart0_init();
  init_interrupt();

@@ -1,4 +1,4 @@
-#ifdef __UART_H__
+#ifndef __UART_H__
 #define __UART_H__
 
 #ifdef __cplusplus
@@ -13,4 +13,9 @@ void uart0_send(unsigned char i);
 unsigned char uart0_receive(void);
 //uart0 send string
 void uart0_send_string(char* string);
+
+#ifdef __cplusplus
+}
+#endif
+
 #endif

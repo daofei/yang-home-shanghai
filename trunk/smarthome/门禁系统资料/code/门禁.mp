@@ -31,52 +31,58 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0226   0918 =   2328. bytes (rel,con,rom)
+                            text   0226   084A =   2122. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       0113  __start
        0113  __text_start
-       0133  _exit
-       0134  _uart0_init
-       0140  _port_init
-       0143  _main
-       019F  _init_interrupt
-       01AD  _int1_isr
-       01EC  _int0_isr
-       0211  _delay_ms
-       0226  _tips_port_init
-       022D  _tips_ok
-       023A  _tips_err
-       0267  _tips_id_ok
-       0288  __print
-       042E  _strcpy
-       0437  push_arg4
-       0439  push_arg2
-       043C  mod16s
-       0440  div16s
-       045A  mod16u
-       045C  div16u
-       045D  xdiv16u
-       0476  pop_gset2
-       0479  pop_gset4
-       047C  pop_gset5
-       047F  push_gset5
-       0481  push_gset4
-       0483  push_gset3
-       0485  push_gset2
-       0487  push_gset1
-       048A  pop_gset1
-       048B  pop
-       049E  xicall
-       04A7  _putchar
-       04BE  __va_start
-       04C7  _itoa
-       0520  _utoa
-       055C  _islower
-       056A  _toupper
-       0581  _printf
-       059F  __text_end
+       0113  __start
+       0132  _exit
+       0133  _uart0_init
+       013F  _port_init
+       0142  _main
+       017C  _init_interrupt
+       018A  _int1_isr
+       01AD  _int0_isr
+       01C2  _delay_ms
+       01D5  _tips_port_init
+       01DC  _tips_ok
+       01EA  _tips_err
+       0202  _tips_id_ok
+       0218  _readPasswordItemNum
+       021B  _readPasswordItem
+       022A  _insertPasswordItem
+       022D  _deletePasswordItem
+       0230  __print
+       0371  _strcpy
+       037A  push_arg4
+       037C  push_arg2
+       037F  mod16s
+       0383  div16s
+       0398  mod16u
+       039A  div16u
+       039B  xdiv16u
+       03B4  pop_gset2
+       03B6  pop_gset4
+       03B8  pop_gset5
+       03BA  push_gset5
+       03BC  push_gset4
+       03BE  push_gset3
+       03C0  push_gset2
+       03C2  push_gset1
+       03C5  pop_gset1
+       03C6  pop
+       03D9  xicall
+       03E2  asgnblk
+       03FA  _putchar
+       040F  __va_start
+       0418  _itoa
+       0458  _utoa
+       0487  _islower
+       0495  _toupper
+       04A9  _printf
+       04C2  <created procedures>
+       0538  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
@@ -111,8 +117,9 @@ main.o	[ main.c ]
 wg26.o	[ wg26.c ]
 util.o	[ util.c ]
 tips.o	[ tips.c ]
-<library>	[ _printf.s, strcpy.s, asave.s, div16s.s, div16u.s, gpop2.s, gpop4.s, gpop5.s, gpush.s, icall.s, putchar.s ]
-[ stdarg.s, itoa.s, utoa.s, islower.s, ctype.s, toupper.s, printf.s, textmode.s ]
+password.o	[ password.c ]
+<library>	[ _printf.s, strcpy.s, asave.s, div16s.s, div16u.s, gpop2.s, gpop4.s, gpop5.s, gpush.s, icall.s, struct.s ]
+[ putchar.s, stdarg.s, itoa.s, utoa.s, islower.s, ctype.s, toupper.s, printf.s, textmode.s ]
 
 User Global Definitions
 

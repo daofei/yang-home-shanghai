@@ -1,4 +1,4 @@
-#ifdef __INIT_H__
+#ifndef __INIT_H__
 #define __INIT_H__
 
 #ifdef __cplusplus

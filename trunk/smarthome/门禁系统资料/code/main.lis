@@ -25,30 +25,29 @@
  0002           ; 
  0002           ; int main(void)
  0002           ; {
- 0002                   .dbline 20
- 0002           ;  //char buf[10];
+ 0002                   .dbline 19
  0002           ;  port_init();
  0002 0E940000          xcall _port_init
- 0006                   .dbline 21
+ 0006                   .dbline 20
  0006           ;  uart0_init();
  0006 0E940000          xcall _uart0_init
- 000A                   .dbline 22
+ 000A                   .dbline 21
  000A           ;  init_interrupt();
  000A 0E940000          xcall _init_interrupt
- 000E                   .dbline 23
+ 000E                   .dbline 22
  000E           ;  tips_port_init();
  000E 0E940000          xcall _tips_port_init
- 0012                   .dbline 25
+ 0012                   .dbline 24
  0012           ;  //uart0_send_string("uart send...\n");
  0012           ;  PORTB = 0xff;
  0012 8FEF              ldi R24,255
  0014 88BB              out 0x18,R24
  0016 4BC0              xjmp L3
  0018           L2:
- 0018                   .dbline 27
+ 0018                   .dbline 26
  0018           ;  while(1)
  0018           ;  {
- 0018                   .dbline 32
+ 0018                   .dbline 31
  0018           ;   //uart0_send_string("uart send testing...\n");
  0018           ;   //PORTB = 0xff;
  0018           ;   //SEI();
@@ -57,7 +56,7 @@
  0018 04EF              ldi R16,500
  001A 11E0              ldi R17,1
  001C 0E940000          xcall _delay_ms
- 0020                   .dbline 33
+ 0020                   .dbline 32
  0020           ;   if(id_code)
  0020 40E0              ldi R20,0
  0022 50E0              ldi R21,0
@@ -72,9 +71,9 @@
  003C 4606              cpc R4,R22
  003E 5706              cpc R5,R23
  0040 19F1              breq L5
- 0042                   .dbline 34
+ 0042                   .dbline 33
  0042           ;   {
- 0042                   .dbline 36
+ 0042                   .dbline 35
  0042           ;    //printf("sizeof(long)=%x", sizeof(long));
  0042           ;    id_code &= 0x01fffffe;
  0042 4EEF              ldi R20,254
@@ -89,7 +88,7 @@
  0056 20920000          sts _id_code,R2
  005A 50920300          sts _id_code+2+1,R5
  005E 40920200          sts _id_code+2,R4
- 0062                   .dbline 37
+ 0062                   .dbline 36
  0062           ;    id_code >>= 1;
  0062 5694              lsr R5
  0064 4794              ror R4
@@ -99,7 +98,7 @@
  006E 20920000          sts _id_code,R2
  0072 50920300          sts _id_code+2+1,R5
  0076 40920200          sts _id_code+2,R4
- 007A                   .dbline 38
+ 007A                   .dbline 37
  007A           ;    printf("id_code=%d", id_code);
  007A 4882              std y+0,R4
  007C 5982              std y+1,R5
@@ -107,10 +106,10 @@
  0080 00E0              ldi R16,<L7
  0082 10E0              ldi R17,>L7
  0084 0E940000          xcall _printf
- 0088                   .dbline 39
+ 0088                   .dbline 38
  0088           ;   }
  0088           L5:
- 0088                   .dbline 41
+ 0088                   .dbline 40
  0088           ;   
  0088           ;   if(id_code == 1392618)
  0088 4AEE              ldi R20,234
@@ -126,21 +125,21 @@
  00A4 4606              cpc R4,R22
  00A6 5706              cpc R5,R23
  00A8 11F4              brne L8
- 00AA                   .dbline 42
+ 00AA                   .dbline 41
  00AA           ;   {
- 00AA                   .dbline 43
+ 00AA                   .dbline 42
  00AA           ;    PORTB = 0x0;
  00AA 2224              clr R2
  00AC 28BA              out 0x18,R2
- 00AE                   .dbline 44
+ 00AE                   .dbline 43
  00AE           ;   }
  00AE           L8:
- 00AE                   .dbline 45
+ 00AE                   .dbline 44
  00AE           L3:
- 00AE                   .dbline 26
+ 00AE                   .dbline 25
  00AE B4CF              xjmp L2
  00B0           X0:
- 00B0                   .dbline 46
+ 00B0                   .dbline 45
  00B0           ;  }
  00B0           ;  return 0;
  00B0 0027              clr R16

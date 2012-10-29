@@ -10,28 +10,8 @@ extern "C" {
 void tips_port_init(void);
 void tips_ok(void);
 void tips_err(void);
-{
- BEEP_ON;
- delay_ms(400);
- BEEP_OFF;
- delay_ms(400);
- BEEP_ON;
- delay_ms(400);
- BEEP_OFF;
- 
- delay_ms(800);
- 
- BEEP_ON;
- delay_ms(400);
- BEEP_OFF;
- delay_ms(400);
- BEEP_ON;
- delay_ms(400);
- BEEP_OFF;
- return;
-}
-//_----_-_-_
-void tips_id_ok(void)
+void tips_id_ok(void);
+
 #ifdef __cplusplus
 }
 #endif

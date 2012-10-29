@@ -25,30 +25,29 @@ _main::
 ; 
 ; int main(void)
 ; {
-	.dbline 20
-;  //char buf[10];
+	.dbline 19
 ;  port_init();
 	xcall _port_init
-	.dbline 21
+	.dbline 20
 ;  uart0_init();
 	xcall _uart0_init
-	.dbline 22
+	.dbline 21
 ;  init_interrupt();
 	xcall _init_interrupt
-	.dbline 23
+	.dbline 22
 ;  tips_port_init();
 	xcall _tips_port_init
-	.dbline 25
+	.dbline 24
 ;  //uart0_send_string("uart send...\n");
 ;  PORTB = 0xff;
 	ldi R24,255
 	out 0x18,R24
 	xjmp L3
 L2:
-	.dbline 27
+	.dbline 26
 ;  while(1)
 ;  {
-	.dbline 32
+	.dbline 31
 ;   //uart0_send_string("uart send testing...\n");
 ;   //PORTB = 0xff;
 ;   //SEI();
@@ -57,7 +56,7 @@ L2:
 	ldi R16,500
 	ldi R17,1
 	xcall _delay_ms
-	.dbline 33
+	.dbline 32
 ;   if(id_code)
 	ldi R20,0
 	ldi R21,0
@@ -72,9 +71,9 @@ L2:
 	cpc R4,R22
 	cpc R5,R23
 	breq L5
-	.dbline 34
+	.dbline 33
 ;   {
-	.dbline 36
+	.dbline 35
 ;    //printf("sizeof(long)=%x", sizeof(long));
 ;    id_code &= 0x01fffffe;
 	ldi R20,254
@@ -89,7 +88,7 @@ L2:
 	sts _id_code,R2
 	sts _id_code+2+1,R5
 	sts _id_code+2,R4
-	.dbline 37
+	.dbline 36
 ;    id_code >>= 1;
 	lsr R5
 	ror R4
@@ -99,7 +98,7 @@ L2:
 	sts _id_code,R2
 	sts _id_code+2+1,R5
 	sts _id_code+2,R4
-	.dbline 38
+	.dbline 37
 ;    printf("id_code=%d", id_code);
 	std y+0,R4
 	std y+1,R5
@@ -107,10 +106,10 @@ L2:
 	ldi R16,<L7
 	ldi R17,>L7
 	xcall _printf
-	.dbline 39
+	.dbline 38
 ;   }
 L5:
-	.dbline 41
+	.dbline 40
 ;   
 ;   if(id_code == 1392618)
 	ldi R20,234
@@ -126,21 +125,21 @@ L5:
 	cpc R4,R22
 	cpc R5,R23
 	brne L8
-	.dbline 42
+	.dbline 41
 ;   {
-	.dbline 43
+	.dbline 42
 ;    PORTB = 0x0;
 	clr R2
 	out 0x18,R2
-	.dbline 44
+	.dbline 43
 ;   }
 L8:
-	.dbline 45
+	.dbline 44
 L3:
-	.dbline 26
+	.dbline 25
 	xjmp L2
 X0:
-	.dbline 46
+	.dbline 45
 ;  }
 ;  return 0;
 	clr R16

@@ -75,115 +75,111 @@
  001E 3A92              st -y,R3
  0020 4A92              st -y,R4
  0022 5A92              st -y,R5
- 0024 0A93              st -y,R16
- 0026 1A93              st -y,R17
- 0028 2A93              st -y,R18
- 002A 3A93              st -y,R19
- 002C EA93              st -y,R30
- 002E 2FB6              in R2,0x3f
- 0030 2A92              st -y,R2
- 0032 0E940000          xcall push_gset2
- 0036                   .dbline -1
- 0036                   .dbline 29
- 0036           ; }
- 0036           ; 
- 0036           ; unsigned long id_code = 0;
- 0036           ; 
- 0036           ; #pragma interrupt_handler int1_isr:3
- 0036           ; void int1_isr(void)
- 0036           ; {
- 0036                   .dbline 30
- 0036           ;  id_code <<= 1;
- 0036 40900200          lds R4,_id_code+2
- 003A 50900300          lds R5,_id_code+2+1
- 003E 20900000          lds R2,_id_code
- 0042 30900100          lds R3,_id_code+1
- 0046 220C              lsl R2
- 0048 331C              rol R3
- 004A 441C              rol R4
- 004C 551C              rol R5
- 004E 30920100          sts _id_code+1,R3
- 0052 20920000          sts _id_code,R2
- 0056 50920300          sts _id_code+2+1,R5
- 005A 40920200          sts _id_code+2,R4
- 005E                   .dbline 31
- 005E           ;  id_code |= 1;
- 005E 41E0              ldi R20,1
- 0060 50E0              ldi R21,0
- 0062 60E0              ldi R22,0
- 0064 70E0              ldi R23,0
- 0066 242A              or R2,R20
- 0068 352A              or R3,R21
- 006A 462A              or R4,R22
- 006C 572A              or R5,R23
- 006E 30920100          sts _id_code+1,R3
- 0072 20920000          sts _id_code,R2
- 0076 50920300          sts _id_code+2+1,R5
- 007A 40920200          sts _id_code+2,R4
- 007E                   .dbline -2
- 007E           L2:
- 007E 0E940000          xcall pop_gset2
- 0082 2990              ld R2,y+
- 0084 2FBE              out 0x3f,R2
- 0086 E991              ld R30,y+
- 0088 3991              ld R19,y+
- 008A 2991              ld R18,y+
- 008C 1991              ld R17,y+
- 008E 0991              ld R16,y+
- 0090 5990              ld R5,y+
- 0092 4990              ld R4,y+
- 0094 3990              ld R3,y+
- 0096 2990              ld R2,y+
- 0098                   .dbline 0 ; func end
- 0098 1895              reti
- 009A                   .dbend
+ 0024 8A92              st -y,R8
+ 0026 9A92              st -y,R9
+ 0028 EA93              st -y,R30
+ 002A 2FB6              in R2,0x3f
+ 002C 2A92              st -y,R2
+ 002E 0E940000          xcall push_gset2
+ 0032                   .dbline -1
+ 0032                   .dbline 29
+ 0032           ; }
+ 0032           ; 
+ 0032           ; unsigned long id_code = 0;
+ 0032           ; 
+ 0032           ; #pragma interrupt_handler int1_isr:3
+ 0032           ; void int1_isr(void)
+ 0032           ; {
+ 0032                   .dbline 30
+ 0032           ;  id_code <<= 1;
+ 0032 40900200          lds R4,_id_code+2
+ 0036 50900300          lds R5,_id_code+2+1
+ 003A 20900000          lds R2,_id_code
+ 003E 30900100          lds R3,_id_code+1
+ 0042 220C              lsl R2
+ 0044 331C              rol R3
+ 0046 441C              rol R4
+ 0048 551C              rol R5
+ 004A 30920100          sts _id_code+1,R3
+ 004E 20920000          sts _id_code,R2
+ 0052 50920300          sts _id_code+2+1,R5
+ 0056 40920200          sts _id_code+2,R4
+ 005A                   .dbline 31
+ 005A           ;  id_code |= 1;
+ 005A 41E0              ldi R20,1
+ 005C 50E0              ldi R21,0
+ 005E 60E0              ldi R22,0
+ 0060 70E0              ldi R23,0
+ 0062 242A              or R2,R20
+ 0064 352A              or R3,R21
+ 0066 462A              or R4,R22
+ 0068 572A              or R5,R23
+ 006A 30920100          sts _id_code+1,R3
+ 006E 20920000          sts _id_code,R2
+ 0072 50920300          sts _id_code+2+1,R5
+ 0076 40920200          sts _id_code+2,R4
+ 007A                   .dbline -2
+ 007A           L2:
+ 007A 0E940000          xcall pop_gset2
+ 007E 2990              ld R2,y+
+ 0080 2FBE              out 0x3f,R2
+ 0082 E991              ld R30,y+
+ 0084 9990              ld R9,y+
+ 0086 8990              ld R8,y+
+ 0088 5990              ld R5,y+
+ 008A 4990              ld R4,y+
+ 008C 3990              ld R3,y+
+ 008E 2990              ld R2,y+
+ 0090                   .dbline 0 ; func end
+ 0090 1895              reti
+ 0092                   .dbend
                         .area vector(rom, abs)
                         .org 4
- 0004 0C944D00          jmp _int0_isr
+ 0004 0C944900          jmp _int0_isr
                         .area text(rom, con, rel)
- 009A                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
- 009A                   .dbfunc e int0_isr _int0_isr fV
+ 0092                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0092                   .dbfunc e int0_isr _int0_isr fV
                         .even
- 009A           _int0_isr::
- 009A 0A92              st -y,R0
- 009C 1A92              st -y,R1
- 009E 2A92              st -y,R2
- 00A0 3A92              st -y,R3
- 00A2 4A92              st -y,R4
- 00A4 5A92              st -y,R5
- 00A6 0FB6              in R0,0x3f
- 00A8 0A92              st -y,R0
- 00AA                   .dbline -1
- 00AA                   .dbline 36
- 00AA           ; }
- 00AA           ; 
- 00AA           ; #pragma interrupt_handler int0_isr:2
- 00AA           ; void int0_isr(void)
- 00AA           ; {
- 00AA                   .dbline 37
- 00AA           ;  id_code <<= 1;
- 00AA 40900200          lds R4,_id_code+2
- 00AE 50900300          lds R5,_id_code+2+1
- 00B2 20900000          lds R2,_id_code
- 00B6 30900100          lds R3,_id_code+1
- 00BA 220C              lsl R2
- 00BC 331C              rol R3
- 00BE 441C              rol R4
- 00C0 551C              rol R5
- 00C2 30920100          sts _id_code+1,R3
- 00C6 20920000          sts _id_code,R2
- 00CA 50920300          sts _id_code+2+1,R5
- 00CE 40920200          sts _id_code+2,R4
- 00D2                   .dbline -2
- 00D2           L3:
- 00D2 0990              ld R0,y+
- 00D4 0FBE              out 0x3f,R0
- 00D6 5990              ld R5,y+
- 00D8 4990              ld R4,y+
- 00DA 3990              ld R3,y+
- 00DC 2990              ld R2,y+
- 00DE 1990              ld R1,y+
- 00E0 0990              ld R0,y+
- 00E2                   .dbline 0 ; func end
- 00E2 1895              reti
- 00E4                   .dbend
+ 0092           _int0_isr::
+ 0092 0A92              st -y,R0
+ 0094 1A92              st -y,R1
+ 0096 2A92              st -y,R2
+ 0098 3A92              st -y,R3
+ 009A 4A92              st -y,R4
+ 009C 5A92              st -y,R5
+ 009E 0FB6              in R0,0x3f
+ 00A0 0A92              st -y,R0
+ 00A2                   .dbline -1
+ 00A2                   .dbline 36
+ 00A2           ; }
+ 00A2           ; 
+ 00A2           ; #pragma interrupt_handler int0_isr:2
+ 00A2           ; void int0_isr(void)
+ 00A2           ; {
+ 00A2                   .dbline 37
+ 00A2           ;  id_code <<= 1;
+ 00A2 40900200          lds R4,_id_code+2
+ 00A6 50900300          lds R5,_id_code+2+1
+ 00AA 20900000          lds R2,_id_code
+ 00AE 30900100          lds R3,_id_code+1
+ 00B2 220C              lsl R2
+ 00B4 331C              rol R3
+ 00B6 441C              rol R4
+ 00B8 551C              rol R5
+ 00BA 30920100          sts _id_code+1,R3
+ 00BE 20920000          sts _id_code,R2
+ 00C2 50920300          sts _id_code+2+1,R5
+ 00C6 40920200          sts _id_code+2,R4
+ 00CA                   .dbline -2
+ 00CA           L3:
+ 00CA 0990              ld R0,y+
+ 00CC 0FBE              out 0x3f,R0
+ 00CE 5990              ld R5,y+
+ 00D0 4990              ld R4,y+
+ 00D2 3990              ld R3,y+
+ 00D4 2990              ld R2,y+
+ 00D6 1990              ld R1,y+
+ 00D8 0990              ld R0,y+
+ 00DA                   .dbline 0 ; func end
+ 00DA 1895              reti
+ 00DC                   .dbend
