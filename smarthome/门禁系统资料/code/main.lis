@@ -1,13 +1,12 @@
                         .module main.c
                         .area text(rom, con, rel)
- 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+ 0000                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
  0000                   .dbfunc e main _main fI
- 0000           ;            buf -> y+2
                         .even
  0000           _main::
- 0000 2C97              sbiw R28,12
+ 0000 2297              sbiw R28,2
  0002                   .dbline -1
- 0002                   .dbline 17
+ 0002                   .dbline 18
  0002           ; #include <stdio.h>
  0002           ; #include <string.h>
  0002           ; #include <stdlib.h>
@@ -20,156 +19,143 @@
  0002           ; #include "uart.h"
  0002           ; #include "wg26.h"
  0002           ; #include "util.h"
+ 0002           ; #include "tips.h"
  0002           ; 
  0002           ; extern unsigned long id_code;
  0002           ; 
  0002           ; int main(void)
  0002           ; {
- 0002                   .dbline 19
- 0002           ;  char buf[10];
+ 0002                   .dbline 20
+ 0002           ;  //char buf[10];
  0002           ;  port_init();
  0002 0E940000          xcall _port_init
- 0006                   .dbline 20
+ 0006                   .dbline 21
  0006           ;  uart0_init();
  0006 0E940000          xcall _uart0_init
- 000A                   .dbline 21
+ 000A                   .dbline 22
  000A           ;  init_interrupt();
  000A 0E940000          xcall _init_interrupt
  000E                   .dbline 23
- 000E           ;  //uart0_send_string("uart send...\n");
- 000E           ;  PORTB = 0xff;
- 000E 8FEF              ldi R24,255
- 0010 88BB              out 0x18,R24
- 0012 59C0              xjmp L3
- 0014           L2:
- 0014                   .dbline 25
- 0014           ;  while(1)
- 0014           ;  {
- 0014                   .dbline 30
- 0014           ;   //uart0_send_string("uart send testing...\n");
- 0014           ;   //PORTB = 0xff;
- 0014           ;   //SEI();
- 0014           ;   
- 0014           ;   delay_ms(500);
- 0014 04EF              ldi R16,500
- 0016 11E0              ldi R17,1
- 0018 0E940000          xcall _delay_ms
- 001C                   .dbline 31
- 001C           ;   if(id_code)
- 001C 40E0              ldi R20,0
- 001E 50E0              ldi R21,0
- 0020 60E0              ldi R22,0
- 0022 70E0              ldi R23,0
- 0024 40900200          lds R4,_id_code+2
- 0028 50900300          lds R5,_id_code+2+1
- 002C 20900000          lds R2,_id_code
- 0030 30900100          lds R3,_id_code+1
- 0034 2416              cp R2,R20
- 0036 3506              cpc R3,R21
- 0038 4606              cpc R4,R22
- 003A 5706              cpc R5,R23
- 003C 89F1              breq L5
- 003E                   .dbline 32
- 003E           ;   {
- 003E                   .dbline 33
- 003E           ;    printf("sizeof(long)=%x", sizeof(long));
- 003E 24E0              ldi R18,4
- 0040 30E0              ldi R19,0
- 0042 00E0              ldi R16,<L7
- 0044 10E0              ldi R17,>L7
- 0046 0E940000          xcall _printf
- 004A                   .dbline 34
- 004A           ;    id_code &= 0x01fffffe;
- 004A 4EEF              ldi R20,254
- 004C 5FEF              ldi R21,255
- 004E 6FEF              ldi R22,255
- 0050 71E0              ldi R23,1
- 0052 40900200          lds R4,_id_code+2
- 0056 50900300          lds R5,_id_code+2+1
- 005A 20900000          lds R2,_id_code
- 005E 30900100          lds R3,_id_code+1
- 0062 2422              and R2,R20
- 0064 3522              and R3,R21
- 0066 4622              and R4,R22
- 0068 5722              and R5,R23
+ 000E           ;  tips_port_init();
+ 000E 0E940000          xcall _tips_port_init
+ 0012                   .dbline 25
+ 0012           ;  //uart0_send_string("uart send...\n");
+ 0012           ;  PORTB = 0xff;
+ 0012 8FEF              ldi R24,255
+ 0014 88BB              out 0x18,R24
+ 0016 4BC0              xjmp L3
+ 0018           L2:
+ 0018                   .dbline 27
+ 0018           ;  while(1)
+ 0018           ;  {
+ 0018                   .dbline 32
+ 0018           ;   //uart0_send_string("uart send testing...\n");
+ 0018           ;   //PORTB = 0xff;
+ 0018           ;   //SEI();
+ 0018           ;   
+ 0018           ;   delay_ms(500);
+ 0018 04EF              ldi R16,500
+ 001A 11E0              ldi R17,1
+ 001C 0E940000          xcall _delay_ms
+ 0020                   .dbline 33
+ 0020           ;   if(id_code)
+ 0020 40E0              ldi R20,0
+ 0022 50E0              ldi R21,0
+ 0024 60E0              ldi R22,0
+ 0026 70E0              ldi R23,0
+ 0028 40900200          lds R4,_id_code+2
+ 002C 50900300          lds R5,_id_code+2+1
+ 0030 20900000          lds R2,_id_code
+ 0034 30900100          lds R3,_id_code+1
+ 0038 2416              cp R2,R20
+ 003A 3506              cpc R3,R21
+ 003C 4606              cpc R4,R22
+ 003E 5706              cpc R5,R23
+ 0040 19F1              breq L5
+ 0042                   .dbline 34
+ 0042           ;   {
+ 0042                   .dbline 36
+ 0042           ;    //printf("sizeof(long)=%x", sizeof(long));
+ 0042           ;    id_code &= 0x01fffffe;
+ 0042 4EEF              ldi R20,254
+ 0044 5FEF              ldi R21,255
+ 0046 6FEF              ldi R22,255
+ 0048 71E0              ldi R23,1
+ 004A 2422              and R2,R20
+ 004C 3522              and R3,R21
+ 004E 4622              and R4,R22
+ 0050 5722              and R5,R23
+ 0052 30920100          sts _id_code+1,R3
+ 0056 20920000          sts _id_code,R2
+ 005A 50920300          sts _id_code+2+1,R5
+ 005E 40920200          sts _id_code+2,R4
+ 0062                   .dbline 37
+ 0062           ;    id_code >>= 1;
+ 0062 5694              lsr R5
+ 0064 4794              ror R4
+ 0066 3794              ror R3
+ 0068 2794              ror R2
  006A 30920100          sts _id_code+1,R3
  006E 20920000          sts _id_code,R2
  0072 50920300          sts _id_code+2+1,R5
  0076 40920200          sts _id_code+2,R4
- 007A                   .dbline 35
- 007A           ;    id_code >>= 1;
- 007A 5694              lsr R5
- 007C 4794              ror R4
- 007E 3794              ror R3
- 0080 2794              ror R2
- 0082 30920100          sts _id_code+1,R3
- 0086 20920000          sts _id_code,R2
- 008A 50920300          sts _id_code+2+1,R5
- 008E 40920200          sts _id_code+2,R4
- 0092                   .dbline 36
- 0092           ;    printf("id_code=%d", id_code);
- 0092 4882              std y+0,R4
- 0094 5982              std y+1,R5
- 0096 9101              movw R18,R2
- 0098 00E0              ldi R16,<L8
- 009A 10E0              ldi R17,>L8
- 009C 0E940000          xcall _printf
- 00A0                   .dbline 37
- 00A0           ;   }
- 00A0           L5:
- 00A0                   .dbline 39
- 00A0           ;   
- 00A0           ;   if(id_code == 1392618)
- 00A0 4AEE              ldi R20,234
- 00A2 5FE3              ldi R21,63
- 00A4 65E1              ldi R22,21
- 00A6 70E0              ldi R23,0
- 00A8 40900200          lds R4,_id_code+2
- 00AC 50900300          lds R5,_id_code+2+1
- 00B0 20900000          lds R2,_id_code
- 00B4 30900100          lds R3,_id_code+1
- 00B8 2416              cp R2,R20
- 00BA 3506              cpc R3,R21
- 00BC 4606              cpc R4,R22
- 00BE 5706              cpc R5,R23
- 00C0 11F4              brne L9
- 00C2                   .dbline 40
- 00C2           ;   {
- 00C2                   .dbline 41
- 00C2           ;    PORTB = 0x0;
- 00C2 2224              clr R2
- 00C4 28BA              out 0x18,R2
- 00C6                   .dbline 42
- 00C6           ;   }
- 00C6           L9:
- 00C6                   .dbline 43
- 00C6           L3:
- 00C6                   .dbline 24
- 00C6 A6CF              xjmp L2
- 00C8           X0:
- 00C8                   .dbline 44
- 00C8           ;  }
- 00C8           ;  return 0;
- 00C8 0027              clr R16
- 00CA 1127              clr R17
- 00CC                   .dbline -2
- 00CC           L1:
- 00CC 2C96              adiw R28,12
- 00CE                   .dbline 0 ; func end
- 00CE 0895              ret
- 00D0                   .dbsym l buf 2 A[10:10]c
- 00D0                   .dbend
+ 007A                   .dbline 38
+ 007A           ;    printf("id_code=%d", id_code);
+ 007A 4882              std y+0,R4
+ 007C 5982              std y+1,R5
+ 007E 9101              movw R18,R2
+ 0080 00E0              ldi R16,<L7
+ 0082 10E0              ldi R17,>L7
+ 0084 0E940000          xcall _printf
+ 0088                   .dbline 39
+ 0088           ;   }
+ 0088           L5:
+ 0088                   .dbline 41
+ 0088           ;   
+ 0088           ;   if(id_code == 1392618)
+ 0088 4AEE              ldi R20,234
+ 008A 5FE3              ldi R21,63
+ 008C 65E1              ldi R22,21
+ 008E 70E0              ldi R23,0
+ 0090 40900200          lds R4,_id_code+2
+ 0094 50900300          lds R5,_id_code+2+1
+ 0098 20900000          lds R2,_id_code
+ 009C 30900100          lds R3,_id_code+1
+ 00A0 2416              cp R2,R20
+ 00A2 3506              cpc R3,R21
+ 00A4 4606              cpc R4,R22
+ 00A6 5706              cpc R5,R23
+ 00A8 11F4              brne L8
+ 00AA                   .dbline 42
+ 00AA           ;   {
+ 00AA                   .dbline 43
+ 00AA           ;    PORTB = 0x0;
+ 00AA 2224              clr R2
+ 00AC 28BA              out 0x18,R2
+ 00AE                   .dbline 44
+ 00AE           ;   }
+ 00AE           L8:
+ 00AE                   .dbline 45
+ 00AE           L3:
+ 00AE                   .dbline 26
+ 00AE B4CF              xjmp L2
+ 00B0           X0:
+ 00B0                   .dbline 46
+ 00B0           ;  }
+ 00B0           ;  return 0;
+ 00B0 0027              clr R16
+ 00B2 1127              clr R17
+ 00B4                   .dbline -2
+ 00B4           L1:
+ 00B4 2296              adiw R28,2
+ 00B6                   .dbline 0 ; func end
+ 00B6 0895              ret
+ 00B8                   .dbend
                         .area data(ram, con, rel)
- 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
- 0000           L8:
+ 0000                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+ 0000           L7:
  0000                   .blkb 11
                         .area idata
  0000 69645F636F64653D256400    .byte 'i,'d,95,'c,'o,'d,'e,61,37,'d,0
                         .area data(ram, con, rel)
- 000B                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
- 000B           L7:
- 000B                   .blkb 16
-                        .area idata
- 000B 73697A656F66286C6F6E67293D257800  .byte 's,'i,'z,'e,'o,'f,40,'l,'o,'n,'g,41,61,37,'x,0
-                        .area data(ram, con, rel)
- 001B                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+ 000B                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c

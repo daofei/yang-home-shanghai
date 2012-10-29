@@ -1,6 +1,6 @@
 	.module util.c
 	.area text(rom, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
 	.dbfunc e delay_ms _delay_ms fV
 ;              i -> R20,R21
 ;              j -> R22,R23

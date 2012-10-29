@@ -4,8 +4,11 @@ init.c
 main.c
 wg26.c
 util.c
+tips.c
 [Headers]
 uart.h
 init.h
 wg26.h
+tips.h
+util.h
 [Documents]
