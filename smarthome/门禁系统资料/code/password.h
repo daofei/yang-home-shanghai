@@ -14,7 +14,8 @@ typedef struct __passwordItem
 {
  unsigned char flags;
  unsigned long idCard;
- unsigned long long password;  
+ unsigned long passwordH;
+ unsigned long passwordL;  
 }passwordItem_t;
 
 //read password numbers.

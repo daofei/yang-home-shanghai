@@ -22,91 +22,104 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                           idata   0157   00CE =    206. bytes (rel,con,rom)
+                           idata   0157   00EC =    236. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
        0157  __idata_start
-       0225  __idata_end
+       0243  __idata_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0226   084A =   2122. bytes (rel,con,rom)
+                            text   0244   0AC0 =   2752. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       0113  __text_start
-       0113  __start
-       0132  _exit
-       0133  _uart0_init
-       013F  _port_init
-       0142  _main
-       017C  _init_interrupt
-       018A  _int1_isr
-       01AD  _int0_isr
-       01C2  _delay_ms
-       01D5  _tips_port_init
-       01DC  _tips_ok
-       01EA  _tips_err
-       0202  _tips_id_ok
-       0218  _readPasswordItemNum
-       021B  _readPasswordItem
-       022A  _insertPasswordItem
-       022D  _deletePasswordItem
-       0230  __print
-       0371  _strcpy
-       037A  push_arg4
-       037C  push_arg2
-       037F  mod16s
-       0383  div16s
-       0398  mod16u
-       039A  div16u
-       039B  xdiv16u
-       03B4  pop_gset2
-       03B6  pop_gset4
-       03B8  pop_gset5
-       03BA  push_gset5
-       03BC  push_gset4
-       03BE  push_gset3
-       03C0  push_gset2
-       03C2  push_gset1
-       03C5  pop_gset1
-       03C6  pop
-       03D9  xicall
-       03E2  asgnblk
-       03FA  _putchar
-       040F  __va_start
-       0418  _itoa
-       0458  _utoa
-       0487  _islower
-       0495  _toupper
-       04A9  _printf
-       04C2  <created procedures>
-       0538  __text_end
+       0122  __text_start
+       0122  __start
+       0141  _exit
+       0142  _uart0_init
+       014E  _port_init
+       0151  _main
+       0196  _init_interrupt
+       01A4  _int1_isr
+       01C1  _int0_isr
+       01D0  _delay_ms
+       01E3  _tips_port_init
+       01EA  _tips_led_on
+       01EE  _tips_led_off
+       01F0  _tips_beep_on
+       01F4  _tips_beep_off
+       01F6  _tips_ok
+       0204  _tips_err
+       021C  _tips_id_ok
+       0232  _readPasswordItemNum
+       0235  _readPasswordItem
+       0244  _insertPasswordItem
+       0247  _deletePasswordItem
+       024A  _timer_init
+       0259  _get_timer
+       0273  _set_timer
+       0284  _set_timer_cb
+       0298  _start_timer
+       02A7  _stop_timer
+       02D0  _timer0_isr
+       0331  __print
+       0472  _strcpy
+       047B  push_arg4
+       047D  push_arg2
+       047E  mod16s
+       0482  div16s
+       0497  mod16u
+       0499  div16u
+       049A  xdiv16u
+       04B3  pop_gset2
+       04B5  pop_gset4
+       04B7  pop_gset5
+       04B9  push_gset5
+       04BB  push_gset4
+       04BD  push_gset3
+       04BF  push_gset2
+       04C1  push_gset1
+       04C4  pop_gset1
+       04C5  pop
+       04D8  xicall
+       04E1  push_lset
+       04F6  pop_lset
+       050D  asgnblk
+       0525  _putchar
+       053A  __va_start
+       0543  _itoa
+       0582  _utoa
+       05B0  _islower
+       05BE  _toupper
+       05D2  _printf
+       05EB  <created procedures>
+       0682  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            data   0060   00CE =    206. bytes (rel,con,ram)
+                            data   0060   00EC =    236. bytes (rel,con,ram)
 
        Addr  Global Symbol
       -----  --------------------------------
        0060  __data_start
-       006B  _id_code
-       012E  __data_end
+       0088  _id_code
+       014C  __data_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                             bss   012E   001B =     27. bytes (rel,con,ram)
+                             bss   014C   002B =     43. bytes (rel,con,ram)
 
        Addr  Global Symbol
       -----  --------------------------------
-       012E  __bss_start
-       0147  __textmode
-       0149  __bss_end
+       014C  __bss_start
+       0175  __textmode
+       0177  __bss_end
 
 Area                               Start  End    Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                          vector   0000   000C =     12. bytes (abs,ovr,rom)
+                          vector   0000   0028 =     40. bytes (abs,ovr,rom)
 
 Files Linked      [ module(s) ]
 
@@ -118,8 +131,10 @@ wg26.o	[ wg26.c ]
 util.o	[ util.c ]
 tips.o	[ tips.c ]
 password.o	[ password.c ]
-<library>	[ _printf.s, strcpy.s, asave.s, div16s.s, div16u.s, gpop2.s, gpop4.s, gpop5.s, gpush.s, icall.s, struct.s ]
-[ putchar.s, stdarg.s, itoa.s, utoa.s, islower.s, ctype.s, toupper.s, printf.s, textmode.s ]
+timer.o	[ timer.c ]
+<library>	[ _printf.s, strcpy.s, asave.s, div16s.s, div16u.s, gpop2.s, gpop4.s, gpop5.s, gpush.s, icall.s, lpush.s ]
+[ struct.s, putchar.s, stdarg.s, itoa.s, utoa.s, islower.s, ctype.s, toupper.s, printf.s, textmode.s ]
+
 
 User Global Definitions
 
