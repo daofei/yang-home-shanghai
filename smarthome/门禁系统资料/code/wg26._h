@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void init_interrupt0(void);
+void init_interrupt(void);
 
 #ifdef __cplusplus
 }

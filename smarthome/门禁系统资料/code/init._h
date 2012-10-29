@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-//uart0 init.
+//port init.
 void port_init(void);
 
 #ifdef __cplusplus

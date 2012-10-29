@@ -75,10 +75,8 @@ _int1_isr::
 	st -y,R3
 	st -y,R4
 	st -y,R5
-	st -y,R16
-	st -y,R17
-	st -y,R18
-	st -y,R19
+	st -y,R8
+	st -y,R9
 	st -y,R30
 	in R2,0x3f
 	st -y,R2
@@ -126,10 +124,8 @@ L2:
 	ld R2,y+
 	out 0x3f,R2
 	ld R30,y+
-	ld R19,y+
-	ld R18,y+
-	ld R17,y+
-	ld R16,y+
+	ld R9,y+
+	ld R8,y+
 	ld R5,y+
 	ld R4,y+
 	ld R3,y+

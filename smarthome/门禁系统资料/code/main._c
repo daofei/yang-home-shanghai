@@ -20,7 +20,7 @@ int main(void)
  port_init();
  uart0_init();
  init_interrupt();
- tips_port_init()l
+ tips_port_init();
  //uart0_send_string("uart send...\n");
  PORTB = 0xff;
  while(1)
