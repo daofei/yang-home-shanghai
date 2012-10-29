@@ -6,6 +6,7 @@ wg26.c
 util.c
 tips.c
 password.c
+timer.c
 [Headers]
 uart.h
 init.h
@@ -13,4 +14,5 @@ wg26.h
 tips.h
 util.h
 password.h
+timer.h
 [Documents]

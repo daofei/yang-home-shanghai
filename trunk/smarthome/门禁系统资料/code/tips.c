@@ -18,13 +18,36 @@ void tips_port_init(void)
  return;
 }
 
+void tips_led_on(void)
+{
+ LED_ON;
+ return;
+}
+
+void tips_led_off(void)
+{
+ LED_OFF;
+ return;
+}
+
+void tips_beep_on(void)
+{
+ BEEP_ON;
+ return;
+}
+
+void tips_beep_off(void)
+{
+ BEEP_OFF;
+ return;
+}
 //__------__ 6 pices.pice per 0.4 seconds.
 void tips_ok(void)
 {
  LED_ON;
  BEEP_ON;
  //2.4 seconds.
- delay_ms(2400);
+ delay_ms(400);
  LED_OFF;
  BEEP_OFF;
  return;
@@ -33,21 +56,21 @@ void tips_ok(void)
 void tips_err(void)
 {
  BEEP_ON;
- delay_ms(400);
+ delay_ms(100);
  BEEP_OFF;
- delay_ms(400);
+ delay_ms(100);
  BEEP_ON;
- delay_ms(400);
+ delay_ms(100);
  BEEP_OFF;
  
- delay_ms(800);
+ delay_ms(200);
  
  BEEP_ON;
- delay_ms(400);
+ delay_ms(100);
  BEEP_OFF;
- delay_ms(400);
+ delay_ms(100);
  BEEP_ON;
- delay_ms(400);
+ delay_ms(100);
  BEEP_OFF;
  return;
 }
@@ -55,16 +78,16 @@ void tips_err(void)
 void tips_id_ok(void)
 {
  BEEP_ON;
- delay_ms(800);
+ delay_ms(200);
  BEEP_OFF;
- delay_ms(800);
+ delay_ms(200);
   
  BEEP_ON;
- delay_ms(400);
+ delay_ms(100);
  BEEP_OFF;
- delay_ms(400);
+ delay_ms(100);
  BEEP_ON;
- delay_ms(400);
+ delay_ms(100);
  BEEP_OFF;
  return;
 }
