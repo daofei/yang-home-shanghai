@@ -1,6 +1,6 @@
                         .module wg26.c
                         .area text(rom, con, rel)
- 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0000                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
  0000                   .dbfunc e init_interrupt _init_interrupt fV
                         .even
  0000           _init_interrupt::
@@ -53,21 +53,21 @@
  001A 0895              ret
  001C                   .dbend
                         .area data(ram, con, rel)
- 0000                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0000                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
  0000           _id_code::
  0000                   .blkb 4
                         .area idata
  0000 00000000          .word 0,0
                         .area data(ram, con, rel)
- 0004                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0004                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
  0004                   .dbsym e id_code _id_code l
                         .area vector(rom, abs)
                         .org 8
  0008 0C940E00          jmp _int1_isr
                         .area data(ram, con, rel)
- 0004                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 0004                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
                         .area text(rom, con, rel)
- 001C                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 001C                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
  001C                   .dbfunc e int1_isr _int1_isr fV
                         .even
  001C           _int1_isr::
@@ -141,7 +141,7 @@
                         .org 4
  0004 0C944D00          jmp _int0_isr
                         .area text(rom, con, rel)
- 009A                   .dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+ 009A                   .dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
  009A                   .dbfunc e int0_isr _int0_isr fV
                         .even
  009A           _int0_isr::

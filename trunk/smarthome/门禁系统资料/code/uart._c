@@ -15,6 +15,7 @@ void uart0_init(void)
 }
 
 #ifdef NO_PRINTF
+ddd
 //uart0 send char.
 void uart0_send(unsigned char i)
 {
@@ -36,4 +37,4 @@ void uart0_send_string(char* string)
   string++;
  }
 }
-*/
+#endif

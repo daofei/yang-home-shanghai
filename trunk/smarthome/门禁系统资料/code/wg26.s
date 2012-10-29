@@ -1,6 +1,6 @@
 	.module wg26.c
 	.area text(rom, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 	.dbfunc e init_interrupt _init_interrupt fV
 	.even
 _init_interrupt::
@@ -53,21 +53,21 @@ L1:
 	ret
 	.dbend
 	.area data(ram, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 _id_code::
 	.blkb 4
 	.area idata
 	.word 0,0
 	.area data(ram, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 	.dbsym e id_code _id_code l
 	.area vector(rom, abs)
 	.org 8
 	jmp _int1_isr
 	.area data(ram, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 	.area text(rom, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 	.dbfunc e int1_isr _int1_isr fV
 	.even
 _int1_isr::
@@ -141,7 +141,7 @@ L2:
 	.org 4
 	jmp _int0_isr
 	.area text(rom, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 	.dbfunc e int0_isr _int0_isr fV
 	.even
 _int0_isr::

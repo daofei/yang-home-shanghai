@@ -1,6 +1,6 @@
 	.module uart.c
 	.area text(rom, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
 	.dbfunc e uart0_init _uart0_init fV
 	.even
 _uart0_init::

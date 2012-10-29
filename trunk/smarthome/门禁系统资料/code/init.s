@@ -1,6 +1,6 @@
 	.module init.c
 	.area text(rom, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\init.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\init.c
 	.dbfunc e port_init _port_init fV
 	.even
 _port_init::

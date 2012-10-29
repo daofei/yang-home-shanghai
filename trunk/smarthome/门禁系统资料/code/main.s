@@ -1,13 +1,12 @@
 	.module main.c
 	.area text(rom, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
 	.dbfunc e main _main fI
-;            buf -> y+2
 	.even
 _main::
-	sbiw R28,12
+	sbiw R28,2
 	.dbline -1
-	.dbline 17
+	.dbline 18
 ; #include <stdio.h>
 ; #include <string.h>
 ; #include <stdlib.h>
@@ -20,32 +19,36 @@ _main::
 ; #include "uart.h"
 ; #include "wg26.h"
 ; #include "util.h"
+; #include "tips.h"
 ; 
 ; extern unsigned long id_code;
 ; 
 ; int main(void)
 ; {
-	.dbline 19
-;  char buf[10];
+	.dbline 20
+;  //char buf[10];
 ;  port_init();
 	xcall _port_init
-	.dbline 20
+	.dbline 21
 ;  uart0_init();
 	xcall _uart0_init
-	.dbline 21
+	.dbline 22
 ;  init_interrupt();
 	xcall _init_interrupt
 	.dbline 23
+;  tips_port_init();
+	xcall _tips_port_init
+	.dbline 25
 ;  //uart0_send_string("uart send...\n");
 ;  PORTB = 0xff;
 	ldi R24,255
 	out 0x18,R24
 	xjmp L3
 L2:
-	.dbline 25
+	.dbline 27
 ;  while(1)
 ;  {
-	.dbline 30
+	.dbline 32
 ;   //uart0_send_string("uart send testing...\n");
 ;   //PORTB = 0xff;
 ;   //SEI();
@@ -54,7 +57,7 @@ L2:
 	ldi R16,500
 	ldi R17,1
 	xcall _delay_ms
-	.dbline 31
+	.dbline 33
 ;   if(id_code)
 	ldi R20,0
 	ldi R21,0
@@ -69,25 +72,15 @@ L2:
 	cpc R4,R22
 	cpc R5,R23
 	breq L5
-	.dbline 32
-;   {
-	.dbline 33
-;    printf("sizeof(long)=%x", sizeof(long));
-	ldi R18,4
-	ldi R19,0
-	ldi R16,<L7
-	ldi R17,>L7
-	xcall _printf
 	.dbline 34
+;   {
+	.dbline 36
+;    //printf("sizeof(long)=%x", sizeof(long));
 ;    id_code &= 0x01fffffe;
 	ldi R20,254
 	ldi R21,255
 	ldi R22,255
 	ldi R23,1
-	lds R4,_id_code+2
-	lds R5,_id_code+2+1
-	lds R2,_id_code
-	lds R3,_id_code+1
 	and R2,R20
 	and R3,R21
 	and R4,R22
@@ -96,7 +89,7 @@ L2:
 	sts _id_code,R2
 	sts _id_code+2+1,R5
 	sts _id_code+2,R4
-	.dbline 35
+	.dbline 37
 ;    id_code >>= 1;
 	lsr R5
 	ror R4
@@ -106,18 +99,18 @@ L2:
 	sts _id_code,R2
 	sts _id_code+2+1,R5
 	sts _id_code+2,R4
-	.dbline 36
+	.dbline 38
 ;    printf("id_code=%d", id_code);
 	std y+0,R4
 	std y+1,R5
 	movw R18,R2
-	ldi R16,<L8
-	ldi R17,>L8
+	ldi R16,<L7
+	ldi R17,>L7
 	xcall _printf
-	.dbline 37
+	.dbline 39
 ;   }
 L5:
-	.dbline 39
+	.dbline 41
 ;   
 ;   if(id_code == 1392618)
 	ldi R20,234
@@ -132,44 +125,37 @@ L5:
 	cpc R3,R21
 	cpc R4,R22
 	cpc R5,R23
-	brne L9
-	.dbline 40
+	brne L8
+	.dbline 42
 ;   {
-	.dbline 41
+	.dbline 43
 ;    PORTB = 0x0;
 	clr R2
 	out 0x18,R2
-	.dbline 42
+	.dbline 44
 ;   }
-L9:
-	.dbline 43
+L8:
+	.dbline 45
 L3:
-	.dbline 24
+	.dbline 26
 	xjmp L2
 X0:
-	.dbline 44
+	.dbline 46
 ;  }
 ;  return 0;
 	clr R16
 	clr R17
 	.dbline -2
 L1:
-	adiw R28,12
+	adiw R28,2
 	.dbline 0 ; func end
 	ret
-	.dbsym l buf 2 A[10:10]c
 	.dbend
 	.area data(ram, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
-L8:
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+L7:
 	.blkb 11
 	.area idata
 	.byte 'i,'d,95,'c,'o,'d,'e,61,37,'d,0
 	.area data(ram, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
-L7:
-	.blkb 16
-	.area idata
-	.byte 's,'i,'z,'e,'o,'f,40,'l,'o,'n,'g,41,61,37,'x,0
-	.area data(ram, con, rel)
-	.dbfile D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+	.dbfile Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c

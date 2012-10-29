@@ -10,15 +10,17 @@
 #include "uart.h"
 #include "wg26.h"
 #include "util.h"
+#include "tips.h"
 
 extern unsigned long id_code;
 
 int main(void)
 {
- char buf[10];
+ //char buf[10];
  port_init();
  uart0_init();
  init_interrupt();
+ tips_port_init();
  //uart0_send_string("uart send...\n");
  PORTB = 0xff;
  while(1)
@@ -30,7 +32,7 @@ int main(void)
   delay_ms(500);
   if(id_code)
   {
-   printf("sizeof(long)=%x", sizeof(long));
+   //printf("sizeof(long)=%x", sizeof(long));
    id_code &= 0x01fffffe;
    id_code >>= 1;
    printf("id_code=%d", id_code);
