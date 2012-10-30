@@ -1,1 +1,1 @@
-uart.o init.o main.o wg26.o util.o tips.o password.o timer.o 
+uart.o init.o main.o wg26.o util.o tips.o password.o timer.o log.o locker.o 

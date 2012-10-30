@@ -5,35 +5,34 @@
 extern "C" {
 #endif
 
-#define PASSWORDFLAGS_UNKOWN	0x00
-#define PASSWORDFLAGS_ID		0x01
-#define PASSWORDFLAGS_PASSWORD	0x02
-#define PASSWORDFLAGS_IDANDPWD  0x04
+#define PASSWORDFLAGS_UNKOWN    0x00
+#define PASSWORDFLAGS_ID                0x01
+#define PASSWORDFLAGS_PASSWORD  0x02
 
-#define IDREADEDIDCARD		 0
-#define IDREADEDKEYPAD		 1
+#define IDREADEDIDCARD          0
+#define IDREADEDKEYPAD          1
 
 void password_handle(char type, unsigned long code);
 
 typedef struct __passwordItem
 {
- unsigned char flags;
- unsigned long idCard;
- unsigned long long password;
+    unsigned char flags;
+    unsigned long idCard;
+    unsigned long long password;
 }passwordItem_t;
 
 //read password numbers.
-int readPasswordItemNum(void);
+unsigned char readPasswordItemNum(void);
 
 //read a password struct by index.
-passwordItem_t readPasswordItem(int index);
+passwordItem_t readPasswordItem(unsigned char index);
 
 //insert a password item.
-int insertPasswordItem(passwordItem_t item);
+unsigned char insertPasswordItem(passwordItem_t item);
 
 //delete a password by index. 
 //maybe change the index.
-int deletePasswordItem(int index);
+void deletePasswordItem(unsigned char index);
 
 #ifdef __cplusplus
 }
