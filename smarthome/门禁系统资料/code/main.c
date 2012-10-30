@@ -20,8 +20,6 @@ int main(void)
     tips_port_init();
     timer_init();
     printf("running...");
-    //uart0_send_string("uart send...\n");
-    PORTB = 0xff;
     while(1)
     {
         delay_ms(200);

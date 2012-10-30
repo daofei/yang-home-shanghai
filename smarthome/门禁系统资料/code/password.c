@@ -14,11 +14,15 @@
 unsigned char readPasswordItemNum(void)
 {
 
-    return 0;
+    return 1;
 }
 passwordItem_t readPasswordItem(unsigned char index)
 {
     passwordItem_t item;
+	item.flags = PASSWORDFLAGS_PASSWORD|PASSWORDFLAGS_ID;
+	item.idCard = 1392618;
+	item.passwordH = 1;
+	item.passwordL = 1007;
     return item;
 }
 unsigned char insertPasswordItem(passwordItem_t item)
@@ -40,12 +44,14 @@ static unsigned char current_index = 0;
 static unsigned char input_err_count = 0;
 
 //You input xxx then password is 1xxx.
-static unsigned long password = 1;
+static unsigned long passwordH = 1;
+static unsigned long passwordL = 1;
 
 static void clear_pswd_status(void)
 {
     //clear last password input.
-    password = 1;
+	passwordH = 1;
+    passwordL = 1;
     tips_led_off();
     password_read_flags = PASSWORDREADIDCARDUNKOWN;
     current_index = 0;
@@ -88,7 +94,6 @@ void password_handle(char type, unsigned long code)
     //read a card.
     if(type==IDREADEDIDCARD)
     {
-        printf("ID Card:%d", code);
         clear_pswd_status();
         //read paswd item num.
         pswd_item_num = readPasswordItemNum();
@@ -115,7 +120,7 @@ void password_handle(char type, unsigned long code)
                 else //only id card.
                 {
                     //record log
-                    log(LOGTYPEIDOK, i, code, 0);
+                    log(LOGTYPEIDOK, i, code, 0, 0);
                     //clear pswd statuc.
                     clear_pswd_status();
                     tips_ok();
@@ -127,7 +132,7 @@ void password_handle(char type, unsigned long code)
             }  //if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
         }	  //for(i=0;i<pswd_item_num;++i)
         //unkown id card.
-        log(LOGTYPEIDERR, 0, code, 0);
+        log(LOGTYPEIDERR, 0, code, 0, 0);
         //clear password.
         clear_pswd_status();
         //error password and log.
@@ -141,23 +146,19 @@ void password_handle(char type, unsigned long code)
         code &= 0x0000000f;
         if(code == 0x0000000a)  //*
         {
-            printf("Press *");
             //clear password.
             clear_pswd_status();
         }
         else if(code == 0x0000000b) //#
         {
-            printf("Press #");
-            //handle password.
-            printf("Ok.pswd:%d", password);
             //need id card password.
             if(password_read_flags==PASSWORDREADIDCARDOK)
             {
                 passwordItem_t current_item = readPasswordItem(current_index);
                 //password is ok.
-                if(current_item.password==password)
+                if((current_item.passwordH==passwordH)&&(current_item.passwordL==passwordL))
                 {
-                    log(LOGTYPEIDANDPSWDOK, current_index, current_item.idCard, password);
+                    log(LOGTYPEIDANDPSWDOK, current_index, current_item.idCard, passwordH, passwordL);
                     //clear password status.
                     clear_pswd_status();
                     //unlock and write log.
@@ -168,7 +169,7 @@ void password_handle(char type, unsigned long code)
                 }
                 else //password is error.
                 {
-                    log(LOGTYPEIDANDPSWDERR, current_index, current_item.idCard, password);
+                    log(LOGTYPEIDANDPSWDERR, current_index, current_item.idCard, passwordH, passwordL);
                     //clear password.
                     clear_pswd_status();
                     //error password and log.
@@ -187,9 +188,10 @@ void password_handle(char type, unsigned long code)
                     //read a item.
                     item = readPasswordItem(i);
                     //if item need id card, and is this id card.
-                    if((item.flags==PASSWORDFLAGS_PASSWORD)&&(item.password==password))
+                    if((item.flags==PASSWORDFLAGS_PASSWORD)&&(item.passwordH==passwordH)
+						&&(item.passwordL==passwordL))
                     {
-                        log(LOGTYPEPSWDOK, i, 0, password);
+                        log(LOGTYPEPSWDOK, i, 0, passwordH, passwordL);
                         //clear password.
                         clear_pswd_status();
                         //password is right. unlock and log.
@@ -201,7 +203,7 @@ void password_handle(char type, unsigned long code)
                     }
                 }
                 //password is error.
-                log(LOGTYPEPSWDERR, 0, 0, password);
+                log(LOGTYPEPSWDERR, 0, 0, passwordH, passwordL);
                 //clear password.
                 clear_pswd_status();
                 //password is error, and log.
@@ -213,13 +215,17 @@ void password_handle(char type, unsigned long code)
         }
         else
         {
-            printf("Press %d", code);
             tips_led_on();
             //set time out. 200ms*5*30
             set_timer(PASSWORDTIMEOUTTIMER, 30000, input_time_out);
-            password = password*10 + code;
-            printf("pswd:%d", password);
-        }
+            passwordL = passwordL*10 + code;
+			//passwordH save password hight 9 num.
+			if(passwordL>999999999)
+			{
+			 passwordH = passwordL;
+			 passwordL = 1;
+			}
+		}
     }
     return;
 }
