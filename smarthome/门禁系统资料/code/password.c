@@ -27,3 +27,39 @@ int deletePasswordItem(int index)
  return 0;
 }
 
+static unsigned char password_read_flags = 0;
+
+//You input xxx then password is 1xxx.
+static unsigned long passwordH = 1;
+static unsigned long passwordL = 1;
+
+void password_handle(char type, unsigned long code)
+{
+ if(type==IDREADEDIDCARD)
+ {
+  printf("ID Card:%d", code);
+ }
+ else if(type==IDREADEDKEYPAD)
+ {
+  code &= 0x0000000f;
+  if(code == 0x0000000a)  //*
+  {
+   printf("Press *");
+   //clear password.
+   passwordL = 1;
+  }
+  else if(code == 0x0000000b) //#
+  {
+   printf("Press #");
+   //handle password.
+   printf("Ok.pswd:%d", passwordL);
+  }
+  else
+  {
+   printf("Press %d", code);
+   passwordL = passwordL*10 + code;
+   printf("pswd:%d", passwordL);
+  }
+ }
+ return;
+}

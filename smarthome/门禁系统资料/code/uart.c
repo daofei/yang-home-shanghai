@@ -13,7 +13,7 @@ void uart0_init(void)
  UBRRH = 0x00;
  UCSRB = 0x18;
 }
-
+//if no printf then need those funcation .
 #ifdef NO_PRINTF
 //uart0 send char.
 void uart0_send(unsigned char i)
