@@ -28,7 +28,8 @@ tips.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\sm
 tips.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
 	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
 password.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C:/icc/include/stdlib.h C:/icc/include/_const.h C:/icc/include/limits.h C:/icc/include/iom16v.h C:/icc/include/macros.h\
- Z:\yang-home-shanghai\smarthome\门禁系统资料\code/log.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/locker.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h
+ Z:\yang-home-shanghai\smarthome\门禁系统资料\code/log.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/locker.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h\
+ Z:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h
 password.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
 	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
 timer.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C:/icc/include/stdlib.h C:/icc/include/_const.h C:/icc/include/limits.h C:/icc/include/string.h C:/icc/include/_const.h C:/icc/include/iom16v.h C:/icc/include/macros.h\

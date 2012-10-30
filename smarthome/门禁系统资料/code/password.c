@@ -7,6 +7,7 @@
 #include "log.h"
 #include "locker.h"
 #include "tips.h"
+#include "timer.h"
 #include "password.h"
 
 
@@ -30,13 +31,13 @@ void deletePasswordItem(unsigned char index)
     return;
 }
 
-#define PASSWORDREADIDCARDUNKOWN 0
-#define PASSWORDREADIDCARDOK 1
-#define PASSWORDREADIDANDPSWDOK	 2
+#define PASSWORDREADIDCARDUNKOWN    0
+#define PASSWORDREADIDCARDOK                1
+#define PASSWORDREADIDANDPSWDOK         2
 
 static unsigned char password_read_flags = 0;
-static passwordItem_t current_item;
 static unsigned char current_index = 0;
+static unsigned char input_err_count = 0;
 
 //You input xxx then password is 1xxx.
 static unsigned long password = 1;
@@ -48,6 +49,23 @@ static void clear_pswd_status(void)
     tips_led_off();
     password_read_flags = PASSWORDREADIDCARDUNKOWN;
     current_index = 0;
+    stop_timer(PASSWORDTIMEOUTTIMER);
+    return;
+}
+
+//cannot input timeout.
+static void cannot_input_time_out(char timer)
+{
+    if(timer==PASSWORDTIMEOUTTIMER)
+        input_err_count = 0;
+    return;
+}
+
+//input timeout.
+static void input_time_out(char timer)
+{
+    if(timer==PASSWORDTIMEOUTTIMER)
+        clear_pswd_status();
     return;
 }
 
@@ -56,6 +74,16 @@ void password_handle(char type, unsigned long code)
     unsigned char pswd_item_num = 0;
     unsigned char i;
     passwordItem_t item;
+
+    //if input error count is too large.
+    if(input_err_count>5)
+    {
+        clear_pswd_status();
+        tips_err();
+        //set time out. 200ms*5*60
+        set_timer(PASSWORDTIMEOUTTIMER, 300, cannot_input_time_out);
+        return;
+    }
  
     //read a card.
     if(type==IDREADEDIDCARD)
@@ -79,8 +107,10 @@ void password_handle(char type, unsigned long code)
                     tips_id_ok();
                     //id card ok, but not input password, led on.
                     tips_led_on();
-                    current_item = item;
+                    current_index = i;
                     password_read_flags = PASSWORDREADIDCARDOK;
+                    //set time out. 200ms*5*30
+                    set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
                 }
                 else //only id card.
                 {
@@ -90,6 +120,8 @@ void password_handle(char type, unsigned long code)
                     clear_pswd_status();
                     tips_ok();
                     locker_unlock();
+                    //error count clear.
+                    input_err_count = 0;
                 } //else
                 return;
             }  //if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
@@ -100,6 +132,8 @@ void password_handle(char type, unsigned long code)
         clear_pswd_status();
         //error password and log.
         tips_err();
+        //error count ++
+        ++input_err_count;
         return;
     }	  //if(type==IDREADEDIDCARD)
     else if(type==IDREADEDKEYPAD) // read a keypad input.
@@ -119,6 +153,7 @@ void password_handle(char type, unsigned long code)
             //need id card password.
             if(password_read_flags==PASSWORDREADIDCARDOK)
             {
+                passwordItem_t current_item = readPasswordItem(current_index);
                 //password is ok.
                 if(current_item.password==password)
                 {
@@ -128,6 +163,8 @@ void password_handle(char type, unsigned long code)
                     //unlock and write log.
                     tips_ok();
                     locker_unlock();
+                    //error count clear.
+                    input_err_count = 0;
                 }
                 else //password is error.
                 {
@@ -136,6 +173,8 @@ void password_handle(char type, unsigned long code)
                     clear_pswd_status();
                     //error password and log.
                     tips_err();
+                    //error count ++.
+                    ++input_err_count;
                 }
             }
             else //only password.
@@ -156,6 +195,8 @@ void password_handle(char type, unsigned long code)
                         //password is right. unlock and log.
                         tips_ok();
                         locker_unlock();
+                        //error count clear.
+                        input_err_count = 0;
                         return;
                     }
                 }
@@ -165,6 +206,8 @@ void password_handle(char type, unsigned long code)
                 clear_pswd_status();
                 //password is error, and log.
                 tips_err();
+                //error count++.
+                ++input_err_count;
                 return;
             }
         }
@@ -172,6 +215,8 @@ void password_handle(char type, unsigned long code)
         {
             printf("Press %d", code);
             tips_led_on();
+            //set time out. 200ms*5*30
+            set_timer(PASSWORDTIMEOUTTIMER, 30000, input_time_out);
             password = password*10 + code;
             printf("pswd:%d", password);
         }

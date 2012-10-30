@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 #define IDREADERTIMEOUTTIMER	0
-#define PASSWORDTIMEOUTTIMER	0
+#define PASSWORDTIMEOUTTIMER	1
 
 #define MAXTIMER 4
 
