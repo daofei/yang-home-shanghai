@@ -71,6 +71,7 @@ static void read_time_out(char timer)
         //enable reader.
         enable_reader();
         id_reader_flags = IDREADERFLAG_WAITING;
+		read_count = 0;
     }
     return;
 }
@@ -104,7 +105,7 @@ void int0_isr(void)
     }
     return;
 }
-#pragma interrupt_handler int1_isr:2
+#pragma interrupt_handler int1_isr:3
 void int1_isr(void)
 {
     set_id_reading_status();

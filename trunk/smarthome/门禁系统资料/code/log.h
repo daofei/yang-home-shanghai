@@ -12,7 +12,7 @@ extern "C" {
 #define LOGTYPEPSWDOK               5
 #define LOGTYPEPSWDERR              6
 
-void log(char type, unsigned char index, unsigned long id_code, unsigned long pswd);
+void log(char type, unsigned char index, unsigned long id_code, unsigned long pswdH, unsigned long pswdL);
 
 #ifdef __cplusplus
 }

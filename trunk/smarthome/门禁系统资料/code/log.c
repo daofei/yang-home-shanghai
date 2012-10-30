@@ -2,7 +2,7 @@
 
 #include "log.h"
 
-void log(char type, unsigned char index, unsigned long id_code, unsigned long pswd)
+void log(char type, unsigned char index, unsigned long id_code, unsigned long pswdH, unsigned long pswdL)
 {
 
 }
