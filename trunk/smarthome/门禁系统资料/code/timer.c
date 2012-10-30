@@ -40,7 +40,7 @@ void set_timer(char timer, int value, timerCB cb)
     g_timer[timer].value = value+1;
     g_timer[timer].cb = cb;
     if(g_timer[timer].value)
-    t0_start();
+        t0_start();
     return;
 }
 //stop timer and clean timer.
