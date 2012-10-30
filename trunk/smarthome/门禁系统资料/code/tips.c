@@ -17,25 +17,25 @@ void tips_port_init(void)
  DDRD |= 0x30;
  return;
 }
-
+//led on.
 void tips_led_on(void)
 {
  LED_ON;
  return;
 }
-
+//led off.
 void tips_led_off(void)
 {
  LED_OFF;
  return;
 }
-
+//beep on.
 void tips_beep_on(void)
 {
  BEEP_ON;
  return;
 }
-
+//beep off.
 void tips_beep_off(void)
 {
  BEEP_OFF;

@@ -5,17 +5,21 @@
 extern "C" {
 #endif
 
-#define PASSWORTFLAGS_UNKOWN	0x00
-#define PASSWORTFLAGS_ID		0x01
-#define PASSWORTFLAGS_PASSWORD	0x02
-#define PASSWORTFLAGS_IDANDPWD  0x04
+#define PASSWORDFLAGS_UNKOWN	0x00
+#define PASSWORDFLAGS_ID		0x01
+#define PASSWORDFLAGS_PASSWORD	0x02
+#define PASSWORDFLAGS_IDANDPWD  0x04
+
+#define IDREADEDIDCARD		 0
+#define IDREADEDKEYPAD		 1
+
+void password_handle(char type, unsigned long code);
 
 typedef struct __passwordItem
 {
  unsigned char flags;
  unsigned long idCard;
- unsigned long passwordH;
- unsigned long passwordL;  
+ unsigned long long password;
 }passwordItem_t;
 
 //read password numbers.

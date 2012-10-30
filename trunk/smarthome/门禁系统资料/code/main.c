@@ -12,8 +12,6 @@
 #include "tips.h"
 #include "timer.h"
 
-extern unsigned long id_code;
-
 int main(void)
 {
  port_init();
@@ -26,18 +24,7 @@ int main(void)
  PORTB = 0xff;
  while(1)
  {
-  if(id_code)
-  {
-   printf("sizeof(double)=%d", sizeof(double));
-   id_code &= 0x01fffffe;
-   id_code >>= 1;
-   printf("id_code=%d", id_code);
-  }
   delay_ms(200);
-  if(id_code == 1392618)
-  {
-   PORTB = 0x0;
-  }
  }
  return 0;
 }

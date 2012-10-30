@@ -5,15 +5,22 @@
 extern "C" {
 #endif
 
+#define IDREADERTIMEOUTTIMER	0
+
+#define MAXTIMER 4
+
 typedef void (*timerCB)(char); 
-
-void timer_init(void);
-
 typedef struct __timer
 {
  unsigned int value;
- timerCB *cb;
+ timerCB cb;
 }timer_t; 
+//timer init.
+void timer_init(void);
+//set timer.
+void set_timer(char timer, int value, timerCB cb);
+//stop timer.
+void stop_timer(char timer);
 
 #ifdef __cplusplus
 }

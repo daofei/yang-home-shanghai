@@ -19,108 +19,76 @@ void timer_init(void)
  //TIMSK |= 0x01;
  return; 
 }
-
+//cpu timer0 start
 static void t0_start(void)
 {
  TIMSK |= 0x01;
  return;
 }
-
+//cpu timer0 stop
 static void t0_stop(void)
 {
  TIMSK &= 0xfe;
  return;
 }
-
-#define MAXTIMER 4
+//
 static timer_t g_timer[MAXTIMER];
-
-char get_timer(void)
+//set timer and start timer. set value 0, need wait a cpu timer pice.
+void set_timer(char timer, int value, timerCB cb)
 {
- char i;
- for(i=0;i<MAXTIMER;i++)
- {
-  if(g_timer[i].value)
-  {
-   g_timer[i].value = 1;
-   return i;
-  }
- }
- return -1;
-}
-
-void set_timer(char timer, int value)
-{
+ //value=0, stoped timer.
+ g_timer[timer].value = value+1;
+ g_timer[timer].cb = cb;
  if(g_timer[timer].value)
-  g_timer[timer].value = value;
- return;
-}
-
-void set_timer_cb(char timer, timerCB *cb)
-{
- if(g_timer[timer].value)
-  g_timer[timer].cb = cb;
- return;
-}
-
-void start_timer(char timer)
-{
- if(g_timer[timer].value)
- {
   t0_start();
- }
  return;
 }
-
+//stop timer and clean timer.
 void stop_timer(char timer)
 {
  if(g_timer[timer].value)
  {
-  char i;
+  //stop this timer.
   g_timer[timer].value = 0;
-  for(i=0;i<MAXTIMER;i++)
-  {
-   if(g_timer[i].value)
-   	break;
-  }
-  if(i==MAXTIMER)
-   t0_stop();
+  g_timer[timer].cb = NULL;
  }
  return;
 }
-
+//timer spank.
 #pragma interrupt_handler timer0_isr:10
 void timer0_isr(void)
 {
- static char i = 0;
- i++;
+ static char time_pices = 0;
+ ++time_pices;
  //200ms.
- if(i==5)
+ if(time_pices == 5)
  {
-  char j;
-  for(j=0;j<MAXTIMER;j++)
+  char running_timer_count = 0;
+  char i;
+  for(i=0;i<MAXTIMER;i++)
   {
-   if(g_timer[j].value>1)
-   	--g_timer[j].value;
-   //timer call back.
-   if(g_timer[j].value==1)
+   if(g_timer[i].value>1)
    {
-   	if(g_timer[j].cb)
-	 ;//g_timer[j].cb(j);
-	g_timer[j].value = 0;
+   	--g_timer[i].value;
+	++running_timer_count;
+   }
+   //timer call back.
+   else if(g_timer[i].value==1)
+   {
+   	if(g_timer[i].cb)
 	{
-	 char k;
-	 for(k=0;k<MAXTIMER;k++)
-  	 {
-   	  if(g_timer[k].value)
-   	   break;
-  	 }
-  	 if(k==MAXTIMER)
-   	  t0_stop();
+	 //disable cpu timer.
+	 t0_stop();
+	 (g_timer[i].cb)(i);
+	 //enable cpu timer.
+	 t0_start();
 	}
+	g_timer[i].value = 0;
    }
   }
-  i = 0;
+  time_pices = 0;
+  //if no timer running, stop cpu timer.
+  if(!running_timer_count) t0_stop();
  }
  return;
 }
