@@ -14,17 +14,17 @@
 
 int main(void)
 {
- port_init();
- uart0_init();
- init_interrupt();
- tips_port_init();
- timer_init();
- printf("running...");
- //uart0_send_string("uart send...\n");
- PORTB = 0xff;
- while(1)
- {
-  delay_ms(200);
- }
- return 0;
+    port_init();
+    uart0_init();
+    init_interrupt();
+    tips_port_init();
+    timer_init();
+    printf("running...");
+    //uart0_send_string("uart send...\n");
+    PORTB = 0xff;
+    while(1)
+    {
+        delay_ms(200);
+    }
+    return 0;
 }

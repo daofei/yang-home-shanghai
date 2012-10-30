@@ -6,14 +6,15 @@ extern "C" {
 #endif
 
 #define IDREADERTIMEOUTTIMER	0
+#define PASSWORDTIMEOUTTIMER	0
 
 #define MAXTIMER 4
 
 typedef void (*timerCB)(char); 
 typedef struct __timer
 {
- unsigned int value;
- timerCB cb;
+    unsigned int value;
+    timerCB cb;
 }timer_t; 
 //timer init.
 void timer_init(void);

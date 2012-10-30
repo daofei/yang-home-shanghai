@@ -7,6 +7,8 @@ util.c
 tips.c
 password.c
 timer.c
+log.c
+locker.c
 [Headers]
 uart.h
 init.h
@@ -15,4 +17,6 @@ tips.h
 util.h
 password.h
 timer.h
+log.h
+locker.h
 [Documents]
