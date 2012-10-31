@@ -19,7 +19,7 @@ typedef struct __passwordItem
     unsigned char flags;
     unsigned long idCard;
     unsigned long passwordH;
-	unsigned long passwordL;
+    unsigned long passwordL;
 }passwordItem_t;
 
 //read password numbers.

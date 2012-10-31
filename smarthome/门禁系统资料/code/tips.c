@@ -91,3 +91,17 @@ void tips_id_ok(void)
     BEEP_OFF;
     return;
 }
+//__------__-----__
+void tips_ring_on(void)
+{
+    BEEP_ON;
+    //2.4 seconds.
+    delay_ms(400);
+    BEEP_OFF;
+    delay_ms(400);
+    BEEP_ON;
+    //2.4 seconds.
+    delay_ms(400);
+    BEEP_OFF;
+    return;
+}

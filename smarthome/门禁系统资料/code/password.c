@@ -50,7 +50,7 @@ static unsigned long passwordL = 1;
 static void clear_pswd_status(void)
 {
     //clear last password input.
-	passwordH = 1;
+    passwordH = 1;
     passwordL = 1;
     tips_led_off();
     password_read_flags = PASSWORDREADIDCARDUNKOWN;
@@ -189,7 +189,7 @@ void password_handle(char type, unsigned long code)
                     item = readPasswordItem(i);
                     //if item need id card, and is this id card.
                     if((item.flags==PASSWORDFLAGS_PASSWORD)&&(item.passwordH==passwordH)
-						&&(item.passwordL==passwordL))
+                        &&(item.passwordL==passwordL))
                     {
                         log(LOGTYPEPSWDOK, i, 0, passwordH, passwordL);
                         //clear password.
@@ -219,13 +219,13 @@ void password_handle(char type, unsigned long code)
             //set time out. 200ms*5*30
             set_timer(PASSWORDTIMEOUTTIMER, 30000, input_time_out);
             passwordL = passwordL*10 + code;
-			//passwordH save password hight 9 num.
-			if(passwordL>999999999)
-			{
-			 passwordH = passwordL;
-			 passwordL = 1;
-			}
-		}
+            //passwordH save password hight 9 num.
+            if(passwordL>999999999)
+            {
+                passwordH = passwordL;
+                passwordL = 1;
+            }
+        }
     }
     return;
 }

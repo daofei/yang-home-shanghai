@@ -15,6 +15,7 @@ void tips_beep_off(void);
 void tips_ok(void);
 void tips_err(void);
 void tips_id_ok(void);
+void tips_ring_on(void);
 
 #ifdef __cplusplus
 }

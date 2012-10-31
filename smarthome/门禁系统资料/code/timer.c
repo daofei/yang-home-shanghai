@@ -75,6 +75,7 @@ void timer0_isr(void)
             //timer call back.
             else if(g_timer[i].value==1)
             {
+                g_timer[i].value = 0;
                 if(g_timer[i].cb)
                 {
                     //disable cpu timer.
@@ -83,7 +84,6 @@ void timer0_isr(void)
                     //enable cpu timer.
                     t0_start();
                 }
-                g_timer[i].value = 0;
             }
         }
         time_pices = 0;
