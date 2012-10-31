@@ -9,6 +9,8 @@ password.c
 timer.c
 log.c
 locker.c
+ringandscreen.c
+iic.c
 [Headers]
 uart.h
 init.h
@@ -19,4 +21,6 @@ password.h
 timer.h
 log.h
 locker.h
+ringandscreen.h
+iic.h
 [Documents]

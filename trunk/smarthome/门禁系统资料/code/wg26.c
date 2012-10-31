@@ -57,7 +57,7 @@ static void read_time_out(char timer)
         disable_reader();
         id_reader_flags = IDREADERFLAG_READED;
         //read ok.
-        if(read_count>5) //id card.
+        if(read_count>20) //id card.
         {
             if(!id_reader_check(id_code))
             {
@@ -71,7 +71,7 @@ static void read_time_out(char timer)
         //enable reader.
         enable_reader();
         id_reader_flags = IDREADERFLAG_WAITING;
-		read_count = 0;
+        read_count = 0;
     }
     return;
 }
