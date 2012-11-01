@@ -7,6 +7,8 @@ extern "C" {
 
 void ringandscreen_init(void);
 
+char check_door(void);
+
 #ifdef __cplusplus
 }
 #endif
