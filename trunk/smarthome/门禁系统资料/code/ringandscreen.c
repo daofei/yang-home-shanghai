@@ -103,11 +103,12 @@ void input_isr(void)
         //start timer. 50s.
         set_timer(RINGANDSCREENINPUTTIMER, 300, ring_screen_timeout);
     }
-    else if(!(PIND&0x04)) //dor minitor input.
-    {
-        //start timer. 10s.
-        set_timer(RINGANDSCREENINPUTTIMER, 70, door_minitor_timeout);
-    }
     enable_input();
     return;
+}
+
+//when door open, return 1.
+char check_door(void)
+{
+    return (!(PIND&0x04));
 }
