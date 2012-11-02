@@ -57,7 +57,7 @@ static void read_time_out(char timer)
         disable_reader();
         id_reader_flags = IDREADERFLAG_READED;
         //read ok.
-        if(read_count>20) //id card.
+        if(read_count==26) //id card.
         {
             if(!id_reader_check(id_code))
             {
@@ -66,8 +66,10 @@ static void read_time_out(char timer)
                 password_handle(IDREADEDIDCARD, id_code);
             }
         }
-        else //keypad input.
+        else if(read_count==4)//keypad input.
+        {
             password_handle(IDREADEDKEYPAD, id_code);
+        }
         //enable reader.
         enable_reader();
         id_reader_flags = IDREADERFLAG_WAITING;
