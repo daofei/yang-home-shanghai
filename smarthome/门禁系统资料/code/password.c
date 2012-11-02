@@ -109,7 +109,7 @@ void password_handle(char type, unsigned long code)
                 if(item.flags&PASSWORDFLAGS_PASSWORD)
                 {
                     //id card ok, but need password.
-                    tips_id_ok();
+                    //tips_id_ok();
                     //id card ok, but not input password, led on.
                     tips_led_on();
                     current_index = i;
@@ -217,7 +217,7 @@ void password_handle(char type, unsigned long code)
         {
             tips_led_on();
             //set time out. 200ms*5*30
-            set_timer(PASSWORDTIMEOUTTIMER, 30000, input_time_out);
+            set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
             passwordL = passwordL*10 + code;
             //passwordH save password hight 9 num.
             if(passwordL>999999999)
