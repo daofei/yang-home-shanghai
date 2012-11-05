@@ -4,12 +4,20 @@
 
 #include "util.h"
 
+#define XTAL    8
+void delay_1ms(void)
+{
+    int i;
+    //XTAL*143-2 = 1142
+    for(i=1;i<1142;i++);
+}
+//=========================================
 void delay_ms(int ms)
 {
-    int i,j;
-    for(i=0;i<ms;i++)
+    int i=0;
+    while(i<ms)
     {
-        for(j=0;j<1140;j++)
-            ;
+        delay_1ms();
+        i++;
     }
 }

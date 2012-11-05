@@ -19,10 +19,10 @@ unsigned char readPasswordItemNum(void)
 passwordItem_t readPasswordItem(unsigned char index)
 {
     passwordItem_t item;
-	item.flags = PASSWORDFLAGS_PASSWORD|PASSWORDFLAGS_ID;
-	item.idCard = 1392618;
-	item.passwordH = 1;
-	item.passwordL = 1007;
+    item.flags = PASSWORDFLAGS_PASSWORD|PASSWORDFLAGS_ID;
+    item.idCard = 1392618;
+    item.passwordH = 1;
+    item.passwordL = 1007;
     return item;
 }
 unsigned char insertPasswordItem(passwordItem_t item)
