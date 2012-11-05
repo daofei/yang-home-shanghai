@@ -31,89 +31,92 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   023E   109A =   4250. bytes (rel,con,rom)
+                            text   023E   12B0 =   4784. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       011F  __start
        011F  __text_start
+       011F  __start
        013E  _exit
        013F  _uart0_init
        014B  _port_init
        014C  _main
        0172  _init_interrupt
-       01F1  _int0_isr
-       020C  _int1_isr
-       0227  _delay_ms
-       023A  _tips_port_init
-       0241  _tips_led_on
-       0245  _tips_led_off
-       0247  _tips_beep_on
-       024B  _tips_beep_off
-       024D  _tips_ok
-       0256  _tips_err
-       0270  _tips_id_ok
-       0286  _tips_ring_on
-       0292  _readPasswordItemNum
-       0294  _readPasswordItem
-       02BE  _insertPasswordItem
-       02C0  _deletePasswordItem
-       02E5  _password_handle
-       0417  _timer_init
-       0426  _set_timer
-       0446  _stop_timer
-       045C  _timer0_isr
-       04B4  _log
-       04B5  _locker_init
-       04B6  _locker_unlock
-       04B7  _locker_lock
-       04B8  _ringandscreen_init
-       04C3  _screen_on
-       04D6  _screen_off
-       04D8  _ring_on
-       04E2  _ring_screen_timeout
-       04E9  _door_minitor_timeout
-       04FA  _input_isr
-       0518  _check_door
-       0520  __print
-       0661  _strcpy
-       066A  push_arg4
-       066C  push_arg2
-       066D  mod16s
-       0671  div16s
-       0686  mod16u
-       0688  div16u
-       0689  xdiv16u
-       06A2  empy32s
-       06A2  empy32u
-       06CE  pop_gset2
-       06D0  pop_gset3
-       06D2  pop_gset4
-       06D4  pop_gset5
-       06D6  push_gset5
-       06D8  push_gset4
-       06DA  push_gset3
-       06DC  push_gset2
-       06DE  push_gset1
-       06E1  pop_gset1
-       06E2  pop
-       06F5  xicall
-       06FE  long_prolog
-       070C  long_epilog
-       0717  tstzero1
-       071D  tstzero2
-       0723  push_lset
-       0736  pop_lset
-       074D  asgnblk
-       0765  _putchar
-       077A  __va_start
-       0783  _itoa
-       07C3  _utoa
-       07F2  _islower
-       0800  _toupper
-       0814  _printf
-       082D  <created procedures>
-       096C  __text_end
+       01FA  _int0_isr
+       0216  _int1_isr
+       0232  _delay_1ms
+       023B  _delay_ms
+       0248  _tips_port_init
+       024F  _tips_led_on
+       0253  _tips_led_off
+       0255  _tips_beep_on
+       0259  _tips_beep_off
+       025B  _tips_ok
+       0264  _tips_err
+       027E  _tips_id_ok
+       0294  _tips_ring_on
+       02A0  _readPasswordItemNum
+       02A2  _readPasswordItem
+       02CC  _insertPasswordItem
+       02CE  _deletePasswordItem
+       02F3  _password_handle
+       041E  _timer_init
+       042D  _set_timer
+       044D  _stop_timer
+       0463  _timer0_isr
+       04BE  _log
+       04BF  _locker_init
+       04C0  _locker_unlock
+       04C1  _locker_lock
+       04C2  _ringandscreen_init
+       04CD  _screen_on
+       04E0  _screen_off
+       04E2  _ring_on
+       04EC  _ring_screen_timeout
+       04F3  _door_minitor_timeout
+       0504  _input_isr
+       0522  _check_door
+       052A  _at24c256_init
+       0531  _rw24c256
+       0617  __print
+       0758  _strcpy
+       0761  push_arg4
+       0763  push_arg2
+       0764  mod16s
+       0768  div16s
+       077D  mod16u
+       077F  div16u
+       0780  xdiv16u
+       0799  empy32u
+       0799  empy32s
+       07C5  pop_gset2
+       07C7  pop_gset3
+       07C9  pop_gset4
+       07CB  pop_gset5
+       07CD  push_gset5
+       07CF  push_gset4
+       07D1  push_gset3
+       07D3  push_gset2
+       07D5  push_gset1
+       07D8  pop_gset1
+       07D9  pop
+       07EC  xicall
+       07F5  long_prolog
+       0803  long_epilog
+       080E  tstzero1
+       0814  tstzero2
+       081A  push_lset
+       082D  pop_lset
+       0844  asgnblk
+       085C  _putchar
+       0871  __va_start
+       087A  _itoa
+       08BA  _utoa
+       08E9  _islower
+       08F7  _toupper
+       090B  _printf
+       0924  <created procedures>
+       0A77  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
@@ -152,7 +155,7 @@ timer.o	[ timer.c ]
 log.o	[ log.c ]
 locker.o	[ locker.c ]
 ringandscreen.o	[ ringandscreen.c ]
-iic.o	[ iic.c ]
+eeprom.o	[ eeprom.c ]
 <library>	[ _printf.s, strcpy.s, asave.s, div16s.s, div16u.s, emul32.s, gpop2.s, gpop3.s, gpop4.s, gpop5.s, gpush.s ]
 [ icall.s, longutil.s, lpush.s, struct.s, putchar.s, stdarg.s, itoa.s, utoa.s, islower.s, ctype.s, toupper.s ]
 [ printf.s, textmode.s ]

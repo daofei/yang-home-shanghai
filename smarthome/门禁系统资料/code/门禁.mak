@@ -2,7 +2,7 @@ CC = iccavr
 CFLAGS =  -IC:\icc\include\ -e -DATMEGA -DATMega16  -l -g -Mavr_enhanced 
 ASFLAGS = $(CFLAGS)  -Wa-g
 LFLAGS =  -O -LC:\icc\lib\ -g -ucrtatmega.o -bfunc_lit:0x54.0x4000 -dram_end:0x45f -bdata:0x60.0x45f -dhwstk_size:16 -beeprom:1.512 -fihx_coff -S2
-FILES = uart.o init.o main.o wg26.o util.o tips.o password.o timer.o log.o locker.o ringandscreen.o iic.o 
+FILES = uart.o init.o main.o wg26.o util.o tips.o password.o timer.o log.o locker.o ringandscreen.o eeprom.o 
 
 门禁:	$(FILES)
 	$(CC) -o 门禁 $(LFLAGS) @门禁.lk   -lcatmega
@@ -46,6 +46,6 @@ ringandscreen.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-sh
  Z:\yang-home-shanghai\smarthome\门禁系统资料\code/ringandscreen.h
 ringandscreen.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
 	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
-iic.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/iic.h
-iic.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\iic.c
-	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\iic.c
+eeprom.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h
+eeprom.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c

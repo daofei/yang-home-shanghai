@@ -1,223 +1,256 @@
-#include <avr/io.h>
-#include <compat/twi.h>
-#include <avr/signal.h>
+#include<iom16v.h>
+#include <macros.h>
 
-#include <util/delay.h>
+#include "util.h"
+#include "eeprom.h"
 
-#include "EEPROM.h"
+/* 一个通用的24C01－24C256共9种EEPROM的字节读写操作程序，   
+此程序有五个入口条件，分别为读写数据缓冲区指针,   
+进行读写的字节数，EEPROM首址，EEPROM控制字节，   
+以及EEPROM类型。此程序结构性良好，具有极好的容错性，程序机器码也不多:   
+DataBuff为读写数据输入／输出缓冲区的首址   
+Length 为要读写数据的字节数量   
+Addr 为EEPROM的片内地址 AT24256为0～32767   
+Control 为EEPROM的控制字节，具体形式为(1)(0)(1)(0)(A2)(A1)(A0)(R/W),其中R/W=1,   
+表示读操作,R/W=0为写操作,A2,A1,A0为EEPROM的页选或片选地址;   
+enumer为枚举变量,需为AT2401至AT24256中的一种,分别对应AT24C01至AT24C256;   
+函数返回值为一个位变量，若返回1表示此次操作失效，0表示操作成功;   
+ERROR为允许最大次数，若出现ERRORCOUNT次操作失效后，则函数中止操作，并返回1   
+SDA和SCL由用户自定义，这里暂定义为P3^0和P3^1; */   
+/*对于1K位，2K位，4K位，8K位，16K位芯片采用一个8位长的字节地址码，对于32K位以上   
+的采用2个8位长的字节地址码直接寻址，而4K位，8K位，16K位配合页面地址来寻址*/   
+   
+/* －－－－－  AT24C01～AT24C256 的读写程序 －－－－－－ */
+#define RW24C256READ 1
+#define RW24C256WRITE   0
 
-static strTWI_t strTWI;
+#define AT24C256DEVADDR 0xa0
 
-void delay_nms(unsigned int ms)                        
+#define MAXRETRY    10
+
+#define SET_SCL (PORTC|=0x10)
+#define CLR_SCL (PORTC&=0xef)
+#define SET_SDA (PORTC|=0x20)
+#define CLR_SDA (PORTC&=0xdf)
+#define TEST_SDA ((PINC&0x20)?1:0)
+#define SDA_OUT (DDRC|=0x20)
+#define SDA_IN (DDRC&=0xdf)
+
+static void start(void);
+static void stop(void);
+static unsigned char recAck(void);
+static void ack(void);
+static void noAck(void);
+static void sendByte(unsigned char byte);
+static unsigned char receiveByte(void);
+
+//pc4 scl
+//pc5 sda
+void at24c256_init(void)
+{
+    //pc4 and pc5 output mode.
+    DDRC |= 0x30;
+    PORTC |= 0x30;
+    return;
+}
+
+char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned char rwFlag)    
+{    
+
+    unsigned char j, i = MAXRETRY;    
+    char err = 1;  /*   出错标志   */   
+    while(i--)    
+    {    
+        start();  /*   启动总线   */
+        if(rwFlag == RW24C256WRITE)
+            sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
+        else
+            sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线读数据，器件地址 */   
+        if(recAck()) continue; /*   如写不正确结束本次循环   */   
+
+        sendByte((unsigned char)(addr >> 8));//把整型数据转换为字符型数据：弃高取低，只取低8位.如果容量大于32K位，使用16位地址寻址，写入高八位地址    
+        if(recAck())  continue;    
+
+        sendByte((unsigned char)addr); /*   向IIC总线写数据   */   
+        if(recAck())  continue; /*   如写正确结束本次循环   */
+        
+        if(rwFlag == RW24C256WRITE)   //判断是读器件还是写器件    
+        {    
+            j=len;    
+            err=0;         /* 清错误特征位 */   
+            while(j--)    
+            {    
+                sendByte(*(data++)); /*   向IIC总线写数据   */   
+                if(!recAck()) continue; /*   如写正确结束本次循环   */   
+                err=1;    
+                break;    
+            }    
+            if(err==1) continue;    
+            break;    
+        }    
+        else   
+        {    
+            //start();  /*   启动总线   */   
+            //sendByte(Control); /*   向IIC总线写数据   */   
+            //if(recAck()) continue;//器件没应答结束本次本层循环    
+            while(--len)  /*   字节长为0结束   */   
+            {     
+                *(data++)= receiveByte();    
+                ack();   /*   对IIC总线产生应答   */   
+            }    
+            *data=receiveByte(); /* 读最后一个字节 */   
+            noAck();  /*   不对IIC总线产生应答   */   
+            err=0;    
+            break;    
+        }    
+    }    
+    stop();  /*   停止IIC总线   */   
+    if(rwFlag == RW24C256WRITE)    
+    {     
+        delay_ms(50);    
+    }    
+    return err;    
+}    
+   
+/* * * * * 以下是对IIC总线的操作子程序 * * * * */   
+/* * * * * * 启动总线 * * * * */   
+static void start(void)    
+{    
+    //SCL=0; /* SCL处于高电平时,SDA从高电平转向低电平表示 */   
+    CLR_SCL;
+    //SDA=1; /* 一个"开始"状态,该状态必须在其他命令之前执行 */   
+    SET_SDA;
+    //SCL=1;
+    SET_SCL;
+    NOP(); NOP(); NOP();    
+    //SDA=0;
+    CLR_SDA;
+    NOP(); NOP(); NOP(); NOP();    
+    //SCL=0;
+    CLR_SCL;
+    //SDA=1;
+    SET_SDA;
+
+    return;
+}    
+   
+/* * * * * 停止IIC总线 * * * * */   
+static void stop(void)    
 {     
-for(int i=0;i<ms;i++)
-   _delay_loop_2(8*250); 8M 晶振
-}
-
-void EEprom_RW(unsigned RW,unsigned int addr,unsigned char *ptr,unsigned int len)
+    //SCL=0; /*SCL处于高电平时,SDA从低电平转向高电平 */
+    CLR_SCL;   
+    //SDA=0; /*表示一个"停止"状态,该状态终止所有通讯 */
+    CLR_SDA;
+    //SCL=1;
+    SET_SCL;
+    NOP(); NOP(); NOP(); /* 空操作 */
+    //SDA=1;
+    SET_SDA;
+    NOP(); NOP(); NOP();
+    //SCL=0;
+    CLR_SCL;
+    
+    return;
+}    
+   
+/* * * * * 检查应答位 * * * * */   
+static unsigned char recAck(void)    
 {
-strTWI.STATUS=TW_OK;
+    unsigned char result;
+    
+    //SCL=0;
+    CLR_SCL;   
+    //SDA=1;
+    SET_SDA;    
+    //SCL=1;
+    SET_SCL;
+    //change sda input mode.
+    SDA_IN;
+    NOP(); NOP(); NOP(); NOP();
+    //CY=SDA;     /* 因为返回值总是放在CY中的 */
+    result = TEST_SDA;
+    //SCL=0;
+    CLR_SCL;
+    //SDA_OUT;
+    SDA_OUT;
+    return result;
+}    
+   
+/* * * * *对IIC总线产生应答 * * * * */   
+static void ack(void)    
+{     
+    //SDA=0; /* EEPROM通过在收到每个地址或数据之后, */
+    CLR_SDA;
+    //SCL=1; /* 置SDA低电平的方式确认表示收到读SDA口状态 */
+    SET_SCL;
+    NOP(); NOP(); NOP(); NOP();
+    //SCL=0;
+    CLR_SCL;   
+    NOP();
+    //SDA=1;
+    SET_SDA;
 
-if(RW == EEPROM_READ)
-   TWI_RW(SLA_24CXX+(ADDR_24C256<<1)+TW_READ,addr,ptr,len);
-else if(RW == EEPROM_WRITE)
-   TWI_RW(SLA_24CXX+(ADDR_24C256<<1)+TW_WRITE,addr,ptr,len);
-  
-while(strTWI.STATUS==TW_BUSY);
+    return;
+}    
+   
+/* * * * * * * * * 不对IIC总线产生应答 * * * * */   
+static void noAck(void)    
+{    
+    //SDA=1;
+    SET_SDA;
+    //SCL=1;
+    SET_SCL;
+    NOP(); NOP(); NOP(); NOP();    
+    //SCL=0;
+    CLR_SCL;
+    
+    return;
+}    
+   
+/* * * * * * * * * 向IIC总线写数据 * * * * */   
+static void sendByte(unsigned char byte)    
+{     
+    unsigned char mask = 0x80;
+    for(;mask>1;)    
+    {     
+        //SCL=0;
+        CLR_SCL;
+        if(mask&byte)
+        {
+            //SDA=1;
+            SET_SDA;
+        }
+        else
+        {
+            //SDA=0;
+            CLR_SDA;
+        }
+        mask >>= 1;
+        //SCL=1;
+        SET_SCL;
+    }
+    //SCL=0;
+    CLR_SCL;
 
-if(RW == EEPROM_WRITE)
-   delay_nms(10);
+    return;
 }
-
-//AT24C256的读写函数(包括随机读，连续读，字节写，页写)
-//根据sla的最低位决定(由中断程序中判断)
-//bit0=1 TW_READ 读
-//bit0=0 TW_WRITE 写
-// sla   器件地址(不能搞错)
-// addr EEPROM地址(0~32767)
-// *ptr 读写数据缓冲区
-// len   读数据长度(1~32768)，写数据长度(1 or 8 or 16 or 32 or 64)
-// 返回值 是否能执行当前操作
-unsigned char twi_rw(unsigned char slAddr, unsigned int dataAddr, unsigned char *ptr, unsigned int len)
-{
-    if (strTWI.status==TW_BUSY)
-    { 
-        //TWI忙，不能进行操作
-        return OP_BUSY;
+   
+/* * * * * * * * * 从IIC总线上读数据子程序 * * * * */   
+static unsigned char receiveByte(void)    
+{     
+    register receivebyte,i=8;
+    SDA_IN;
+    //SCL=0;
+    CLR_SCL;
+    while(i--)    
+    {     
+        //SCL=1;
+        SET_SCL;
+        receivebyte = (receivebyte <<1 ) | TEST_SDA;    
+        //SCL=0;
+        CLR_SCL;
     }
-    strTWI.status=TW_BUSY;
-    strTWI.sladdr=slAddr;
-    strTWI.sldaddrH=(unsigned char)((dataAddr>>8)&0xff);
-    strTWI.sldaddrL=(unsigned char)(dataAddr&0xff);
-    strTWI.data=ptr;
-    strTWI.dataLen=len;
-    strTWI.state=ST_START;
-    strTWI.retry=0;
-    TWCR=(1<<TWSTA)|TW_ACT;      //启动start信号
-    return OP_RUN;
-}
-
-void twi_isr(void)  //IIC中断
-{
-    unsigned char action,state,status;
-    action=strTWI.SLA&TW_READ;     //取操作模式
-    state=strTWI.STATE;
-    status=TWSR&0xF8;       //屏蔽预分频位
-    if ((status>=0x60)||(status==0x00))
-    {//总线错误或从机模式引发的中断,不予处理
-        return;
-    }
-    switch(state)
-    {
-    case ST_START: //START状态检查
-        if(status==TW_START)
-        {//发送start信号成功
-            TWDR=strTWI.SLA&0xFE;    //发送器件地址写SLAW
-            TWCR=TW_ACT;             //触发下一步动作，同时清start发送标志
-        }
-        else
-        {//发送start信号出错
-            state=ST_FAIL;
-        }
-        break;
-    case ST_SLAW: //SLAW状态检查
-        if(status==TW_MT_SLA_ACK)
-        {//发送器件高位地址成功
-            TWDR=strTWI.ADDR_H;     //发送eeprom地址
-            TWCR=TW_ACT;             //触发下一步动作
-        }
-        else
-        {//发送器件地址出错
-            state=ST_FAIL;
-        }
-        break;
-    case ST_WADDR_H: //ADDR状态检查
-        if(status==TW_MT_DATA_ACK)
-        {//发送器件低位地址成功
-            TWDR=strTWI.ADDR_L;     //发送eeprom地址
-            TWCR=TW_ACT;             //触发下一步动作
-        }
-        else
-        {//发送器件地址出错
-            state=ST_FAIL;
-        }
-        break;
-    case ST_WADDR_L: //ADDR状态检查
-        if(status==TW_MT_DATA_ACK)
-        {//发送eeprom地址成功
-            if (action==TW_READ)
-            {//读操作模式
-                TWCR=(1<<TWSTA)|TW_ACT;   //发送restart信号,下一步将跳到RESTART分支
-            }
-            else
-            {//写操作模式
-                TWDR=*strTWI.pBUF++;          //写第一个字节
-                strTWI.DATALEN--;
-                state=ST_WDATA-1;    //下一步将跳到WDATA分支
-                TWCR=TW_ACT;            //触发下一步动作
-            }
-        }
-        else
-        {//发送eeprom地址出错
-            state=ST_FAIL;
-        }
-        break;
-    case ST_RESTART: //RESTART状态检查，只有读操作模式才能跳到这里
-        if(status==TW_REP_START)
-        {//发送restart信号成功
-            TWDR=strTWI.SLA;     //发器件地址读SLAR
-            TWCR=TW_ACT;             //触发下一步动作，同时清start发送标志
-        }
-        else
-        {//重发start信号出错
-            state=ST_FAIL;
-        }
-        break;
-    case ST_SLAR: //SLAR状态检查，只有读操作模式才能跳到这里
-        if(status==TW_MR_SLA_ACK)
-        {//发送器件地址成功
-            if (strTWI.DATALEN--)
-            {//多个数据
-                TWCR=(1<<TWEA)|TW_ACT;   //设定ACK，触发下一步动作
-            }
-            else
-            {//只有一个数据
-                TWCR=TW_ACT;     //设定NAK，触发下一步动作
-            }
-        }
-        else
-        {//发送器件地址出错
-            state=ST_FAIL;
-        }
-        break;
-    case ST_RDATA: //读取数据状态检查，只有读操作模式才能跳到这里
-        state--;        //循环,直到读完指定长度数据
-        if(status==TW_MR_DATA_ACK)
-        {//读取数据成功，但不是最后一个数据
-            *strTWI.pBUF++=TWDR;
-            if (strTWI.DATALEN--)
-            {//还有多个数据
-                TWCR=(1<<TWEA)|TW_ACT;   //设定ACK，触发下一步动作
-            }
-            else
-            {//准备读最后一个数据
-                TWCR=TW_ACT;     //设定NAK，触发下一步动作
-            }
-        }
-        else if(status==TW_MR_DATA_NACK)
-        {//已经读完最后一个数据
-            *strTWI.pBUF++=TWDR;
-            TWCR=(1<<TWSTO)|TW_ACT;    //发送停止信号，不会再产生中断了
-            strTWI.STATUS=TW_OK;
-        }
-        else
-        {//读取数据出错
-            state=ST_FAIL;
-        }
-        break;
-    case ST_WDATA: //写数据状态检查，只有写操作模式才能跳到这里
-        state--;        //循环,直到写完指定长度数据
-        if(status==TW_MT_DATA_ACK)
-        {//写数据成功
-            if (strTWI.DATALEN)
-            {//还要写
-                TWDR=*strTWI.pBUF++;
-                strTWI.DATALEN--;
-                TWCR=TW_ACT;            //触发下一步动作
-            }
-            else
-            {//写够了
-                TWCR=(1<<TWSTO)|TW_ACT;   //发送停止信号，不会再产生中断了
-                strTWI.STATUS=TW_OK;
-                //启动写命令后需要10ms(最大)的编程时间才能真正的把数据记录下来
-                //编程期间器件不响应任何命令
-            }
-        }
-        else
-        {//写数据失败
-            state=ST_FAIL;
-        }
-        break;
-    default:
-        //错误状态
-        state=ST_FAIL;
-        break;
-    }
-
-    if (state==ST_FAIL)
-    {//错误处理
-        strTWI.FAILCNT++;
-        if (strTWI.FAILCNT<FAIL_MAX)
-        {//重试次数未超出最大值，
-            TWCR=(1<<TWSTA)|TW_ACT;    //发生错误,启动start信号
-        }
-        else
-        {//否则停止
-            TWCR=(1<<TWSTO)|TW_ACT;    //发送停止信号，不会再产生中断了
-            strTWI.STATUS=TW_FAIL;
-        }
-    }
-    state++;
-    strTWI.STATE=state;       //保存状态
+    SDA_OUT;
+    return(receivebyte);    
 }
 
