@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-
 #include<iom16v.h>
 #include <macros.h>
 
@@ -8,30 +5,75 @@
 #include "locker.h"
 #include "tips.h"
 #include "timer.h"
+#include "eeprom.h"
 #include "password.h"
 
+//eeprom 
+//addr: 0 number.
+
+// 1: flags
+// 2,3,4,5: id Card.
+// 6,7,8,9: password H
+// 10,11,12,13 :password L
+
+// 14: flags
+// 15,16,17,18: id Card.
+// 19,20,21,22: password H
+// 23,24,25,26 :password L
 
 unsigned char readPasswordItemNum(void)
 {
+    unsigned char num = 0;
 
-    return 1;
+    rw24c256(&num, 1, 0, RW24C256READ);
+    return num;
 }
+
 passwordItem_t readPasswordItem(unsigned char index)
 {
     passwordItem_t item;
-    item.flags = PASSWORDFLAGS_PASSWORD|PASSWORDFLAGS_ID;
-    item.idCard = 1392618;
-    item.passwordH = 1;
-    item.passwordL = 1007;
+    unsigned char t = 0;
+    unsigned long tmp = 0;
+
+    rw24c256(&t, 1, index*13+1, RW24C256READ);
+    item.flags = t;
+
+    tmp = 0;
+    rw24c256((unsigned char*)&tmp, 4, index*13+2, RW24C256READ);
+    item.idCard = tmp;
+    
+    tmp = 0;
+    rw24c256((unsigned char*)&tmp, 4, index*13+6, RW24C256READ);
+    item.passwordH = tmp;
+    
+    tmp = 0;
+    rw24c256((unsigned char*)&tmp, 4, index*13+10, RW24C256READ);
+    item.passwordL = tmp;
+    
     return item;
 }
-unsigned char insertPasswordItem(passwordItem_t item)
+
+void insertPasswordItem(unsigned char index, passwordItem_t item)
 {
-    return 0;
+    unsigned long tmp = 0;
+
+    rw24c256(&(item.flags), 1, index*13+1, RW24C256WRITE);
+
+    tmp = item.idCard;
+    rw24c256((unsigned char*)&tmp, 4, index*13+2, RW24C256WRITE);
+    
+    tmp = item.passwordH;
+    rw24c256((unsigned char*)&tmp, 4, index*13+6, RW24C256WRITE);
+    
+    tmp = item.passwordL;
+    rw24c256((unsigned char*)&tmp, 4, index*13+10, RW24C256WRITE);
+
+    return;
 }
-//maybe change the index.
-void deletePasswordItem(unsigned char index)
+
+void writePasswordItemNum(unsigned char num)
 {
+    rw24c256(&num, 1, 0, RW24C256WRITE);
     return;
 }
 

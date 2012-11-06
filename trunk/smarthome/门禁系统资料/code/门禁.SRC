@@ -1,6 +1,4 @@
 [Files]
-uart.c
-init.c
 main.c
 wg26.c
 util.c
@@ -11,10 +9,8 @@ log.c
 locker.c
 ringandscreen.c
 eeprom.c
+uart.c
 [Headers]
-uart.h
-init.h
-wg26.h
 tips.h
 util.h
 password.h
@@ -23,4 +19,5 @@ log.h
 locker.h
 ringandscreen.h
 eeprom.h
+uart.h
 [Documents]

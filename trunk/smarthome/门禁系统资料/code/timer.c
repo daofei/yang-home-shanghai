@@ -1,7 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-
 #include<iom16v.h>
 #include <macros.h>
 
@@ -50,7 +46,7 @@ void stop_timer(char timer)
     {
         //stop this timer.
         g_timer[timer].value = 0;
-        g_timer[timer].cb = NULL;
+        g_timer[timer].cb = 0;
     }
     return;
 }
