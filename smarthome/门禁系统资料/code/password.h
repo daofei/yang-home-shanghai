@@ -29,11 +29,7 @@ unsigned char readPasswordItemNum(void);
 passwordItem_t readPasswordItem(unsigned char index);
 
 //insert a password item.
-unsigned char insertPasswordItem(passwordItem_t item);
-
-//delete a password by index. 
-//maybe change the index.
-void deletePasswordItem(unsigned char index);
+void insertPasswordItem(unsigned char index, passwordItem_t item);
 
 #ifdef __cplusplus
 }

@@ -49,24 +49,24 @@ void at24c256_init(void)
     //pc4 and pc5 output mode.
     DDRC |= 0x30;
     PORTC |= 0x30;
-	printf("H");
-	delay_ms(5000);
-	PORTC &= 0xef;
-	printf("L");
-	delay_ms(5000);
-	PORTC |= 0x10;
-printf("H");
-	delay_ms(5000);
-	PORTC &= 0xef;
-	printf("L");
-	delay_ms(5000);
-	PORTC |= 0x10;	
-	printf("H");
-	delay_ms(5000);
-	PORTC &= 0xef;
-	printf("L");
-	delay_ms(5000);
-	PORTC |= 0x10;	
+    //printf("H");
+    delay_ms(5000);
+    PORTC &= 0xef;
+    //printf("L");
+    delay_ms(5000);
+    PORTC |= 0x10;
+    //printf("H");
+    delay_ms(5000);
+    PORTC &= 0xef;
+    //printf("L");
+    delay_ms(5000);
+    PORTC |= 0x10;	
+    //printf("H");
+    delay_ms(5000);
+    PORTC &= 0xef;
+    //printf("L");
+    delay_ms(5000);
+    PORTC |= 0x10;	
     return;
 }
 
@@ -82,17 +82,17 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
             sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
         else
             sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线读数据，器件地址 */  
-			printf("11111"); 
+            //printf("11111"); 
         if(recAck()) continue; /*   如写不正确结束本次循环   */   
-		printf("2222"); 
+        //printf("2222"); 
         sendByte((unsigned char)(addr >> 8));//把整型数据转换为字符型数据：弃高取低，只取低8位.如果容量大于32K位，使用16位地址寻址，写入高八位地址    
-       		printf("33333"); 
-			 if(recAck())  continue;    
-		printf("4444"); 
+        //printf("33333"); 
+        if(recAck())  continue;    
+        //printf("4444"); 
         sendByte((unsigned char)addr); /*   向IIC总线写数据   */   
-				printf("5555"); 
+        //printf("5555"); 
         if(recAck())  continue; /*   如写正确结束本次循环   */
-        		printf("6666"); 
+        //printf("6666"); 
         if(rwFlag == RW24C256WRITE)   //判断是读器件还是写器件    
         {    
             j=len;    
@@ -109,13 +109,13 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
         }    
         else   
         {    
-		printf("to read.");
+            //printf("to read.");
             //start();  /*   启动总线   */   
             //sendByte(Control); /*   向IIC总线写数据   */   
             //if(recAck()) continue;//器件没应答结束本次本层循环    
             while(len--)  /*   字节长为0结束   */   
             {
-			printf("to read12.");     
+                //printf("to read12.");     
                 *(data++)= receiveByte();    
                 ack();   /*   对IIC总线产生应答   */   
             }    
@@ -183,7 +183,7 @@ static unsigned char recAck(void)
     CLR_SCL;   
     //SDA=1;
     SET_SDA;
-	SDA_IN;
+    SDA_IN;
     //SCL=1;
     SET_SCL;
     //change sda input mode.
@@ -260,7 +260,7 @@ static void sendByte(unsigned char byte)
 static unsigned char receiveByte(void)    
 {     
     register receivebyte,i=8;
-	printf("to read123.");     
+    //printf("to read123.");     
     SDA_IN;
     //SCL=0;
     CLR_SCL;
@@ -269,7 +269,7 @@ static unsigned char receiveByte(void)
         //SCL=1;
         SET_SCL;
         receivebyte = (receivebyte <<1 ) | TEST_SDA;
-		printf("receivebyte %d", receivebyte);
+        //printf("receivebyte %d", receivebyte);
         //SCL=0;
         CLR_SCL;
     }
