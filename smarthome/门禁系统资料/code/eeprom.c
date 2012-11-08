@@ -26,13 +26,13 @@ SDA和SCL由用户自定义，这里暂定义为P3^0和P3^1; */
 
 #define MAXRETRY    10
 
-#define SET_SCL (PORTC|=0x10)
-#define CLR_SCL (PORTC&=0xef)
-#define SET_SDA (PORTC|=0x20)
-#define CLR_SDA (PORTC&=0xdf)
-#define TEST_SDA ((PINC&0x20)?1:0)
-#define SDA_OUT (DDRC|=0x20)
-#define SDA_IN (DDRC&=0xdf,PORTC|=0x20)
+#define SET_SCL (PORTB|=0x10)
+#define CLR_SCL (PORTB&=0xef)
+#define SET_SDA (PORTB|=0x20)
+#define CLR_SDA (PORTB&=0xdf)
+#define TEST_SDA ((PINB&0x20)?1:0)
+#define SDA_OUT (DDRB|=0x20)
+#define SDA_IN (DDRB&=0xdf,PORTB|=0x20)
 
 static void start(void);
 static void stop(void);
@@ -47,40 +47,29 @@ static unsigned char receiveByte(void);
 void at24c256_init(void)
 {
     //pc4 and pc5 output mode.
-    DDRC |= 0x30;
-    PORTC |= 0x30;
+    DDRB |= 0x30;
+    PORTB |= 0x30;
     return;
 }
 
 char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned char rwFlag)    
-{    
-
-    unsigned char j, i = MAXRETRY;    
+{
+    unsigned char i = MAXRETRY;
     char err = 1;  /*   出错标志   */   
     while(i--)    
     {    
         start();  /*   启动总线   */
-        //if(rwFlag == RW24C256WRITE)
-            sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
-        //else
-        //    sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线读数据，器件地址 */  
-            //printf("11111"); 
+	    sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
         if(recAck()) continue; /*   如写不正确结束本次循环   */   
-        //printf("2222"); 
         sendByte((unsigned char)(addr >> 8));//把整型数据转换为字符型数据：弃高取低，只取低8位.如果容量大于32K位，使用16位地址寻址，写入高八位地址    
-        //printf("33333"); 
         if(recAck())  continue;    
-        //printf("4444"); 
         sendByte((unsigned char)addr); /*   向IIC总线写数据   */   
-        //printf("5555"); 
         if(recAck())  continue; /*   如写正确结束本次循环   */
-        //printf("6666"); 
         if(rwFlag == RW24C256WRITE)   //判断是读器件还是写器件    
-        {    
-            j=len;    
+        {
             err=0;         /* 清错误特征位 */   
-            while(j--)    
-            {    
+            while(len--)    
+            {
                 sendByte(*(data++)); /*   向IIC总线写数据   */   
                 if(!recAck()) continue; /*   如写正确结束本次循环   */   
                 err=1;    
@@ -90,14 +79,12 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
             break;    
         }    
         else   
-        {    
-            //printf("to read.");
+        { 
             start();  /*   启动总线   */   
-            sendByte(AT24C256DEVADDR|0x01); /*   向IIC总线写数据   */   
+            sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线写数据   */   
             if(recAck()) continue;//器件没应答结束本次本层循环    
             while(len--)  /*   字节长为0结束   */   
             {
-                //printf("to read12.");     
                 *(data++)= receiveByte();    
                 ack();   /*   对IIC总线产生应答   */   
             }    
@@ -216,13 +203,13 @@ static void noAck(void)
    
 /* * * * * * * * * 向IIC总线写数据 * * * * */   
 static void sendByte(unsigned char byte)    
-{     
+{
     unsigned char mask = 0x80;
     for(;mask>0;)    
     {
         //SCL=0;
         CLR_SCL;
-        NOP();
+        NOP();NOP();
         if(mask&byte)
         {
             //SDA=1;
@@ -234,10 +221,10 @@ static void sendByte(unsigned char byte)
             CLR_SDA;
         }
         mask >>= 1;
-        NOP();
+        NOP();NOP();
         //SCL=1;
         SET_SCL;
-        NOP();
+        NOP();NOP();
     }
     //SCL=0;
     CLR_SCL;
@@ -248,20 +235,19 @@ static void sendByte(unsigned char byte)
 /* * * * * * * * * 从IIC总线上读数据子程序 * * * * */   
 static unsigned char receiveByte(void)    
 {     
-    register receivebyte,i=8;
-    //printf("to read123.");      
+    unsigned char receivebyte = 0, i=8;     
     //SCL=0;
     CLR_SCL;
-     //SDA = 1;
-     SET_SDA;
+    //SDA = 1;
+    SET_SDA;
     SDA_IN;
+	NOP();NOP();
     while(i--)    
     {     
         //SCL=1;
         SET_SCL;
-        NOP();
+		NOP();NOP();
         receivebyte = (receivebyte <<1 ) | TEST_SDA;
-        //printf("receivebyte %d", receivebyte);
         //SCL=0;
         CLR_SCL;
         NOP();

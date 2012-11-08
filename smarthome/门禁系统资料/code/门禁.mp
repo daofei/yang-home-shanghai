@@ -12,129 +12,130 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                             lit   0060   0101 =    257. bytes (rel,con,rom)
+                             lit   0060   0105 =    261. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
        0060  __lit_start
-       0060  __ctype
-       0161  __lit_end
+       0064  __ctype
+       0165  __lit_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                           idata   0161   00DD =    221. bytes (rel,con,rom)
+                           idata   0165   00ED =    237. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       0161  __idata_start
-       023E  __idata_end
+       0165  __idata_start
+       0252  __idata_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   023E   145E =   5214. bytes (rel,con,rom)
+                            text   0252   14AC =   5292. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       011F  __text_start
-       011F  __start
-       013E  _exit
-       013F  _main
-       0182  _init_interrupt
-       020A  _int0_isr
-       0227  _int1_isr
-       0244  _delay_1ms
-       024D  _delay_ms
-       025C  _tips_port_init
-       0263  _tips_led_on
-       0267  _tips_led_off
-       0269  _tips_beep_on
-       026D  _tips_beep_off
-       026F  _tips_ok
-       0278  _tips_err
-       0292  _tips_id_ok
-       02A8  _tips_ring_on
-       02B4  _readPasswordItemNum
-       02BF  _readPasswordItem
-       0301  _insertPasswordItem
-       033B  _writePasswordItemNum
-       0369  _password_handle
-       0498  _timer_init
-       04A7  _set_timer
-       04C7  _stop_timer
-       04DD  _timer0_isr
-       0535  _log
-       0536  _locker_init
-       0537  _locker_unlock
-       0538  _locker_lock
-       0539  _ringandscreen_init
-       0544  _screen_on
-       0557  _screen_off
-       0559  _ring_on
-       0563  _ring_screen_timeout
-       056A  _door_minitor_timeout
-       057B  _input_isr
-       0599  _check_door
-       05A1  _at24c256_init
-       05BD  _rw24c256
-       06A0  _uart0_init
-       06AC  __print
-       07ED  _strcpy
-       07F6  push_arg4
-       07F8  push_arg2
-       07F9  mod16s
-       07FD  div16s
-       0812  mod16u
-       0814  div16u
-       0815  xdiv16u
-       082E  empy32s
-       082E  empy32u
-       085A  pop_gset2
-       085C  pop_gset3
-       085E  pop_gset4
-       0860  pop_gset5
-       0862  push_gset5
-       0864  push_gset4
-       0866  push_gset3
-       0868  push_gset2
-       086A  push_gset1
-       086D  pop_gset1
-       086E  pop
-       0881  xicall
-       088A  long_prolog
-       0898  long_epilog
-       08A3  tstzero1
-       08A9  tstzero2
-       08AF  push_lset
-       08C2  pop_lset
-       08D9  asgnblk
-       08F1  _putchar
-       0906  __va_start
-       090F  _itoa
-       094F  _utoa
-       097E  _islower
-       098C  _toupper
-       09A0  _printf
-       09B9  <created procedures>
-       0B4E  __text_end
+       0129  __text_start
+       0129  __start
+       0148  _exit
+       0149  _main
+       01A8  _init_interrupt
+       0230  _int0_isr
+       024D  _int1_isr
+       026A  _delay_1ms
+       0273  _delay_ms
+       0282  _tips_port_init
+       0289  _tips_led_on
+       028D  _tips_led_off
+       028F  _tips_beep_on
+       0293  _tips_beep_off
+       0295  _tips_ok
+       029E  _tips_err
+       02B8  _tips_id_ok
+       02CE  _tips_ring_on
+       02DA  _readPasswordItemNum
+       02E5  _readPasswordItem
+       0327  _insertPasswordItem
+       035F  _writePasswordItemNum
+       038D  _password_handle
+       04BC  _timer_init
+       04CB  _set_timer
+       04EB  _stop_timer
+       0501  _timer0_isr
+       0559  _log
+       055A  _locker_init
+       055B  _locker_unlock
+       055C  _locker_lock
+       055D  _ringandscreen_init
+       0568  _screen_on
+       057B  _screen_off
+       057D  _ring_on
+       0587  _ring_screen_timeout
+       058E  _door_minitor_timeout
+       059F  _input_isr
+       05BD  _check_door
+       05C5  _at24c256_init
+       05CC  _rw24c256
+       06B4  _uart0_init
+       06C0  __print
+       0801  _strcpy
+       080A  push_arg4
+       080C  push_arg2
+       080D  mod16s
+       0811  div16s
+       0826  mod16u
+       0828  div16u
+       0829  xdiv16u
+       0842  empy32s
+       0842  empy32u
+       086E  pop_gset2
+       0870  pop_gset3
+       0872  pop_gset4
+       0874  pop_gset5
+       0876  push_gset5
+       0878  push_gset4
+       087A  push_gset3
+       087C  push_gset2
+       087E  push_gset1
+       0881  pop_gset1
+       0882  pop
+       0895  xicall
+       089E  long_prolog
+       08AC  long_epilog
+       08B7  tstzero1
+       08BD  tstzero2
+       08C3  push_lset
+       08D6  pop_lset
+       08ED  asgncblk
+       0906  asgnblk
+       091E  _putchar
+       0933  __va_start
+       093C  _itoa
+       097B  _utoa
+       09A9  _islower
+       09B7  _toupper
+       09CB  _printf
+       09E4  <created procedures>
+       0B7F  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            data   0060   00DD =    221. bytes (rel,con,ram)
+                            data   0060   00ED =    237. bytes (rel,con,ram)
 
        Addr  Global Symbol
       -----  --------------------------------
        0060  __data_start
-       013D  __data_end
+       014D  __data_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                             bss   013D   002B =     43. bytes (rel,con,ram)
+                             bss   014D   002B =     43. bytes (rel,con,ram)
 
        Addr  Global Symbol
       -----  --------------------------------
-       013D  __bss_start
-       0166  __textmode
-       0168  __bss_end
+       014D  __bss_start
+       0176  __textmode
+       0178  __bss_end
 
 Area                               Start  End    Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
@@ -155,8 +156,8 @@ ringandscreen.o	[ ringandscreen.c ]
 eeprom.o	[ eeprom.c ]
 uart.o	[ uart.c ]
 <library>	[ _printf.s, strcpy.s, asave.s, div16s.s, div16u.s, emul32.s, gpop2.s, gpop3.s, gpop4.s, gpop5.s, gpush.s ]
-[ icall.s, longutil.s, lpush.s, struct.s, putchar.s, stdarg.s, itoa.s, utoa.s, islower.s, ctype.s, toupper.s ]
-[ printf.s, textmode.s ]
+[ icall.s, longutil.s, lpush.s, pmstruct.s, struct.s, putchar.s, stdarg.s, itoa.s, utoa.s, islower.s ]
+[ ctype.s, toupper.s, printf.s, textmode.s ]
 
 User Global Definitions
 
