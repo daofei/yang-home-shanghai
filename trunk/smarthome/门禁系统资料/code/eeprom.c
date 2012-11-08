@@ -78,10 +78,10 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
     while(i--)    
     {    
         start();  /*   启动总线   */
-        if(rwFlag == RW24C256WRITE)
+        //if(rwFlag == RW24C256WRITE)
             sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
-        else
-            sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线读数据，器件地址 */  
+        //else
+        //    sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线读数据，器件地址 */  
             //printf("11111"); 
         if(recAck()) continue; /*   如写不正确结束本次循环   */   
         //printf("2222"); 
@@ -110,9 +110,9 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
         else   
         {    
             //printf("to read.");
-            //start();  /*   启动总线   */   
-            //sendByte(Control); /*   向IIC总线写数据   */   
-            //if(recAck()) continue;//器件没应答结束本次本层循环    
+            start();  /*   启动总线   */   
+            sendByte(AT24C256DEVADDR|0x01); /*   向IIC总线写数据   */   
+            if(recAck()) continue;//器件没应答结束本次本层循环    
             while(len--)  /*   字节长为0结束   */   
             {
                 //printf("to read12.");     
@@ -138,9 +138,10 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
 static void start(void)    
 {    
     //SCL=0; /* SCL处于高电平时,SDA从高电平转向低电平表示 */   
-    CLR_SCL;
+    //CLR_SCL;
     //SDA=1; /* 一个"开始"状态,该状态必须在其他命令之前执行 */   
     SET_SDA;
+    NOP();
     //SCL=1;
     SET_SCL;
     NOP(); NOP(); NOP();    
@@ -150,7 +151,7 @@ static void start(void)
     //SCL=0;
     CLR_SCL;
     //SDA=1;
-    SET_SDA;
+    //SET_SDA;
 
     return;
 }    
@@ -159,9 +160,10 @@ static void start(void)
 static void stop(void)    
 {     
     //SCL=0; /*SCL处于高电平时,SDA从低电平转向高电平 */
-    CLR_SCL;   
+    //CLR_SCL;   
     //SDA=0; /*表示一个"停止"状态,该状态终止所有通讯 */
     CLR_SDA;
+    NOP();
     //SCL=1;
     SET_SCL;
     NOP(); NOP(); NOP(); /* 空操作 */
@@ -169,7 +171,7 @@ static void stop(void)
     SET_SDA;
     NOP(); NOP(); NOP();
     //SCL=0;
-    CLR_SCL;
+    //CLR_SCL;
     
     return;
 }    
@@ -178,9 +180,10 @@ static void stop(void)
 static unsigned char recAck(void)    
 {
     unsigned char result;
+     unsigned char i=0;
     
     //SCL=0;
-    CLR_SCL;   
+    //CLR_SCL;   
     //SDA=1;
     SET_SDA;
     SDA_IN;
@@ -189,6 +192,7 @@ static unsigned char recAck(void)
     //change sda input mode.
     NOP(); NOP(); NOP(); NOP();
     //CY=SDA;     /* 因为返回值总是放在CY中的 */
+     while(TEST_SDA&&(i>250)) i++;
     result = TEST_SDA;
     //SCL=0;
     CLR_SCL;
@@ -236,6 +240,7 @@ static void sendByte(unsigned char byte)
     {
         //SCL=0;
         CLR_SCL;
+        NOP();
         if(mask&byte)
         {
             //SDA=1;
@@ -247,8 +252,10 @@ static void sendByte(unsigned char byte)
             CLR_SDA;
         }
         mask >>= 1;
+        NOP();
         //SCL=1;
         SET_SCL;
+        NOP();
     }
     //SCL=0;
     CLR_SCL;
@@ -260,18 +267,22 @@ static void sendByte(unsigned char byte)
 static unsigned char receiveByte(void)    
 {     
     register receivebyte,i=8;
-    //printf("to read123.");     
-    SDA_IN;
+    //printf("to read123.");      
     //SCL=0;
     CLR_SCL;
+     //SDA = 1;
+     SET_SDA;
+    SDA_IN;
     while(i--)    
     {     
         //SCL=1;
         SET_SCL;
+        NOP();
         receivebyte = (receivebyte <<1 ) | TEST_SDA;
         //printf("receivebyte %d", receivebyte);
         //SCL=0;
         CLR_SCL;
+        NOP();
     }
     SDA_OUT;
     return receivebyte;    
