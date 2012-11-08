@@ -16,9 +16,11 @@
 int main(void)
 {
     unsigned int door_minitor_count = 0;
-    char o = 0;
-    char in = 0x5a;
+    unsigned char o[4];
+    unsigned char in[4] = {0x12, 0x34, 0x56, 0x78};
 
+	unsigned char i;
+	
     uart0_init();
     init_interrupt();
     tips_port_init();
@@ -43,13 +45,6 @@ int main(void)
             if(door_minitor_count)
                 door_minitor_count = 0;
         }
-        delay_ms(500);
-    rw24c256(&in, 1, 1, RW24C256WRITE);
-    //printf("writed.");
-    delay_ms(5000);
-    rw24c256(&o, 1, 1, RW24C256READ);
-    //printf("read :%d", o);
-
     }
     return 0;
 }
