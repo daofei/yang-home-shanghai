@@ -49,24 +49,6 @@ void at24c256_init(void)
     //pc4 and pc5 output mode.
     DDRC |= 0x30;
     PORTC |= 0x30;
-    //printf("H");
-    delay_ms(5000);
-    PORTC &= 0xef;
-    //printf("L");
-    delay_ms(5000);
-    PORTC |= 0x10;
-    //printf("H");
-    delay_ms(5000);
-    PORTC &= 0xef;
-    //printf("L");
-    delay_ms(5000);
-    PORTC |= 0x10;	
-    //printf("H");
-    delay_ms(5000);
-    PORTC &= 0xef;
-    //printf("L");
-    delay_ms(5000);
-    PORTC |= 0x10;	
     return;
 }
 
@@ -192,7 +174,7 @@ static unsigned char recAck(void)
     //change sda input mode.
     NOP(); NOP(); NOP(); NOP();
     //CY=SDA;     /* 因为返回值总是放在CY中的 */
-     while(TEST_SDA&&(i>250)) i++;
+    while(TEST_SDA&&(i>250)) i++;
     result = TEST_SDA;
     //SCL=0;
     CLR_SCL;
