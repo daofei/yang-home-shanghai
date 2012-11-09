@@ -59,7 +59,7 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
     while(i--)    
     {    
         start();  /*   启动总线   */
-	    sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
+        sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
         if(recAck()) continue; /*   如写不正确结束本次循环   */   
         sendByte((unsigned char)(addr >> 8));//把整型数据转换为字符型数据：弃高取低，只取低8位.如果容量大于32K位，使用16位地址寻址，写入高八位地址    
         if(recAck())  continue;    
@@ -101,7 +101,36 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
     }    
     return err;    
 }    
-   
+
+void rw24c256Int(unsigned long *data, unsigned int addr, unsigned char rwFlag)
+{
+    unsigned char tmp[4] = {0, 0, 0, 0};
+    
+    if(rwFlag==RW24C256WRITE)
+    {
+        tmp[0] = (unsigned char)((*data)&0x000000ff);
+        tmp[1] = (unsigned char)(((*data)>>8)&0x000000ff);
+        tmp[2] = (unsigned char)(((*data)>>16)&0x000000ff);
+        tmp[3] = (unsigned char)(((*data)>>24)&0x000000ff);
+
+        rw24c256((unsigned char*)&tmp, 4, addr, RW24C256WRITE);
+    }
+    else
+    {
+        rw24c256((unsigned char*)&tmp, 4, addr, RW24C256READ);
+
+        *data = 0;
+        *data |= tmp[0];
+        *data <<= 8;
+        *data |= tmp[1];
+        *data <<= 8;
+        *data |= tmp[2];
+        *data <<= 8;
+        *data |= tmp[3];
+    }
+    return;
+}
+
 /* * * * * 以下是对IIC总线的操作子程序 * * * * */   
 /* * * * * * 启动总线 * * * * */   
 static void start(void)    
@@ -241,12 +270,12 @@ static unsigned char receiveByte(void)
     //SDA = 1;
     SET_SDA;
     SDA_IN;
-	NOP();NOP();
+    NOP();NOP();
     while(i--)    
     {     
         //SCL=1;
         SET_SCL;
-		NOP();NOP();
+        NOP();NOP();
         receivebyte = (receivebyte <<1 ) | TEST_SDA;
         //SCL=0;
         CLR_SCL;

@@ -31,6 +31,8 @@ passwordItem_t readPasswordItem(unsigned char index);
 //insert a password item.
 void insertPasswordItem(unsigned char index, passwordItem_t item);
 
+void writePasswordItemNum(unsigned char num);
+
 #ifdef __cplusplus
 }
 #endif
