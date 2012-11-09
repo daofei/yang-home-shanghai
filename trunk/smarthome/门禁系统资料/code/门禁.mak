@@ -7,39 +7,39 @@ FILES = main.o wg26.o util.o tips.o password.o timer.o log.o locker.o ringandscr
 门禁:	$(FILES)
 	$(CC) -o 门禁 $(LFLAGS) @门禁.lk   -lcatmega
 main.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C:/icc/include/stdlib.h C:/icc/include/_const.h C:/icc/include/limits.h C:/icc/include/string.h C:/icc/include/_const.h C:/icc/include/iom16v.h C:/icc/include/macros.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/wg26.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/ringandscreen.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h
-main.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
-wg26.o: C:/icc/include/iom16v.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h
-wg26.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
-util.o: D:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h
-util.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
-tips.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h
-tips.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
-password.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/log.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/locker.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h
-password.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
-timer.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h
-timer.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\timer.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\timer.c
-log.o: C:/icc/include/iom16v.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/log.h
-log.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\log.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\log.c
-locker.o: C:/icc/include/iom16v.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/locker.h
-locker.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\locker.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\locker.c
-ringandscreen.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code/ringandscreen.h
-ringandscreen.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
-eeprom.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h
-eeprom.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
-uart.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h
-uart.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
+ Z:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/wg26.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h\
+ Z:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/ringandscreen.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h
+main.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+wg26.o: C:/icc/include/iom16v.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h
+wg26.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+util.o: Z:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h
+util.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
+tips.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h
+tips.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
+password.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/log.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/locker.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h\
+ Z:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h
+password.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
+timer.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h
+timer.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\timer.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\timer.c
+log.o: C:/icc/include/iom16v.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/log.h
+log.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\log.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\log.c
+locker.o: C:/icc/include/iom16v.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/locker.h
+locker.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\locker.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\locker.c
+ringandscreen.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h\
+ Z:\yang-home-shanghai\smarthome\门禁系统资料\code/ringandscreen.h
+ringandscreen.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
+eeprom.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/util.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h
+eeprom.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
+uart.o: C:/icc/include/iom16v.h C:/icc/include/macros.h Z:\yang-home-shanghai\smarthome\门禁系统资料\code/uart.h
+uart.o:	Z:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
+	$(CC) -c $(CFLAGS) Z:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
