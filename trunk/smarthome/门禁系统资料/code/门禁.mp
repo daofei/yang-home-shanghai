@@ -30,7 +30,7 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0076   1192 =   4498. bytes (rel,con,rom)
+                            text   0076   119A =   4506. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
@@ -38,73 +38,72 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
        003B  __start
        005A  _exit
        005B  _main
-       00D1  _init_interrupt
-       0159  _int0_isr
-       0175  _int1_isr
-       0191  _delay_1ms
-       019A  _delay_ms
-       01A7  _tips_port_init
-       01AE  _tips_led_on
-       01B2  _tips_led_off
-       01B4  _tips_beep_on
-       01B8  _tips_beep_off
-       01BA  _tips_ok
-       01C3  _tips_err
-       01DD  _tips_id_ok
-       01F3  _tips_ring_on
-       01FF  _readPasswordItemNum
-       020A  _readPasswordItem
+       00E7  _init_interrupt
+       016F  _int0_isr
+       018D  _int1_isr
+       01A9  _delay_1ms
+       01B2  _delay_ms
+       01BF  _tips_port_init
+       01C6  _tips_led_on
+       01CA  _tips_led_off
+       01CC  _tips_beep_on
+       01D0  _tips_beep_off
+       01D2  _tips_ok
+       01DB  _tips_err
+       01F5  _tips_id_ok
+       020B  _tips_ring_on
+       0217  _readPasswordItemNum
+       0222  _readPasswordItem
        0256  _insertPasswordItem
-       028A  _writePasswordItemNum
-       02B8  _password_handle
-       0400  _timer_init
-       040F  _set_timer
-       042F  _stop_timer
-       0445  _timer0_isr
-       049D  _log
-       049E  _locker_init
-       049F  _locker_unlock
-       04A0  _locker_lock
-       04A1  _ringandscreen_init
-       04AC  _screen_on
-       04BF  _screen_off
-       04C1  _ring_on
-       04CB  _ring_screen_timeout
-       04D2  _door_minitor_timeout
-       04E3  _input_isr
-       0501  _check_door
-       0509  _at24c256_init
-       0510  _rw24c256
-       0571  _rw24c256Int
-       066B  _uart0_init
-       0677  push_arg4
-       0679  push_arg2
-       067A  empy32s
-       067A  empy32u
-       06A6  pop_gset2
-       06A8  pop_gset3
-       06AA  pop_gset4
-       06AC  pop_gset5
-       06AE  push_gset5
-       06B0  push_gset4
-       06B2  push_gset3
-       06B4  push_gset2
-       06B6  push_gset1
-       06B9  pop_gset1
-       06BA  pop
-       06CD  xicall
-       06D6  long_prolog
-       06E4  long_epilog
-       06EF  tstzero1
-       06F5  tstzero2
-       06FB  push_lset
-       070E  pop_lset
-       0725  lsl32
-       0731  lsr32
-       073D  asgncblk
-       0756  asgnblk
-       076E  <created procedures>
-       0904  __text_end
+       027B  _writePasswordItemNum
+       02AB  _password_handle
+       03F5  _timer_init
+       0404  _set_timer
+       0424  _stop_timer
+       043A  _timer0_isr
+       0492  _log
+       0493  _locker_init
+       0494  _locker_unlock
+       0495  _locker_lock
+       0496  _ringandscreen_init
+       04A1  _screen_on
+       04B4  _screen_off
+       04B6  _ring_on
+       04C0  _ring_screen_timeout
+       04C7  _door_minitor_timeout
+       04D8  _input_isr
+       04F6  _check_door
+       04FE  _at24c256_init
+       0505  _rw24c256
+       0568  _rw24c256Int
+       067B  _uart0_init
+       0687  push_arg4
+       0689  push_arg2
+       068A  empy32u
+       068A  empy32s
+       06B6  pop_gset2
+       06B8  pop_gset3
+       06BA  pop_gset5
+       06BC  push_gset5
+       06BE  push_gset4
+       06C0  push_gset3
+       06C2  push_gset2
+       06C4  push_gset1
+       06C7  pop_gset1
+       06C8  pop
+       06DB  xicall
+       06E4  long_prolog
+       06F2  long_epilog
+       06FD  tstzero1
+       0703  tstzero2
+       0709  push_lset
+       071C  pop_lset
+       0733  lsl32
+       073F  lsr32
+       074B  asgncblk
+       0764  asgnblk
+       077C  <created procedures>
+       0908  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
@@ -142,8 +141,8 @@ locker.o	[ locker.c ]
 ringandscreen.o	[ ringandscreen.c ]
 eeprom.o	[ eeprom.c ]
 uart.o	[ uart.c ]
-<library>	[ asave.s, emul32.s, gpop2.s, gpop3.s, gpop4.s, gpop5.s, gpush.s, icall.s, longutil.s, lpush.s, lsl32.s ]
-[ lsr32.s, pmstruct.s, struct.s ]
+<library>	[ asave.s, emul32.s, gpop2.s, gpop3.s, gpop5.s, gpush.s, icall.s, longutil.s, lpush.s, lsl32.s, lsr32.s ]
+[ pmstruct.s, struct.s ]
 
 User Global Definitions
 

@@ -34,10 +34,12 @@ __start:
 _exit:
     005A CFFF      RJMP	_exit
 _main:
+  ot                   --> Y+13
   t                    --> Y+0
   door_minitor_count   --> R10
-    005B 97E4      SBIW	R28,0x34
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
+    005B 97EF      SBIW	R28,0x3F
+    005C 972F      SBIW	R28,0xF
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
 (0001) #include <stdio.h>
 (0002) #include <stdlib.h>
 (0003) #include <string.h>
@@ -57,157 +59,174 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\main.c
 (0017) int main(void)
 (0018) {
 (0019)     unsigned int door_minitor_count = 0;
-    005C 24AA      CLR	R10
-    005D 24BB      CLR	R11
-(0020)     passwordItem_t t;
-(0021) 
+    005D 24AA      CLR	R10
+    005E 24BB      CLR	R11
+(0020)     passwordItem_t t, ot;
+(0021) 	
 (0022)     uart0_init();
-    005E 940E066B  CALL	_uart0_init
+    005F 940E067B  CALL	_uart0_init
 (0023)     init_interrupt();
-    0060 D070      RCALL	_init_interrupt
+    0061 D085      RCALL	_init_interrupt
 (0024)     tips_port_init();
-    0061 D145      RCALL	_tips_port_init
+    0062 D15C      RCALL	_tips_port_init
 (0025)     timer_init();
-    0062 D39D      RCALL	_timer_init
+    0063 D391      RCALL	_timer_init
 (0026)     at24c256_init();
-    0063 D4A5      RCALL	_at24c256_init
-(0027)     //printf("running...");
-(0028)     t.flags = PASSWORDFLAGS_ID |PASSWORDFLAGS_PASSWORD;
-    0064 E083      LDI	R24,3
-    0065 8388      STD	Y+0,R24
-(0029)     t.idCard = 1392618;
-    0066 EE4A      LDI	R20,0xEA
-    0067 E35F      LDI	R21,0x3F
-    0068 E165      LDI	R22,0x15
-    0069 E070      LDI	R23,0
-    006A 01FE      MOVW	R30,R28
-    006B 8341      STD	Z+1,R20
-    006C 8352      STD	Z+2,R21
-    006D 8363      STD	Z+3,R22
-    006E 8374      STD	Z+4,R23
+    0064 D499      RCALL	_at24c256_init
+(0027) 
+(0028)     t.flags = PASSWORDFLAGS_PASSWORD;
+    0065 E082      LDI	R24,2
+    0066 8388      STD	Y+0,R24
+(0029)     t.idCard = 0;
+    0067 E040      LDI	R20,0
+    0068 940E07C7  CALL	0x7C7
+    006A 940E0879  CALL	0x879
 (0030)     t.passwordH = 1;
-    006F E041      LDI	R20,1
-    0070 940E07BB  CALL	0x7BB
-    0072 8345      STD	Z+5,R20
-    0073 8356      STD	Z+6,R21
-    0074 8367      STD	Z+7,R22
-    0075 8770      STD	Z+8,R23
+    006C E041      LDI	R20,1
+    006D 940E07C7  CALL	0x7C7
+    006F 940E0874  CALL	0x874
 (0031)     t.passwordL = 1007;
-    0076 EE4F      LDI	R20,0xEF
-    0077 E053      LDI	R21,3
-    0078 940E0811  CALL	0x811
+    0071 EE4F      LDI	R20,0xEF
+    0072 E053      LDI	R21,3
+    0073 940E07EC  CALL	0x7EC
 (0032)     insertPasswordItem(0, t);
-    007A 963D      ADIW	R30,0xD
-    007B 940E081B  CALL	0x81B
-    007D 5F23      SUBI	R18,0xF3
-    007E 4F3F      SBCI	R19,0xFF
-    007F 2700      CLR	R16
-    0080 D1D5      RCALL	_insertPasswordItem
+    0075 967A      ADIW	R30,0x1A
+    0076 940E07F6  CALL	0x7F6
+    0078 5E26      SUBI	R18,0xE6
+    0079 4F3F      SBCI	R19,0xFF
+    007A 2700      CLR	R16
+    007B D1DA      RCALL	_insertPasswordItem
 (0033) 
 (0034)     t.flags = PASSWORDFLAGS_PASSWORD;
-    0081 E082      LDI	R24,2
-    0082 8388      STD	Y+0,R24
-    0083 940E07B6  CALL	0x7B6
-    0085 940E0887  CALL	0x887
+    007C E082      LDI	R24,2
+    007D 8388      STD	Y+0,R24
 (0035)     t.idCard = 0;
-(0036)     t.passwordH = 113564240;
-    0087 E540      LDI	R20,0x50
-    0088 ED5A      LDI	R21,0xDA
-    0089 EC64      LDI	R22,0xC4
-    008A E076      LDI	R23,6
-    008B 940E088D  CALL	0x88D
-(0037)     t.passwordL = 1600;
-    008D E440      LDI	R20,0x40
-    008E E056      LDI	R21,6
-    008F 940E0811  CALL	0x811
+    007E E040      LDI	R20,0
+    007F 940E07C7  CALL	0x7C7
+    0081 940E0879  CALL	0x879
+(0036)     t.passwordH = 1135642406;
+    0083 E246      LDI	R20,0x26
+    0084 E857      LDI	R21,0x87
+    0085 EB60      LDI	R22,0xB0
+    0086 E473      LDI	R23,0x43
+    0087 940E0869  CALL	0x869
+(0037)     t.passwordL = 100;
+    0089 E644      LDI	R20,0x64
+    008A 940E07C7  CALL	0x7C7
+    008C 940E081D  CALL	0x81D
 (0038)     insertPasswordItem(1, t);
-    0091 967A      ADIW	R30,0x1A
-    0092 940E081B  CALL	0x81B
-    0094 5E26      SUBI	R18,0xE6
-    0095 4F3F      SBCI	R19,0xFF
-    0096 E001      LDI	R16,1
-    0097 D1BE      RCALL	_insertPasswordItem
+    008E 96B7      ADIW	R30,0x27
+    008F 940E07F6  CALL	0x7F6
+    0091 5D29      SUBI	R18,0xD9
+    0092 4F3F      SBCI	R19,0xFF
+    0093 E001      LDI	R16,1
+    0094 D1C1      RCALL	_insertPasswordItem
 (0039) 
 (0040)     t.flags = PASSWORDFLAGS_PASSWORD;
-    0098 E082      LDI	R24,2
-    0099 8388      STD	Y+0,R24
-    009A 940E07B6  CALL	0x7B6
-    009C 940E0887  CALL	0x887
+    0095 E082      LDI	R24,2
+    0096 8388      STD	Y+0,R24
 (0041)     t.idCard = 0;
-(0042)     t.passwordH = 131415926;
-    009E E746      LDI	R20,0x76
-    009F E35F      LDI	R21,0x3F
-    00A0 ED65      LDI	R22,0xD5
-    00A1 E077      LDI	R23,7
-    00A2 940E088D  CALL	0x88D
-(0043)     t.passwordL = 15;
-    00A4 E04F      LDI	R20,0xF
-    00A5 940E07BB  CALL	0x7BB
-    00A7 8741      STD	Z+9,R20
-    00A8 8752      STD	Z+10,R21
-    00A9 8763      STD	Z+11,R22
-    00AA 8774      STD	Z+12,R23
+    0097 E040      LDI	R20,0
+    0098 940E07C7  CALL	0x7C7
+    009A 940E0879  CALL	0x879
+(0042)     t.passwordH = 1314159265;
+    009C EA41      LDI	R20,0xA1
+    009D E75A      LDI	R21,0x7A
+    009E E564      LDI	R22,0x54
+    009F E47E      LDI	R23,0x4E
+    00A0 940E0869  CALL	0x869
+(0043)     t.passwordL = 1;
+    00A2 E041      LDI	R20,1
+    00A3 940E07C7  CALL	0x7C7
+    00A5 940E081D  CALL	0x81D
 (0044)     insertPasswordItem(2, t);
-    00AB 01CE      MOVW	R24,R28
-    00AC 01FE      MOVW	R30,R28
-    00AD 96B7      ADIW	R30,0x27
-    00AE 940E081B  CALL	0x81B
-    00B0 5D29      SUBI	R18,0xD9
-    00B1 4F3F      SBCI	R19,0xFF
-    00B2 E002      LDI	R16,2
-    00B3 D1A2      RCALL	_insertPasswordItem
+    00A7 96F4      ADIW	R30,0x34
+    00A8 940E07F6  CALL	0x7F6
+    00AA 5C2C      SUBI	R18,0xCC
+    00AB 4F3F      SBCI	R19,0xFF
+    00AC E002      LDI	R16,2
+    00AD D1A8      RCALL	_insertPasswordItem
 (0045) 
-(0046)     writePasswordItemNum(3);
-    00B4 E003      LDI	R16,3
-    00B5 D1D4      RCALL	_writePasswordItemNum
-    00B6 C015      RJMP	0x00CC
-(0047) 
-(0048)     while(1)
-(0049)     {
-(0050)         //door open.
-(0051)         if(check_door())
-    00B7 D449      RCALL	_check_door
-    00B8 2300      TST	R16
-    00B9 F061      BEQ	0x00C6
-(0052)         {
-(0053)             door_minitor_count++;
-    00BA 01C5      MOVW	R24,R10
-    00BB 9601      ADIW	R24,1
-    00BC 015C      MOVW	R10,R24
-(0054)             if(door_minitor_count>20)
-    00BD E184      LDI	R24,0x14
-    00BE E090      LDI	R25,0
-    00BF 158A      CP	R24,R10
-    00C0 059B      CPC	R25,R11
-    00C1 F450      BCC	0x00CC
-(0055)             {
-(0056)                 tips_err();
-    00C2 D100      RCALL	_tips_err
-(0057)                 door_minitor_count = 0;
-    00C3 24AA      CLR	R10
-    00C4 24BB      CLR	R11
-(0058)             }
-(0059)         }
-    00C5 C006      RJMP	0x00CC
-(0060)         else
-(0061)         {
-(0062)             if(door_minitor_count)
-    00C6 20AA      TST	R10
-    00C7 F411      BNE	0x00CA
-    00C8 20BB      TST	R11
-    00C9 F011      BEQ	0x00CC
+(0046)     t.flags = PASSWORDFLAGS_PASSWORD;
+    00AE E082      LDI	R24,2
+    00AF 8388      STD	Y+0,R24
+(0047)     t.idCard = 0;
+    00B0 E040      LDI	R20,0
+    00B1 940E07C7  CALL	0x7C7
+    00B3 940E0879  CALL	0x879
+(0048)     t.passwordH = 1;
+    00B5 E041      LDI	R20,1
+    00B6 940E07C7  CALL	0x7C7
+    00B8 940E0874  CALL	0x874
+(0049)     t.passwordL = 1000;
+    00BA EE48      LDI	R20,0xE8
+    00BB E053      LDI	R21,3
+    00BC 940E07EC  CALL	0x7EC
+(0050)     insertPasswordItem(3, t);
+    00BE 5BEF      SUBI	R30,0xBF
+    00BF 4FFF      SBCI	R31,0xFF
+    00C0 940E07F6  CALL	0x7F6
+    00C2 5B2F      SUBI	R18,0xBF
+    00C3 4F3F      SBCI	R19,0xFF
+    00C4 E003      LDI	R16,3
+    00C5 D190      RCALL	_insertPasswordItem
+(0051) 
+(0052) 	writePasswordItemNum(4);
+    00C6 E004      LDI	R16,4
+    00C7 D1B3      RCALL	_writePasswordItemNum
+    00C8 C018      RJMP	0x00E1
+(0053) 
+(0054)     while(1)
+(0055)     {
+(0056)         //door open.
+(0057)         if(check_door())
+    00C9 D42C      RCALL	_check_door
+    00CA 2300      TST	R16
+    00CB F061      BEQ	0x00D8
+(0058)         {
+(0059)             door_minitor_count++;
+    00CC 01C5      MOVW	R24,R10
+    00CD 9601      ADIW	R24,1
+    00CE 015C      MOVW	R10,R24
+(0060)             if(door_minitor_count>20)
+    00CF E184      LDI	R24,0x14
+    00D0 E090      LDI	R25,0
+    00D1 158A      CP	R24,R10
+    00D2 059B      CPC	R25,R11
+    00D3 F450      BCC	0x00DE
+(0061)             {
+(0062)                 tips_err();
+    00D4 D106      RCALL	_tips_err
 (0063)                 door_minitor_count = 0;
-    00CA 24AA      CLR	R10
-    00CB 24BB      CLR	R11
-    00CC CFEA      RJMP	0x00B7
-(0064)         }
-(0065)     }
-(0066)     return 0;
-    00CD 2700      CLR	R16
-    00CE 2711      CLR	R17
-    00CF 96E4      ADIW	R28,0x34
-    00D0 9508      RET
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
+    00D5 24AA      CLR	R10
+    00D6 24BB      CLR	R11
+(0064)             }
+(0065)         }
+    00D7 C006      RJMP	0x00DE
+(0066)         else
+(0067)         {
+(0068)             if(door_minitor_count)
+    00D8 20AA      TST	R10
+    00D9 F411      BNE	0x00DC
+    00DA 20BB      TST	R11
+    00DB F011      BEQ	0x00DE
+(0069)                 door_minitor_count = 0;
+    00DC 24AA      CLR	R10
+    00DD 24BB      CLR	R11
+(0070)         }
+(0071) 		delay_ms(500);
+    00DE EF04      LDI	R16,0xF4
+    00DF E011      LDI	R17,1
+    00E0 D0D1      RCALL	_delay_ms
+    00E1 CFE7      RJMP	0x00C9
+(0072)     }
+(0073)     return 0;
+    00E2 2700      CLR	R16
+    00E3 2711      CLR	R17
+    00E4 96EF      ADIW	R28,0x3F
+    00E5 962F      ADIW	R28,0xF
+    00E6 9508      RET
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 (0001) #include<iom16v.h>
 (0002) 
 (0003) #include "password.h"
@@ -220,54 +239,54 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\wg26.c
 (0010)     //pd2,pd3 input mode.
 (0011)     DDRD &= 0xf3;
 _init_interrupt:
-    00D1 B381      IN	R24,0x11
-    00D2 7F83      ANDI	R24,0xF3
-    00D3 BB81      OUT	0x11,R24
+    00E7 B381      IN	R24,0x11
+    00E8 7F83      ANDI	R24,0xF3
+    00E9 BB81      OUT	0x11,R24
 (0012)     //上拉。
 (0013)     PORTD |= 0x0c;
-    00D4 B382      IN	R24,0x12
-    00D5 608C      ORI	R24,0xC
-    00D6 BB82      OUT	0x12,R24
+    00EA B382      IN	R24,0x12
+    00EB 608C      ORI	R24,0xC
+    00EC BB82      OUT	0x12,R24
 (0014)     //enable interrupt.
 (0015)     SREG |= 0x80;
-    00D7 9478      BSET	7
+    00ED 9478      BSET	7
 (0016)     //int1 int0 enable.
 (0017)     GICR |= 0xc0;
-    00D8 B78B      IN	R24,0x3B
-    00D9 6C80      ORI	R24,0xC0
-    00DA BF8B      OUT	0x3B,R24
+    00EE B78B      IN	R24,0x3B
+    00EF 6C80      ORI	R24,0xC0
+    00F0 BF8B      OUT	0x3B,R24
 (0018)     //int1 int0 fall edge.
 (0019)     MCUCR |= 0x0a;
-    00DB B785      IN	R24,0x35
-    00DC 608A      ORI	R24,0xA
-    00DD BF85      OUT	0x35,R24
+    00F1 B785      IN	R24,0x35
+    00F2 608A      ORI	R24,0xA
+    00F3 BF85      OUT	0x35,R24
 (0020)     return;
-    00DE 9508      RET
+    00F4 9508      RET
 (0021) }
 (0022) //diable reader.
 (0023) static void disable_reader(void)
 (0024) {
 (0025)     GICR &= 0x3f;
 _disable_reader:
-    00DF B78B      IN	R24,0x3B
-    00E0 738F      ANDI	R24,0x3F
-    00E1 BF8B      OUT	0x3B,R24
+    00F5 B78B      IN	R24,0x3B
+    00F6 738F      ANDI	R24,0x3F
+    00F7 BF8B      OUT	0x3B,R24
 (0026)     return;
-    00E2 9508      RET
+    00F8 9508      RET
 (0027) }
 (0028) //enable reader.
 (0029) static void enable_reader(void)
 (0030) {
 (0031)     GICR |= 0xc0;
 _enable_reader:
-    00E3 B78B      IN	R24,0x3B
-    00E4 6C80      ORI	R24,0xC0
-    00E5 BF8B      OUT	0x3B,R24
+    00F9 B78B      IN	R24,0x3B
+    00FA 6C80      ORI	R24,0xC0
+    00FB BF8B      OUT	0x3B,R24
 (0032)     return;
-    00E6 9508      RET
+    00FC 9508      RET
 _id_reader_check:
   id_code              --> Y+0
-    00E7 940E0677  CALL	push_arg4
+    00FD 940E0687  CALL	push_arg4
 (0033) }
 (0034) 
 (0035) //id card id.
@@ -284,214 +303,216 @@ _id_reader_check:
 (0046) static char id_reader_check(unsigned long id_code)
 (0047) {
 (0048)     return 0;
-    00E9 2700      CLR	R16
-    00EA 9624      ADIW	R28,4
-    00EB 9508      RET
+    00FF 2700      CLR	R16
+    0100 9624      ADIW	R28,4
+    0101 9508      RET
 _read_time_out:
   timer                --> R10
-    00EC 940E06B2  CALL	push_gset3
-    00EE 2EA0      MOV	R10,R16
-    00EF 9722      SBIW	R28,2
+    0102 940E06C0  CALL	push_gset3
+    0104 2EA0      MOV	R10,R16
+    0105 9722      SBIW	R28,2
 (0049) }
 (0050) 
 (0051) //read timeout.
 (0052) static void read_time_out(char timer)
 (0053) {
 (0054)     if(timer == IDREADERTIMEOUTTIMER)
-    00F0 20AA      TST	R10
-    00F1 F009      BEQ	0x00F3
-    00F2 C03E      RJMP	0x0131
+    0106 20AA      TST	R10
+    0107 F009      BEQ	0x0109
+    0108 C03E      RJMP	0x0147
 (0055)     {
 (0056)         //disable reader.
 (0057)         disable_reader();
-    00F3 DFEB      RCALL	_disable_reader
+    0109 DFEB      RCALL	_disable_reader
 (0058)         id_reader_flags = IDREADERFLAG_READED;
-    00F4 E082      LDI	R24,2
-    00F5 940E08CE  CALL	0x8CE
+    010A E082      LDI	R24,2
+    010B 940E08D9  CALL	0x8D9
 (0059)         //read ok.
 (0060)         if(read_count==26) //id card.
-    00F7 91800066  LDS	R24,read_count
-    00F9 318A      CPI	R24,0x1A
-    00FA F511      BNE	0x011D
+    010D 91800066  LDS	R24,read_count
+    010F 318A      CPI	R24,0x1A
+    0110 F511      BNE	0x0133
 (0061)         {
 (0062)             if(!id_reader_check(id_code))
-    00FB 91200062  LDS	R18,id_code+2
-    00FD 91300063  LDS	R19,id_code+3
-    00FF 91000060  LDS	R16,id_code
-    0101 91100061  LDS	R17,id_code+1
-    0103 DFE3      RCALL	_id_reader_check
-    0104 2300      TST	R16
-    0105 F009      BEQ	0x0107
-    0106 C021      RJMP	0x0128
+    0111 91200062  LDS	R18,id_code+2
+    0113 91300063  LDS	R19,id_code+3
+    0115 91000060  LDS	R16,id_code
+    0117 91100061  LDS	R17,id_code+1
+    0119 DFE3      RCALL	_id_reader_check
+    011A 2300      TST	R16
+    011B F009      BEQ	0x011D
+    011C C021      RJMP	0x013E
 (0063)             {
 (0064)                 id_code &= 0x01fffffe;
-    0107 EF4E      LDI	R20,0xFE
-    0108 EF5F      LDI	R21,0xFF
-    0109 EF6F      LDI	R22,0xFF
-    010A E071      LDI	R23,1
-    010B 940E07C9  CALL	0x7C9
-    010D 940E0847  CALL	0x847
-    010F 940E07AD  CALL	0x7AD
+    011D EF4E      LDI	R20,0xFE
+    011E EF5F      LDI	R21,0xFF
+    011F EF6F      LDI	R22,0xFF
+    0120 E071      LDI	R23,1
+    0121 940E07D1  CALL	0x7D1
+    0123 940E0829  CALL	0x829
+    0125 940E07BE  CALL	0x7BE
 (0065)                 id_code >>= 1;
-    0111 9456      LSR	R5
-    0112 9447      ROR	R4
-    0113 9437      ROR	R3
-    0114 9427      ROR	R2
-    0115 940E07AD  CALL	0x7AD
+    0127 9456      LSR	R5
+    0128 9447      ROR	R4
+    0129 9437      ROR	R3
+    012A 9427      ROR	R2
+    012B 940E07BE  CALL	0x7BE
 (0066)                 password_handle(IDREADEDIDCARD, id_code);
-    0117 8248      STD	Y+0,R4
-    0118 8259      STD	Y+1,R5
-    0119 0191      MOVW	R18,R2
-    011A 2700      CLR	R16
-    011B D19C      RCALL	_password_handle
+    012D 8248      STD	Y+0,R4
+    012E 8259      STD	Y+1,R5
+    012F 0191      MOVW	R18,R2
+    0130 2700      CLR	R16
+    0131 D179      RCALL	_password_handle
 (0067)             }
 (0068)         }
-    011C C00B      RJMP	0x0128
+    0132 C00B      RJMP	0x013E
 (0069)         else if(read_count==4)//keypad input.
-    011D 91800066  LDS	R24,read_count
-    011F 3084      CPI	R24,4
-    0120 F439      BNE	0x0128
-    0121 940E07C9  CALL	0x7C9
+    0133 91800066  LDS	R24,read_count
+    0135 3084      CPI	R24,4
+    0136 F439      BNE	0x013E
+    0137 940E07D1  CALL	0x7D1
 (0070)         {
 (0071)             password_handle(IDREADEDKEYPAD, id_code);
-    0123 8248      STD	Y+0,R4
-    0124 8259      STD	Y+1,R5
-    0125 0191      MOVW	R18,R2
-    0126 E001      LDI	R16,1
-    0127 D190      RCALL	_password_handle
+    0139 8248      STD	Y+0,R4
+    013A 8259      STD	Y+1,R5
+    013B 0191      MOVW	R18,R2
+    013C E001      LDI	R16,1
+    013D D16D      RCALL	_password_handle
 (0072)         }
 (0073)         //enable reader.
 (0074)         enable_reader();
-    0128 DFBA      RCALL	_enable_reader
+    013E DFBA      RCALL	_enable_reader
 (0075)         id_reader_flags = IDREADERFLAG_WAITING;
-    0129 2422      CLR	R2
-    012A 2433      CLR	R3
-    012B 92300065  STS	id_reader_flags+1,R3
-    012D 92200064  STS	id_reader_flags,R2
+    013F 2422      CLR	R2
+    0140 2433      CLR	R3
+    0141 92300065  STS	id_reader_flags+1,R3
+    0143 92200064  STS	id_reader_flags,R2
 (0076)         read_count = 0;
-    012F 92200066  STS	read_count,R2
+    0145 92200066  STS	read_count,R2
 (0077)     }
 (0078)     return;
-    0131 9622      ADIW	R28,2
-    0132 940E06A8  CALL	pop_gset3
-    0134 9508      RET
+    0147 9622      ADIW	R28,2
+    0148 940E06B8  CALL	pop_gset3
+    014A 9508      RET
 _set_id_reading_status:
-    0135 940E06B4  CALL	push_gset2
-    0137 9722      SBIW	R28,2
+    014B 940E06C2  CALL	push_gset2
+    014D 9722      SBIW	R28,2
 (0079) }
 (0080) //set status.
 (0081) static void set_id_reading_status(void)
 (0082) {
 (0083)     if(id_reader_flags!=IDREADERFLAG_READING)
-    0138 91800064  LDS	R24,id_reader_flags
-    013A 91900065  LDS	R25,id_reader_flags+1
-    013C 3081      CPI	R24,1
-    013D E0E0      LDI	R30,0
-    013E 079E      CPC	R25,R30
-    013F F0A9      BEQ	0x0155
+    014E 91800064  LDS	R24,id_reader_flags
+    0150 91900065  LDS	R25,id_reader_flags+1
+    0152 3081      CPI	R24,1
+    0153 E0E0      LDI	R30,0
+    0154 079E      CPC	R25,R30
+    0155 F0A9      BEQ	0x016B
 (0084)     {
 (0085)         id_reader_flags = IDREADERFLAG_READING;
-    0140 E081      LDI	R24,1
-    0141 940E08CE  CALL	0x8CE
-    0143 940E07B6  CALL	0x7B6
+    0156 E081      LDI	R24,1
+    0157 940E08D9  CALL	0x8D9
+    0159 940E07CC  CALL	0x7CC
 (0086)         id_code = 0;
-    0145 93500061  STS	id_code+1,R21
-    0147 93400060  STS	id_code,R20
-    0149 93700063  STS	id_code+3,R23
-    014B 93600062  STS	id_code+2,R22
+    015B 93500061  STS	id_code+1,R21
+    015D 93400060  STS	id_code,R20
+    015F 93700063  STS	id_code+3,R23
+    0161 93600062  STS	id_code+2,R22
 (0087)         //1*200ms.
 (0088)         set_timer(IDREADERTIMEOUTTIMER, 1, read_time_out);
-    014D E584      LDI	R24,0x54
-    014E E090      LDI	R25,0
-    014F 8399      STD	Y+1,R25
-    0150 8388      STD	Y+0,R24
-    0151 E021      LDI	R18,1
-    0152 E030      LDI	R19,0
-    0153 2700      CLR	R16
-    0154 D2BA      RCALL	_set_timer
+    0163 E584      LDI	R24,0x54
+    0164 E090      LDI	R25,0
+    0165 8399      STD	Y+1,R25
+    0166 8388      STD	Y+0,R24
+    0167 E021      LDI	R18,1
+    0168 E030      LDI	R19,0
+    0169 2700      CLR	R16
+    016A D299      RCALL	_set_timer
 (0089)     }
 (0090)     return;
-    0155 9622      ADIW	R28,2
-    0156 940E06A6  CALL	pop_gset2
-    0158 9508      RET
+    016B 9622      ADIW	R28,2
+    016C 940E06B6  CALL	pop_gset2
+    016E 9508      RET
 _int0_isr:
-    0159 940E08F5  CALL	0x8F5
+    016F 940E0709  CALL	push_lset
+    0171 940E06C2  CALL	push_gset2
 (0091) }
 (0092) //pull id card id and keypad input.
 (0093) #pragma interrupt_handler int0_isr:2
 (0094) void int0_isr(void)
 (0095) {
 (0096)     set_id_reading_status();
-    015B DFD9      RCALL	_set_id_reading_status
+    0173 DFD7      RCALL	_set_id_reading_status
 (0097)     if(!(PIND&0x08))
-    015C 9983      SBIC	0x10,3
-    015D C00D      RJMP	0x016B
-    015E 940E076E  CALL	<created procedures>
-    0160 940E0842  CALL	0x842
+    0174 9983      SBIC	0x10,3
+    0175 C00D      RJMP	0x0183
+    0176 940E0798  CALL	0x798
+    0178 940E0806  CALL	0x806
 (0098)     {
 (0099)         id_code <<= 1;
 (0100)         id_code |= 1;
-    0162 2A24      OR	R2,R20
-    0163 2A35      OR	R3,R21
-    0164 2A46      OR	R4,R22
-    0165 2A57      OR	R5,R23
-    0166 940E07AD  CALL	0x7AD
-    0168 940E0870  CALL	0x870
+    017A 2A24      OR	R2,R20
+    017B 2A35      OR	R3,R21
+    017C 2A46      OR	R4,R22
+    017D 2A57      OR	R5,R23
+    017E 940E07BE  CALL	0x7BE
+    0180 940E0863  CALL	0x863
 (0101)         ++read_count;
 (0102)     }
-    016A C006      RJMP	0x0171
+    0182 C006      RJMP	0x0189
 (0103)     else if(!(PIND&0x04))
-    016B 9982      SBIC	0x10,2
-    016C C004      RJMP	0x0171
-    016D 940E076E  CALL	<created procedures>
-    016F 940E0870  CALL	0x870
+    0183 9982      SBIC	0x10,2
+    0184 C004      RJMP	0x0189
+    0185 940E0798  CALL	0x798
+    0187 940E0863  CALL	0x863
 (0104)     {
 (0105)         id_code <<= 1;
 (0106)         ++read_count;
 (0107)     }
 (0108)     return;
-    0171 D534      RCALL	pop_gset2
-    0172 940E070E  CALL	pop_lset
-    0174 9518      RETI
+    0189 D52C      RCALL	pop_gset2
+    018A 940E071C  CALL	pop_lset
+    018C 9518      RETI
 _int1_isr:
-    0175 940E08F5  CALL	0x8F5
+    018D 940E0709  CALL	push_lset
+    018F D532      RCALL	push_gset2
 (0109) }
 (0110) #pragma interrupt_handler int1_isr:3
 (0111) void int1_isr(void)
 (0112) {
 (0113)     set_id_reading_status();
-    0177 DFBD      RCALL	_set_id_reading_status
+    0190 DFBA      RCALL	_set_id_reading_status
 (0114)     if(!(PIND&0x08))
-    0178 9983      SBIC	0x10,3
-    0179 C00D      RJMP	0x0187
-    017A 940E076E  CALL	<created procedures>
-    017C 940E0842  CALL	0x842
+    0191 9983      SBIC	0x10,3
+    0192 C00D      RJMP	0x01A0
+    0193 940E0798  CALL	0x798
+    0195 940E0806  CALL	0x806
 (0115)     {
 (0116)         id_code <<= 1;
 (0117)         id_code |= 1;
-    017E 2A24      OR	R2,R20
-    017F 2A35      OR	R3,R21
-    0180 2A46      OR	R4,R22
-    0181 2A57      OR	R5,R23
-    0182 940E07AD  CALL	0x7AD
-    0184 940E0870  CALL	0x870
+    0197 2A24      OR	R2,R20
+    0198 2A35      OR	R3,R21
+    0199 2A46      OR	R4,R22
+    019A 2A57      OR	R5,R23
+    019B 940E07BE  CALL	0x7BE
+    019D 940E0863  CALL	0x863
 (0118)         ++read_count;
 (0119)     }
-    0186 C006      RJMP	0x018D
+    019F C006      RJMP	0x01A6
 (0120)     else if(!(PIND&0x04))
-    0187 9982      SBIC	0x10,2
-    0188 C004      RJMP	0x018D
-    0189 940E076E  CALL	<created procedures>
-    018B 940E0870  CALL	0x870
+    01A0 9982      SBIC	0x10,2
+    01A1 C004      RJMP	0x01A6
+    01A2 940E0798  CALL	0x798
+    01A4 940E0863  CALL	0x863
 (0121)     {
 (0122)         id_code <<= 1;
 (0123)         ++read_count;
 (0124)     }
 (0125)     return;
-    018D D518      RCALL	pop_gset2
-    018E 940E070E  CALL	pop_lset
-    0190 9518      RETI
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
+    01A6 D50F      RCALL	pop_gset2
+    01A7 D574      RCALL	pop_lset
+    01A8 9518      RETI
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
 (0001) #include "util.h"
 (0002) 
 (0003) #define XTAL    8
@@ -502,41 +523,41 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\util.c
 (0008)     for(i=1;i<1142;i++);
 _delay_1ms:
   i                    --> R16
-    0191 E001      LDI	R16,1
-    0192 E010      LDI	R17,0
-    0193 5F0F      SUBI	R16,0xFF
-    0194 4F1F      SBCI	R17,0xFF
-    0195 3706      CPI	R16,0x76
-    0196 E0E4      LDI	R30,4
-    0197 071E      CPC	R17,R30
-    0198 F3D4      BLT	0x0193
-    0199 9508      RET
+    01A9 E001      LDI	R16,1
+    01AA E010      LDI	R17,0
+    01AB 5F0F      SUBI	R16,0xFF
+    01AC 4F1F      SBCI	R17,0xFF
+    01AD 3706      CPI	R16,0x76
+    01AE E0E4      LDI	R30,4
+    01AF 071E      CPC	R17,R30
+    01B0 F3D4      BLT	0x01AB
+    01B1 9508      RET
 _delay_ms:
   i                    --> R20
   ms                   --> R22
-    019A D519      RCALL	push_gset2
-    019B 01B8      MOVW	R22,R16
+    01B2 D50F      RCALL	push_gset2
+    01B3 01B8      MOVW	R22,R16
 (0009) }
 (0010) //=========================================
 (0011) void delay_ms(int ms)
 (0012) {
 (0013)     int i=0;
-    019C 2744      CLR	R20
-    019D 2755      CLR	R21
-    019E C003      RJMP	0x01A2
+    01B4 2744      CLR	R20
+    01B5 2755      CLR	R21
+    01B6 C003      RJMP	0x01BA
 (0014)     while(i<ms)
 (0015)     {
 (0016)         delay_1ms();
-    019F DFF1      RCALL	_delay_1ms
+    01B7 DFF1      RCALL	_delay_1ms
 (0017)         i++;
-    01A0 5F4F      SUBI	R20,0xFF
-    01A1 4F5F      SBCI	R21,0xFF
-    01A2 1746      CP	R20,R22
-    01A3 0757      CPC	R21,R23
-    01A4 F3D4      BLT	0x019F
-    01A5 D500      RCALL	pop_gset2
-    01A6 9508      RET
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
+    01B8 5F4F      SUBI	R20,0xFF
+    01B9 4F5F      SBCI	R21,0xFF
+    01BA 1746      CP	R20,R22
+    01BB 0757      CPC	R21,R23
+    01BC F3D4      BLT	0x01B7
+    01BD D4F8      RCALL	pop_gset2
+    01BE 9508      RET
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
 (0001) #include<iom16v.h>
 (0002) #include <macros.h>
 (0003) 
@@ -554,187 +575,187 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
 (0015)     //PIND4 & PIND5 OUTPUT AND pull-up resistors.
 (0016)     PORTD |= 0x30;
 _tips_port_init:
-    01A7 B382      IN	R24,0x12
-    01A8 6380      ORI	R24,0x30
-    01A9 BB82      OUT	0x12,R24
+    01BF B382      IN	R24,0x12
+    01C0 6380      ORI	R24,0x30
+    01C1 BB82      OUT	0x12,R24
 (0017)     DDRD |= 0x30;
-    01AA B381      IN	R24,0x11
-    01AB 6380      ORI	R24,0x30
-    01AC BB81      OUT	0x11,R24
+    01C2 B381      IN	R24,0x11
+    01C3 6380      ORI	R24,0x30
+    01C4 BB81      OUT	0x11,R24
 (0018)     return;
-    01AD 9508      RET
+    01C5 9508      RET
 (0019) }
 (0020) //led on.
 (0021) void tips_led_on(void)
 (0022) {
 (0023)     LED_ON;
 _tips_led_on:
-    01AE B382      IN	R24,0x12
-    01AF 7D8F      ANDI	R24,0xDF
-    01B0 BB82      OUT	0x12,R24
+    01C6 B382      IN	R24,0x12
+    01C7 7D8F      ANDI	R24,0xDF
+    01C8 BB82      OUT	0x12,R24
 (0024)     return;
-    01B1 9508      RET
+    01C9 9508      RET
 (0025) }
 (0026) //led off.
 (0027) void tips_led_off(void)
 (0028) {
 (0029)     LED_OFF;
 _tips_led_off:
-    01B2 9A95      SBI	0x12,5
+    01CA 9A95      SBI	0x12,5
 (0030)     return;
-    01B3 9508      RET
+    01CB 9508      RET
 (0031) }
 (0032) //beep on.
 (0033) void tips_beep_on(void)
 (0034) {
 (0035)     BEEP_ON;
 _tips_beep_on:
-    01B4 B382      IN	R24,0x12
-    01B5 7E8F      ANDI	R24,0xEF
-    01B6 BB82      OUT	0x12,R24
+    01CC B382      IN	R24,0x12
+    01CD 7E8F      ANDI	R24,0xEF
+    01CE BB82      OUT	0x12,R24
 (0036)     return;
-    01B7 9508      RET
+    01CF 9508      RET
 (0037) }
 (0038) //beep off.
 (0039) void tips_beep_off(void)
 (0040) {
 (0041)     BEEP_OFF;
 _tips_beep_off:
-    01B8 9A94      SBI	0x12,4
+    01D0 9A94      SBI	0x12,4
 (0042)     return;
-    01B9 9508      RET
+    01D1 9508      RET
 (0043) }
 (0044) //__------__ 6 pices.pice per 0.4 seconds.
 (0045) void tips_ok(void)
 (0046) {
 (0047)     LED_ON;
 _tips_ok:
-    01BA B382      IN	R24,0x12
-    01BB 7D8F      ANDI	R24,0xDF
-    01BC BB82      OUT	0x12,R24
-    01BD 940E0893  CALL	0x893
+    01D2 B382      IN	R24,0x12
+    01D3 7D8F      ANDI	R24,0xDF
+    01D4 BB82      OUT	0x12,R24
+    01D5 940E08A7  CALL	0x8A7
 (0048)     BEEP_ON;
 (0049)     //2.4 seconds.
 (0050)     delay_ms(400);
-    01BF DFDA      RCALL	_delay_ms
+    01D7 DFDA      RCALL	_delay_ms
 (0051)     LED_OFF;
-    01C0 9A95      SBI	0x12,5
+    01D8 9A95      SBI	0x12,5
 (0052)     BEEP_OFF;
-    01C1 9A94      SBI	0x12,4
+    01D9 9A94      SBI	0x12,4
 (0053)     return;
-    01C2 9508      RET
+    01DA 9508      RET
 (0054) }
 (0055) //_-_-___-_-_
 (0056) void tips_err(void)
 (0057) {
 (0058)     BEEP_ON;
 _tips_err:
-    01C3 940E07EA  CALL	0x7EA
+    01DB 940E0811  CALL	0x811
 (0059)     delay_ms(100);
-    01C5 DFD4      RCALL	_delay_ms
+    01DD DFD4      RCALL	_delay_ms
 (0060)     BEEP_OFF;
-    01C6 9A94      SBI	0x12,4
+    01DE 9A94      SBI	0x12,4
 (0061)     delay_ms(100);
-    01C7 E604      LDI	R16,0x64
-    01C8 E010      LDI	R17,0
-    01C9 DFD0      RCALL	_delay_ms
-    01CA 940E07EA  CALL	0x7EA
+    01DF E604      LDI	R16,0x64
+    01E0 E010      LDI	R17,0
+    01E1 DFD0      RCALL	_delay_ms
+    01E2 940E0811  CALL	0x811
 (0062)     BEEP_ON;
 (0063)     delay_ms(100);
-    01CC DFCD      RCALL	_delay_ms
+    01E4 DFCD      RCALL	_delay_ms
 (0064)     BEEP_OFF;
-    01CD 9A94      SBI	0x12,4
+    01E5 9A94      SBI	0x12,4
 (0065)  
 (0066)     delay_ms(200);
-    01CE EC08      LDI	R16,0xC8
-    01CF E010      LDI	R17,0
-    01D0 DFC9      RCALL	_delay_ms
-    01D1 940E07EA  CALL	0x7EA
+    01E6 EC08      LDI	R16,0xC8
+    01E7 E010      LDI	R17,0
+    01E8 DFC9      RCALL	_delay_ms
+    01E9 940E0811  CALL	0x811
 (0067)  
 (0068)     BEEP_ON;
 (0069)     delay_ms(100);
-    01D3 DFC6      RCALL	_delay_ms
+    01EB DFC6      RCALL	_delay_ms
 (0070)     BEEP_OFF;
-    01D4 9A94      SBI	0x12,4
+    01EC 9A94      SBI	0x12,4
 (0071)     delay_ms(100);
-    01D5 E604      LDI	R16,0x64
-    01D6 E010      LDI	R17,0
-    01D7 DFC2      RCALL	_delay_ms
-    01D8 940E07EA  CALL	0x7EA
+    01ED E604      LDI	R16,0x64
+    01EE E010      LDI	R17,0
+    01EF DFC2      RCALL	_delay_ms
+    01F0 940E0811  CALL	0x811
 (0072)     BEEP_ON;
 (0073)     delay_ms(100);
-    01DA DFBF      RCALL	_delay_ms
+    01F2 DFBF      RCALL	_delay_ms
 (0074)     BEEP_OFF;
-    01DB 9A94      SBI	0x12,4
+    01F3 9A94      SBI	0x12,4
 (0075)     return;
-    01DC 9508      RET
+    01F4 9508      RET
 (0076) }
 (0077) //_----_-_-_
 (0078) void tips_id_ok(void)
 (0079) {
 (0080)     BEEP_ON;
 _tips_id_ok:
-    01DD B382      IN	R24,0x12
-    01DE 7E8F      ANDI	R24,0xEF
-    01DF BB82      OUT	0x12,R24
+    01F5 B382      IN	R24,0x12
+    01F6 7E8F      ANDI	R24,0xEF
+    01F7 BB82      OUT	0x12,R24
 (0081)     delay_ms(200);
-    01E0 EC08      LDI	R16,0xC8
-    01E1 E010      LDI	R17,0
-    01E2 DFB7      RCALL	_delay_ms
+    01F8 EC08      LDI	R16,0xC8
+    01F9 E010      LDI	R17,0
+    01FA DFB7      RCALL	_delay_ms
 (0082)     BEEP_OFF;
-    01E3 9A94      SBI	0x12,4
+    01FB 9A94      SBI	0x12,4
 (0083)     delay_ms(200);
-    01E4 EC08      LDI	R16,0xC8
-    01E5 E010      LDI	R17,0
-    01E6 DFB3      RCALL	_delay_ms
-    01E7 940E07EA  CALL	0x7EA
+    01FC EC08      LDI	R16,0xC8
+    01FD E010      LDI	R17,0
+    01FE DFB3      RCALL	_delay_ms
+    01FF 940E0811  CALL	0x811
 (0084) 
 (0085)     BEEP_ON;
 (0086)     delay_ms(100);
-    01E9 DFB0      RCALL	_delay_ms
+    0201 DFB0      RCALL	_delay_ms
 (0087)     BEEP_OFF;
-    01EA 9A94      SBI	0x12,4
+    0202 9A94      SBI	0x12,4
 (0088)     delay_ms(100);
-    01EB E604      LDI	R16,0x64
-    01EC E010      LDI	R17,0
-    01ED DFAC      RCALL	_delay_ms
-    01EE 940E07EA  CALL	0x7EA
+    0203 E604      LDI	R16,0x64
+    0204 E010      LDI	R17,0
+    0205 DFAC      RCALL	_delay_ms
+    0206 940E0811  CALL	0x811
 (0089)     BEEP_ON;
 (0090)     delay_ms(100);
-    01F0 DFA9      RCALL	_delay_ms
+    0208 DFA9      RCALL	_delay_ms
 (0091)     BEEP_OFF;
-    01F1 9A94      SBI	0x12,4
+    0209 9A94      SBI	0x12,4
 (0092)     return;
-    01F2 9508      RET
+    020A 9508      RET
 (0093) }
 (0094) //__------__-----__
 (0095) void tips_ring_on(void)
 (0096) {
 (0097)     BEEP_ON;
 _tips_ring_on:
-    01F3 940E0893  CALL	0x893
+    020B 940E08A7  CALL	0x8A7
 (0098)     //2.4 seconds.
 (0099)     delay_ms(400);
-    01F5 DFA4      RCALL	_delay_ms
+    020D DFA4      RCALL	_delay_ms
 (0100)     BEEP_OFF;
-    01F6 9A94      SBI	0x12,4
+    020E 9A94      SBI	0x12,4
 (0101)     delay_ms(400);
-    01F7 E900      LDI	R16,0x90
-    01F8 E011      LDI	R17,1
-    01F9 DFA0      RCALL	_delay_ms
-    01FA 940E0893  CALL	0x893
+    020F E900      LDI	R16,0x90
+    0210 E011      LDI	R17,1
+    0211 DFA0      RCALL	_delay_ms
+    0212 940E08A7  CALL	0x8A7
 (0102)     BEEP_ON;
 (0103)     //2.4 seconds.
 (0104)     delay_ms(400);
-    01FC DF9D      RCALL	_delay_ms
+    0214 DF9D      RCALL	_delay_ms
 (0105)     BEEP_OFF;
-    01FD 9A94      SBI	0x12,4
+    0215 9A94      SBI	0x12,4
 (0106)     return;
-    01FE 9508      RET
+    0216 9508      RET
 _readPasswordItemNum:
   num                  --> Y+3
-    01FF 9724      SBIW	R28,4
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
+    0217 9724      SBIW	R28,4
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
 (0001) #include<iom16v.h>
 (0002) #include <macros.h>
 (0003) 
@@ -761,262 +782,218 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
 (0024) unsigned char readPasswordItemNum(void)
 (0025) {
 (0026)     unsigned char num = 0;
-    0200 2422      CLR	R2
-    0201 822B      STD	Y+3,R2
+    0218 2422      CLR	R2
+    0219 822B      STD	Y+3,R2
 (0027) 
 (0028)     rw24c256(&num, 1, 0, RW24C256READ);
-    0202 E081      LDI	R24,1
-    0203 838A      STD	Y+2,R24
-    0204 940E08AB  CALL	0x8AB
-    0206 D309      RCALL	_rw24c256
+    021A E081      LDI	R24,1
+    021B 838A      STD	Y+2,R24
+    021C 940E08B5  CALL	0x8B5
+    021E D2E6      RCALL	_rw24c256
 (0029)     return num;
-    0207 810B      LDD	R16,Y+3
-    0208 9624      ADIW	R28,4
-    0209 9508      RET
+    021F 810B      LDD	R16,Y+3
+    0220 9624      ADIW	R28,4
+    0221 9508      RET
 _readPasswordItem:
-  t                    --> Y+20
-  item                 --> Y+7
-  tmp                  --> Y+3
-  index                --> R12
-    020A D4A5      RCALL	push_gset4
-    020B 2EC2      MOV	R12,R18
-    020C 0158      MOVW	R10,R16
-    020D 9765      SBIW	R28,0x15
+  t                    --> Y+16
+  item                 --> Y+3
+  index                --> R22
+    0222 D49F      RCALL	push_gset2
+    0223 2F62      MOV	R22,R18
+    0224 01A8      MOVW	R20,R16
+    0225 9761      SBIW	R28,0x11
 (0030) }
 (0031) 
 (0032) passwordItem_t readPasswordItem(unsigned char index)
 (0033) {
 (0034)     passwordItem_t item;
 (0035)     unsigned char t = 0;
-    020E 2422      CLR	R2
-    020F 8A2C      STD	Y+20,R2
-    0210 940E07B6  CALL	0x7B6
-    0212 940E0825  CALL	0x825
-(0036)     unsigned long tmp = 0;
-(0037) 
-(0038)     rw24c256(&t, 1, index*13+1, RW24C256READ);
-    0214 E081      LDI	R24,1
-    0215 838A      STD	Y+2,R24
-    0216 E08D      LDI	R24,0xD
-    0217 9D8C      MUL	R24,R12
-    0218 940E08E0  CALL	0x8E0
-    021A 018E      MOVW	R16,R28
-    021B 5E0C      SUBI	R16,0xEC
-    021C 4F1F      SBCI	R17,0xFF
-    021D D2F2      RCALL	_rw24c256
-(0039)     item.flags = t;
-    021E 882C      LDD	R2,Y+20
-    021F 822F      STD	Y+7,R2
-    0220 940E07B6  CALL	0x7B6
-    0222 940E07F0  CALL	0x7F0
-(0040) 
-(0041)     tmp = 0;
-(0042)     rw24c256Int(&tmp, index*13+2, RW24C256READ);
-    0224 5F2E      SUBI	R18,0xFE
-    0225 940E0830  CALL	0x830
-    0227 D349      RCALL	_rw24c256Int
-    0228 940E0876  CALL	0x876
-(0043)     item.idCard = tmp;
-    022A 8620      STD	Z+8,R2
-    022B 8631      STD	Z+9,R3
-    022C 8642      STD	Z+10,R4
-    022D 8653      STD	Z+11,R5
-    022E 940E07B6  CALL	0x7B6
-    0230 940E07F0  CALL	0x7F0
-(0044)     
-(0045)     tmp = 0;
-(0046)     rw24c256Int(&tmp, index*13+6, RW24C256READ);
-    0232 5F2A      SUBI	R18,0xFA
-    0233 940E0830  CALL	0x830
-    0235 D33B      RCALL	_rw24c256Int
-    0236 940E0876  CALL	0x876
-(0047)     item.passwordH = tmp;
-    0238 8624      STD	Z+12,R2
-    0239 8635      STD	Z+13,R3
-    023A 8646      STD	Z+14,R4
-    023B 8657      STD	Z+15,R5
-    023C 940E07B6  CALL	0x7B6
-    023E 940E07F0  CALL	0x7F0
-(0048)     
-(0049)     tmp = 0;
-(0050)     rw24c256Int(&tmp, index*13+10, RW24C256READ);
-    0240 5F26      SUBI	R18,0xF6
-    0241 940E0830  CALL	0x830
-    0243 D32D      RCALL	_rw24c256Int
-    0244 940E0876  CALL	0x876
-(0051)     item.passwordL = tmp;
-    0246 8A20      STD	Z+16,R2
-    0247 8A31      STD	Z+17,R3
-    0248 8A42      STD	Z+18,R4
-    0249 8A53      STD	Z+19,R5
-(0052)     
-(0053)     return item;
+    0226 2422      CLR	R2
+    0227 8A28      STD	Y+16,R2
+    0228 940E0857  CALL	0x857
+    022A 940E08F4  CALL	0x8F4
+(0036) 
+(0037)     rw24c256(&t, 1, index*13+1, RW24C256READ);
+    022C 018E      MOVW	R16,R28
+    022D 5F00      SUBI	R16,0xF0
+    022E 4F1F      SBCI	R17,0xFF
+    022F D2D5      RCALL	_rw24c256
+(0038)     item.flags = t;
+    0230 8828      LDD	R2,Y+16
+    0231 822B      STD	Y+3,R2
+    0232 940E0857  CALL	0x857
+(0039) 
+(0040)     rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RW24C256READ);
+    0234 9602      ADIW	R24,2
+    0235 940E08C9  CALL	0x8C9
+    0237 5F0C      SUBI	R16,0xFC
+    0238 4F1F      SBCI	R17,0xFF
+    0239 D2CB      RCALL	_rw24c256
+    023A 940E0857  CALL	0x857
+(0041)     
+(0042)     rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RW24C256READ);
+    023C 9606      ADIW	R24,6
+    023D 940E08C9  CALL	0x8C9
+    023F 5F08      SUBI	R16,0xF8
+    0240 4F1F      SBCI	R17,0xFF
+    0241 D2C3      RCALL	_rw24c256
+    0242 940E0857  CALL	0x857
+(0043) 	
+(0044)     rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RW24C256READ);
+    0244 960A      ADIW	R24,0xA
+    0245 940E08C9  CALL	0x8C9
+    0247 5F04      SUBI	R16,0xF4
+    0248 4F1F      SBCI	R17,0xFF
+    0249 D2BB      RCALL	_rw24c256
+(0045)     
+(0046)     return item;
     024A 01CE      MOVW	R24,R28
-    024B 9607      ADIW	R24,7
+    024B 9603      ADIW	R24,3
     024C E00D      LDI	R16,0xD
     024D E010      LDI	R17,0
-    024E 92BA      ST	R11,-Y
-    024F 92AA      ST	R10,-Y
+    024E 935A      ST	R21,-Y
+    024F 934A      ST	R20,-Y
     0250 939A      ST	R25,-Y
     0251 938A      ST	R24,-Y
-    0252 D503      RCALL	asgnblk
-    0253 9665      ADIW	R28,0x15
-    0254 D455      RCALL	pop_gset4
+    0252 D511      RCALL	asgnblk
+    0253 9661      ADIW	R28,0x11
+    0254 D461      RCALL	pop_gset2
     0255 9508      RET
 _insertPasswordItem:
-  tmp                  --> Y+3
-  item                 --> R12
-  index                --> R10
-    0256 D459      RCALL	push_gset4
-    0257 0169      MOVW	R12,R18
-    0258 2EA0      MOV	R10,R16
-    0259 9727      SBIW	R28,7
-    025A 940E07B6  CALL	0x7B6
-    025C 940E0825  CALL	0x825
-(0054) }
-(0055) 
-(0056) void insertPasswordItem(unsigned char index, passwordItem_t item)
-(0057) {
-(0058)     unsigned long tmp = 0;
-(0059) 
-(0060)     rw24c256(&(item.flags), 1, index*13+1, RW24C256WRITE);
-    025E 2422      CLR	R2
-    025F 822A      STD	Y+2,R2
-    0260 E08D      LDI	R24,0xD
-    0261 9D8A      MUL	R24,R10
-    0262 940E08E0  CALL	0x8E0
-    0264 0186      MOVW	R16,R12
-    0265 D2AA      RCALL	_rw24c256
-(0061) 
-(0062)     tmp = item.idCard;
-    0266 01F6      MOVW	R30,R12
-    0267 8021      LDD	R2,Z+1
-    0268 8032      LDD	R3,Z+2
-    0269 8043      LDD	R4,Z+3
-    026A 8054      LDD	R5,Z+4
-    026B 940E0801  CALL	0x801
-(0063)     rw24c256Int(&tmp, index*13+2, RW24C256WRITE);
-    026D 5F2E      SUBI	R18,0xFE
-    026E 940E0830  CALL	0x830
-    0270 D300      RCALL	_rw24c256Int
-(0064)     
-(0065)     tmp = item.passwordH;
-    0271 01F6      MOVW	R30,R12
-    0272 8025      LDD	R2,Z+5
-    0273 8036      LDD	R3,Z+6
-    0274 8047      LDD	R4,Z+7
-    0275 8450      LDD	R5,Z+8
-    0276 940E0801  CALL	0x801
-(0066)     rw24c256Int(&tmp, index*13+6, RW24C256WRITE);
-    0278 5F2A      SUBI	R18,0xFA
-    0279 940E0830  CALL	0x830
-    027B D2F5      RCALL	_rw24c256Int
-(0067)     
-(0068)     tmp = item.passwordL;
-    027C 01F6      MOVW	R30,R12
-    027D 8421      LDD	R2,Z+9
-    027E 8432      LDD	R3,Z+10
-    027F 8443      LDD	R4,Z+11
-    0280 8454      LDD	R5,Z+12
-    0281 940E0801  CALL	0x801
-(0069)     rw24c256Int(&tmp, index*13+10, RW24C256WRITE);
-    0283 5F26      SUBI	R18,0xF6
-    0284 940E0830  CALL	0x830
-    0286 D2EA      RCALL	_rw24c256Int
-(0070) 
-(0071)     return;
-    0287 9627      ADIW	R28,7
-    0288 D421      RCALL	pop_gset4
-    0289 9508      RET
+  item                 --> R20
+  index                --> R22
+    0256 D46B      RCALL	push_gset2
+    0257 01A9      MOVW	R20,R18
+    0258 2F60      MOV	R22,R16
+    0259 9723      SBIW	R28,3
+    025A 940E085D  CALL	0x85D
+    025C 940E08F4  CALL	0x8F4
+(0047) }
+(0048) 
+(0049) void insertPasswordItem(unsigned char index, passwordItem_t item)
+(0050) {
+(0051)     rw24c256(&(item.flags), 1, index*13+1, RW24C256WRITE);
+    025E 018A      MOVW	R16,R20
+    025F D2A5      RCALL	_rw24c256
+    0260 940E085D  CALL	0x85D
+(0052) 	
+(0053)     rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RW24C256WRITE);
+    0262 9602      ADIW	R24,2
+    0263 940E08CE  CALL	0x8CE
+    0265 5F0F      SUBI	R16,0xFF
+    0266 4F1F      SBCI	R17,0xFF
+    0267 D29D      RCALL	_rw24c256
+    0268 940E085D  CALL	0x85D
+(0054) 	
+(0055)     rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RW24C256WRITE);
+    026A 9606      ADIW	R24,6
+    026B 940E08CE  CALL	0x8CE
+    026D 5F0B      SUBI	R16,0xFB
+    026E 4F1F      SBCI	R17,0xFF
+    026F D295      RCALL	_rw24c256
+    0270 940E085D  CALL	0x85D
+(0056) 	
+(0057)     rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RW24C256WRITE);
+    0272 960A      ADIW	R24,0xA
+    0273 940E08CE  CALL	0x8CE
+    0275 5F07      SUBI	R16,0xF7
+    0276 4F1F      SBCI	R17,0xFF
+    0277 D28D      RCALL	_rw24c256
+(0058) 	
+(0059)     return;
+    0278 9623      ADIW	R28,3
+    0279 D43C      RCALL	pop_gset2
+    027A 9508      RET
 _writePasswordItemNum:
   num                  --> Y+3
-    028A 931A      ST	R17,-Y
-    028B 930A      ST	R16,-Y
-    028C 9723      SBIW	R28,3
-(0072) }
-(0073) 
-(0074) void writePasswordItemNum(unsigned char num)
-(0075) {
-(0076)     rw24c256(&num, 1, 0, RW24C256WRITE);
-    028D 2422      CLR	R2
-    028E 822A      STD	Y+2,R2
-    028F 940E08AB  CALL	0x8AB
-    0291 D27E      RCALL	_rw24c256
-(0077)     return;
-    0292 9625      ADIW	R28,5
-    0293 9508      RET
+    027B 931A      ST	R17,-Y
+    027C 930A      ST	R16,-Y
+    027D 9723      SBIW	R28,3
+(0060) }
+(0061) 
+(0062) void writePasswordItemNum(unsigned char num)
+(0063) {
+(0064)     rw24c256(&num, 1, 0, RW24C256WRITE);
+    027E 2422      CLR	R2
+    027F 822A      STD	Y+2,R2
+    0280 940E08B5  CALL	0x8B5
+    0282 D282      RCALL	_rw24c256
+(0065)     return;
+    0283 9625      ADIW	R28,5
+    0284 9508      RET
 _clear_pswd_status:
-    0294 D41F      RCALL	push_gset2
-    0295 940E0842  CALL	0x842
-(0078) }
+    0285 D43C      RCALL	push_gset2
+    0286 940E0806  CALL	0x806
+(0066) }
+(0067) 
+(0068) #define PASSWORDREADIDCARDUNKOWN    0
+(0069) #define PASSWORDREADIDCARDOK                1
+(0070) #define PASSWORDREADIDANDPSWDOK         2
+(0071) 
+(0072) static unsigned char password_read_flags = 0;
+(0073) static unsigned char current_index = 0;
+(0074) static unsigned char input_err_count = 0;
+(0075) 
+(0076) //You input xxx then password is 1xxx.
+(0077) static unsigned long passwordH = 1;
+(0078) static unsigned long passwordL = 1;
 (0079) 
-(0080) #define PASSWORDREADIDCARDUNKOWN    0
-(0081) #define PASSWORDREADIDCARDOK                1
-(0082) #define PASSWORDREADIDANDPSWDOK         2
-(0083) 
-(0084) static unsigned char password_read_flags = 0;
-(0085) static unsigned char current_index = 0;
-(0086) static unsigned char input_err_count = 0;
-(0087) 
-(0088) //You input xxx then password is 1xxx.
-(0089) static unsigned long passwordH = 1;
-(0090) static unsigned long passwordL = 1;
+(0080) static void clear_pswd_status(void)
+(0081) {
+(0082)     //clear last password input.
+(0083)     passwordH = 1;
+    0288 9350006B  STS	passwordH+1,R21
+    028A 9340006A  STS	passwordH,R20
+    028C 9370006D  STS	passwordH+3,R23
+    028E 9360006C  STS	passwordH+2,R22
+    0290 940E0806  CALL	0x806
+    0292 940E087E  CALL	0x87E
+(0084)     passwordL = 1;
+(0085)     tips_led_off();
+    0294 DF35      RCALL	_tips_led_off
+(0086)     password_read_flags = PASSWORDREADIDCARDUNKOWN;
+    0295 2422      CLR	R2
+    0296 92200067  STS	password_read_flags,R2
+(0087)     current_index = 0;
+    0298 92200068  STS	current_index,R2
+(0088)     stop_timer(PASSWORDTIMEOUTTIMER);
+    029A E001      LDI	R16,1
+    029B D188      RCALL	_stop_timer
+(0089)     return;
+    029C D419      RCALL	pop_gset2
+    029D 9508      RET
+(0090) }
 (0091) 
-(0092) static void clear_pswd_status(void)
-(0093) {
-(0094)     //clear last password input.
-(0095)     passwordH = 1;
-    0297 9350006B  STS	passwordH+1,R21
-    0299 9340006A  STS	passwordH,R20
-    029B 9370006D  STS	passwordH+3,R23
-    029D 9360006C  STS	passwordH+2,R22
-    029F 940E0835  CALL	0x835
-(0096)     passwordL = 1;
-(0097)     tips_led_off();
-    02A1 DF10      RCALL	_tips_led_off
-(0098)     password_read_flags = PASSWORDREADIDCARDUNKOWN;
-    02A2 2422      CLR	R2
-    02A3 92200067  STS	password_read_flags,R2
-(0099)     current_index = 0;
-    02A5 92200068  STS	current_index,R2
-(0100)     stop_timer(PASSWORDTIMEOUTTIMER);
-    02A7 E001      LDI	R16,1
-    02A8 D186      RCALL	_stop_timer
-(0101)     return;
-    02A9 D3FC      RCALL	pop_gset2
-    02AA 9508      RET
-(0102) }
-(0103) 
-(0104) //cannot input timeout.
-(0105) static void cannot_input_time_out(char timer)
-(0106) {
-(0107)     if(timer==PASSWORDTIMEOUTTIMER)
+(0092) //cannot input timeout.
+(0093) static void cannot_input_time_out(char timer)
+(0094) {
+(0095)     if(timer==PASSWORDTIMEOUTTIMER)
 _cannot_input_time_out:
   timer                --> R16
-    02AB 3001      CPI	R16,1
-    02AC F419      BNE	0x02B0
-(0108)         input_err_count = 0;
-    02AD 2422      CLR	R2
-    02AE 92200069  STS	input_err_count,R2
-(0109)     return;
-    02B0 9508      RET
+    029E 3001      CPI	R16,1
+    029F F419      BNE	0x02A3
+(0096)         input_err_count = 0;
+    02A0 2422      CLR	R2
+    02A1 92200069  STS	input_err_count,R2
+(0097)     return;
+    02A3 9508      RET
 _input_time_out:
   timer                --> R20
-    02B1 D404      RCALL	push_gset1
-    02B2 2F40      MOV	R20,R16
-(0110) }
-(0111) 
-(0112) //input timeout.
-(0113) static void input_time_out(char timer)
-(0114) {
-(0115)     if(timer==PASSWORDTIMEOUTTIMER)
-    02B3 3041      CPI	R20,1
-    02B4 F409      BNE	0x02B6
-(0116)         clear_pswd_status();
-    02B5 DFDE      RCALL	_clear_pswd_status
-(0117)     return;
-    02B6 D402      RCALL	pop_gset1
-    02B7 9508      RET
+    02A4 D41F      RCALL	push_gset1
+    02A5 2F40      MOV	R20,R16
+(0098) }
+(0099) 
+(0100) //input timeout.
+(0101) static void input_time_out(char timer)
+(0102) {
+(0103)     if(timer==PASSWORDTIMEOUTTIMER)
+    02A6 3041      CPI	R20,1
+    02A7 F409      BNE	0x02A9
+(0104)         clear_pswd_status();
+    02A8 DFDC      RCALL	_clear_pswd_status
+(0105)     return;
+    02A9 D41D      RCALL	pop_gset1
+    02AA 9508      RET
 _password_handle:
   current_item         --> Y+25
   pswd_item_num        --> R10
@@ -1024,424 +1001,425 @@ _password_handle:
   item                 --> Y+12
   code                 --> Y+48
   type                 --> R14
-    02B8 933A      ST	R19,-Y
-    02B9 932A      ST	R18,-Y
-    02BA D3F3      RCALL	push_gset5
-    02BB 2EE0      MOV	R14,R16
-    02BC 97A6      SBIW	R28,0x26
-(0118) }
-(0119) 
-(0120) void password_handle(char type, unsigned long code)
-(0121) {
-(0122)     unsigned char pswd_item_num = 0;
-    02BD 24AA      CLR	R10
-(0123)     unsigned char i;
-(0124)     passwordItem_t item;
-(0125) 
-(0126)     //if input error count is too large.
-(0127)     if(input_err_count>5)
-    02BE E085      LDI	R24,5
-    02BF 90200069  LDS	R2,input_err_count
-    02C1 1582      CP	R24,R2
-    02C2 F440      BCC	0x02CB
-(0128)     {
-(0129)         clear_pswd_status();
-    02C3 DFD0      RCALL	_clear_pswd_status
-(0130)         tips_err();
-    02C4 DEFE      RCALL	_tips_err
-(0131)         //set time out. 200ms*5*60
-(0132)         set_timer(PASSWORDTIMEOUTTIMER, 300, cannot_input_time_out);
-    02C5 E588      LDI	R24,0x58
-    02C6 940E089F  CALL	0x89F
-    02C8 E001      LDI	R16,1
-    02C9 D145      RCALL	_set_timer
-(0133)         return;
-    02CA C131      RJMP	0x03FC
-(0134)     }
-(0135)  
-(0136)     //read a card.
-(0137)     if(type==IDREADEDIDCARD)
-    02CB 20EE      TST	R14
-    02CC F009      BEQ	0x02CE
-    02CD C059      RJMP	0x0327
-(0138)     {
-(0139)         clear_pswd_status();
-    02CE DFC5      RCALL	_clear_pswd_status
-(0140)         //read paswd item num.
-(0141)         pswd_item_num = readPasswordItemNum();
-    02CF DF2F      RCALL	_readPasswordItemNum
-    02D0 2EA0      MOV	R10,R16
-(0142)         //loop find it.
-(0143)         for(i=0;i<pswd_item_num;++i)
-    02D1 24CC      CLR	R12
-    02D2 C039      RJMP	0x030C
-(0144)         {
-(0145)             //read a item.
-(0146)             item = readPasswordItem(i);
-    02D3 940E08FA  CALL	0x8FA
-    02D5 DF34      RCALL	_readPasswordItem
-(0147)             //if item need id card, and is this id card.
-(0148)             if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
-    02D6 842C      LDD	R2,Y+12
-    02D7 FE20      SBRS	R2,0
-    02D8 C032      RJMP	0x030B
-    02D9 940E07FB  CALL	0x7FB
-    02DB 01FE      MOVW	R30,R28
-    02DC 8465      LDD	R6,Z+13
-    02DD 8476      LDD	R7,Z+14
-    02DE 8487      LDD	R8,Z+15
-    02DF 8890      LDD	R9,Z+16
-    02E0 940E086B  CALL	0x86B
-    02E2 F009      BEQ	0x02E4
-    02E3 C027      RJMP	0x030B
-(0149)             {
-(0150)                 //need paswd.
-(0151)                 if(item.flags&PASSWORDFLAGS_PASSWORD)
-    02E4 842C      LDD	R2,Y+12
-    02E5 FE21      SBRS	R2,1
-    02E6 C00A      RJMP	0x02F1
-(0152)                 {
-(0153)                     //id card ok, but need password.
-(0154)                     //tips_id_ok();
-(0155)                     //id card ok, but not input password, led on.
-(0156)                     tips_led_on();
-    02E7 DEC6      RCALL	_tips_led_on
-(0157)                     current_index = i;
-    02E8 92C00068  STS	current_index,R12
-(0158)                     password_read_flags = PASSWORDREADIDCARDOK;
-    02EA E081      LDI	R24,1
-    02EB 93800067  STS	password_read_flags,R24
-    02ED 940E08B3  CALL	0x8B3
-(0159)                     //set time out. 200ms*5*30
-(0160)                     set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
-    02EF D11F      RCALL	_set_timer
-(0161)                 }
-    02F0 C10B      RJMP	0x03FC
-(0162)                 else //only id card.
-(0163)                 {
-(0164)                     //record log
-(0165)                     log(LOGTYPEIDOK, i, code, 0, 0);
-    02F1 940E07B6  CALL	0x7B6
-    02F3 8748      STD	Y+8,R20
-    02F4 8759      STD	Y+9,R21
-    02F5 876A      STD	Y+10,R22
-    02F6 877B      STD	Y+11,R23
-    02F7 940E07B6  CALL	0x7B6
-    02F9 834C      STD	Y+4,R20
-    02FA 835D      STD	Y+5,R21
-    02FB 836E      STD	Y+6,R22
-    02FC 837F      STD	Y+7,R23
-    02FD 940E07FB  CALL	0x7FB
-    02FF 940E0882  CALL	0x882
-    0301 2D2C      MOV	R18,R12
-    0302 E001      LDI	R16,1
-    0303 D199      RCALL	_log
-(0166)                     //clear pswd statuc.
-(0167)                     clear_pswd_status();
-    0304 DF8F      RCALL	_clear_pswd_status
-(0168)                     tips_ok();
-    0305 DEB4      RCALL	_tips_ok
-(0169)                     locker_unlock();
-    0306 D198      RCALL	_locker_unlock
-(0170)                     //error count clear.
-(0171)                     input_err_count = 0;
-    0307 2422      CLR	R2
-    0308 92200069  STS	input_err_count,R2
-(0172)                 } //else
-(0173)                 return;
-    030A C0F1      RJMP	0x03FC
-    030B 94C3      INC	R12
-    030C 14CA      CP	R12,R10
-    030D F408      BCC	0x030F
-    030E CFC4      RJMP	0x02D3
-(0174)             }  //if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
-(0175)         }	  //for(i=0;i<pswd_item_num;++i)
-(0176)         //unkown id card.
-(0177)         log(LOGTYPEIDERR, 0, code, 0, 0);
-    030F 940E07B6  CALL	0x7B6
-    0311 8748      STD	Y+8,R20
-    0312 8759      STD	Y+9,R21
-    0313 876A      STD	Y+10,R22
-    0314 877B      STD	Y+11,R23
-    0315 940E07B6  CALL	0x7B6
-    0317 834C      STD	Y+4,R20
-    0318 835D      STD	Y+5,R21
-    0319 836E      STD	Y+6,R22
-    031A 837F      STD	Y+7,R23
-    031B 940E07FB  CALL	0x7FB
-    031D 940E0882  CALL	0x882
-    031F 2722      CLR	R18
-    0320 E002      LDI	R16,2
-    0321 D17B      RCALL	_log
-(0178)         //clear password.
-(0179)         clear_pswd_status();
-    0322 DF71      RCALL	_clear_pswd_status
-(0180)         //error password and log.
-(0181)         tips_err();
-    0323 DE9F      RCALL	_tips_err
-    0324 940E0899  CALL	0x899
-(0182)         //error count ++
-(0183)         ++input_err_count;
-(0184)         return;
-    0326 C0D5      RJMP	0x03FC
-(0185)     }	  //if(type==IDREADEDIDCARD)
-(0186)     else if(type==IDREADEDKEYPAD) // read a keypad input.
-    0327 2D8E      MOV	R24,R14
-    0328 3081      CPI	R24,1
-    0329 F009      BEQ	0x032B
-    032A C0D1      RJMP	0x03FC
-(0187)     {
-(0188)         code &= 0x0000000f;
-    032B E04F      LDI	R20,0xF
-    032C 940E07BB  CALL	0x7BB
-    032E 940E082B  CALL	0x82B
-    0330 940E0847  CALL	0x847
-    0332 01FE      MOVW	R30,R28
-    0333 AA20      STD	Z+48,R2
-    0334 AA31      STD	Z+49,R3
-    0335 AA42      STD	Z+50,R4
-    0336 AA53      STD	Z+51,R5
-(0189)         if(code == 0x0000000a)  //*
-    0337 E04A      LDI	R20,0xA
-    0338 940E07BB  CALL	0x7BB
-    033A 940E082B  CALL	0x82B
-    033C 940E08F0  CALL	0x8F0
-    033E F411      BNE	0x0341
-(0190)         {
-(0191)             //clear password.
-(0192)             clear_pswd_status();
-    033F DF54      RCALL	_clear_pswd_status
-(0193)         }
-    0340 C0BB      RJMP	0x03FC
-(0194)         else if(code == 0x0000000b) //#
-    0341 E04B      LDI	R20,0xB
-    0342 940E07BB  CALL	0x7BB
-    0344 940E082B  CALL	0x82B
-    0346 940E08F0  CALL	0x8F0
-    0348 F009      BEQ	0x034A
-    0349 C07D      RJMP	0x03C7
-(0195)         {
-(0196)             //need id card password.
-(0197)             if(password_read_flags==PASSWORDREADIDCARDOK)
-    034A 91800067  LDS	R24,password_read_flags
-    034C 3081      CPI	R24,1
-    034D F009      BEQ	0x034F
-    034E C035      RJMP	0x0384
-(0198)             {
-(0199)                 passwordItem_t current_item = readPasswordItem(current_index);
-    034F 91200068  LDS	R18,current_index
-    0351 018E      MOVW	R16,R28
-    0352 5E07      SUBI	R16,0xE7
-    0353 4F1F      SBCI	R17,0xFF
-    0354 DEB5      RCALL	_readPasswordItem
-    0355 940E07C0  CALL	0x7C0
-(0200)                 //password is ok.
-(0201)                 if((current_item.passwordH==passwordH)&&(current_item.passwordL==passwordL))
-    0357 01FE      MOVW	R30,R28
-    0358 8C66      LDD	R6,Z+30
-    0359 8C77      LDD	R7,Z+31
-    035A A080      LDD	R8,Z+32
-    035B A091      LDD	R9,Z+33
-    035C 940E086B  CALL	0x86B
-    035E F009      BEQ	0x0360
-    035F C017      RJMP	0x0377
-    0360 940E07DB  CALL	0x7DB
-    0362 01FE      MOVW	R30,R28
-    0363 A062      LDD	R6,Z+34
-    0364 A073      LDD	R7,Z+35
-    0365 A084      LDD	R8,Z+36
-    0366 A095      LDD	R9,Z+37
-    0367 940E086B  CALL	0x86B
-    0369 F469      BNE	0x0377
-    036A 940E079C  CALL	0x79C
-    036C 940E084C  CALL	0x84C
-(0202)                 {
-(0203)                     log(LOGTYPEIDANDPSWDOK, current_index, current_item.idCard, passwordH, passwordL);
-    036E E003      LDI	R16,3
-    036F D12D      RCALL	_log
-(0204)                     //clear password status.
-(0205)                     clear_pswd_status();
-    0370 DF23      RCALL	_clear_pswd_status
-(0206)                     //unlock and write log.
-(0207)                     tips_ok();
-    0371 DE48      RCALL	_tips_ok
-(0208)                     locker_unlock();
-    0372 D12C      RCALL	_locker_unlock
-(0209)                     //error count clear.
-(0210)                     input_err_count = 0;
-    0373 2422      CLR	R2
-    0374 92200069  STS	input_err_count,R2
-(0211)                 }
-    0376 C085      RJMP	0x03FC
-(0212)                 else //password is error.
-(0213)                 {
-(0214)                     log(LOGTYPEIDANDPSWDERR, current_index, current_item.idCard, passwordH, passwordL);
-    0377 940E07DB  CALL	0x7DB
-    0379 940E079C  CALL	0x79C
-    037B 940E084C  CALL	0x84C
-    037D E004      LDI	R16,4
-    037E D11E      RCALL	_log
-(0215)                     //clear password.
-(0216)                     clear_pswd_status();
-    037F DF14      RCALL	_clear_pswd_status
-(0217)                     //error password and log.
-(0218)                     tips_err();
-    0380 DE42      RCALL	_tips_err
-    0381 940E0899  CALL	0x899
-(0219)                     //error count ++.
-(0220)                     ++input_err_count;
-(0221)                 }
-(0222)             }
-    0383 C078      RJMP	0x03FC
-(0223)             else //only password.
-(0224)             {
-(0225)                 //read paswd item num.
-(0226)                 pswd_item_num = readPasswordItemNum();
-    0384 DE7A      RCALL	_readPasswordItemNum
-    0385 2EA0      MOV	R10,R16
-(0227)                 //loop find it.
-(0228)                 for(i=0;i<pswd_item_num;++i)
-    0386 24CC      CLR	R12
-    0387 C02C      RJMP	0x03B4
-(0229)                 {
-(0230)                     //read a item.
-(0231)                     item = readPasswordItem(i);
-    0388 940E08FA  CALL	0x8FA
-    038A DE7F      RCALL	_readPasswordItem
-(0232)                     //if item need id card, and is this id card.
-(0233)                     if((item.flags==PASSWORDFLAGS_PASSWORD)&&(item.passwordH==passwordH)
-    038B 858C      LDD	R24,Y+12
-    038C 3082      CPI	R24,2
-    038D F009      BEQ	0x038F
-    038E C024      RJMP	0x03B3
-    038F 940E07C0  CALL	0x7C0
-    0391 01FE      MOVW	R30,R28
-    0392 8861      LDD	R6,Z+17
-    0393 8872      LDD	R7,Z+18
-    0394 8883      LDD	R8,Z+19
-    0395 8894      LDD	R9,Z+20
-    0396 940E086B  CALL	0x86B
-    0398 F4D1      BNE	0x03B3
-    0399 940E07DB  CALL	0x7DB
-    039B 01FE      MOVW	R30,R28
-    039C 8865      LDD	R6,Z+21
-    039D 8876      LDD	R7,Z+22
-    039E 8887      LDD	R8,Z+23
-    039F 8C90      LDD	R9,Z+24
-    03A0 940E086B  CALL	0x86B
-    03A2 F481      BNE	0x03B3
-    03A3 940E079C  CALL	0x79C
-    03A5 940E07B6  CALL	0x7B6
-    03A7 940E08EB  CALL	0x8EB
-(0234)                         &&(item.passwordL==passwordL))
-(0235)                     {
-(0236)                         log(LOGTYPEPSWDOK, i, 0, passwordH, passwordL);
-    03A9 2D2C      MOV	R18,R12
-    03AA E005      LDI	R16,5
-    03AB D0F1      RCALL	_log
-(0237)                         //clear password.
-(0238)                         clear_pswd_status();
-    03AC DEE7      RCALL	_clear_pswd_status
-(0239)                         //password is right. unlock and log.
-(0240)                         tips_ok();
-    03AD DE0C      RCALL	_tips_ok
-(0241)                         locker_unlock();
-    03AE D0F0      RCALL	_locker_unlock
-(0242)                         //error count clear.
-(0243)                         input_err_count = 0;
-    03AF 2422      CLR	R2
-    03B0 92200069  STS	input_err_count,R2
-(0244)                         return;
-    03B2 C049      RJMP	0x03FC
-    03B3 94C3      INC	R12
-    03B4 14CA      CP	R12,R10
-    03B5 F408      BCC	0x03B7
-    03B6 CFD1      RJMP	0x0388
-(0245)                     }
-(0246)                 }
-(0247)                 //password is error.
-(0248)                 log(LOGTYPEPSWDERR, 0, 0, passwordH, passwordL);
-    03B7 940E07DB  CALL	0x7DB
-    03B9 940E079C  CALL	0x79C
-    03BB 940E07B6  CALL	0x7B6
-    03BD 940E08EB  CALL	0x8EB
-    03BF 2722      CLR	R18
-    03C0 E006      LDI	R16,6
-    03C1 D0DB      RCALL	_log
-(0249)                 //clear password.
-(0250)                 clear_pswd_status();
-    03C2 DED1      RCALL	_clear_pswd_status
-(0251)                 //password is error, and log.
-(0252)                 tips_err();
-    03C3 DDFF      RCALL	_tips_err
-    03C4 940E0899  CALL	0x899
-(0253)                 //error count++.
-(0254)                 ++input_err_count;
-(0255)                 return;
-    03C6 C035      RJMP	0x03FC
-(0256)             }
-(0257)         }
-(0258)         else
-(0259)         {
-(0260)             tips_led_on();
-    03C7 DDE6      RCALL	_tips_led_on
-    03C8 940E08B3  CALL	0x8B3
-(0261)             //set time out. 200ms*5*30
-(0262)             set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
-    03CA D044      RCALL	_set_timer
-    03CB 940E07DB  CALL	0x7DB
-(0263)             passwordL = passwordL*10 + code;
-    03CD E04A      LDI	R20,0xA
-    03CE E050      LDI	R21,0
-    03CF E060      LDI	R22,0
-    03D0 E070      LDI	R23,0
-    03D1 940E08FF  CALL	0x8FF
-    03D3 018A      MOVW	R16,R20
-    03D4 019B      MOVW	R18,R22
-    03D5 D2A4      RCALL	empy32s
-    03D6 0118      MOVW	R2,R16
-    03D7 0129      MOVW	R4,R18
-    03D8 01FE      MOVW	R30,R28
-    03D9 A860      LDD	R6,Z+48
-    03DA A871      LDD	R7,Z+49
-    03DB A882      LDD	R8,Z+50
-    03DC A893      LDD	R9,Z+51
-    03DD 0C26      ADD	R2,R6
-    03DE 1C37      ADC	R3,R7
-    03DF 1C48      ADC	R4,R8
-    03E0 1C59      ADC	R5,R9
-    03E1 9230006F  STS	passwordL+1,R3
-    03E3 9220006E  STS	passwordL,R2
-    03E5 92500071  STS	passwordL+3,R5
-    03E7 92400070  STS	passwordL+2,R4
-(0264)             //passwordH save password hight 9 num.
-(0265)             if(passwordL>999999999)
-    03E9 EF4F      LDI	R20,0xFF
-    03EA EC59      LDI	R21,0xC9
-    03EB E96A      LDI	R22,0x9A
-    03EC E37B      LDI	R23,0x3B
-    03ED 1542      CP	R20,R2
-    03EE 0553      CPC	R21,R3
-    03EF 0564      CPC	R22,R4
-    03F0 0575      CPC	R23,R5
-    03F1 F450      BCC	0x03FC
-(0266)             {
-(0267)                 passwordH = passwordL;
-    03F2 9230006B  STS	passwordH+1,R3
-    03F4 9220006A  STS	passwordH,R2
-    03F6 9250006D  STS	passwordH+3,R5
-    03F8 9240006C  STS	passwordH+2,R4
-    03FA 940E0835  CALL	0x835
-(0268)                 passwordL = 1;
-(0269)             }
-(0270)         }
-(0271)     }
-(0272)     return;
-    03FC 96A6      ADIW	R28,0x26
-    03FD D2AE      RCALL	pop_gset5
-    03FE 9622      ADIW	R28,2
-    03FF 9508      RET
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\timer.c
+    02AB 933A      ST	R19,-Y
+    02AC 932A      ST	R18,-Y
+    02AD D40E      RCALL	push_gset5
+    02AE 2EE0      MOV	R14,R16
+    02AF 97A6      SBIW	R28,0x26
+(0106) }
+(0107) 
+(0108) void password_handle(char type, unsigned long code)
+(0109) {
+(0110)     unsigned char pswd_item_num = 0;
+    02B0 24AA      CLR	R10
+(0111)     unsigned char i;
+(0112)     passwordItem_t item;
+(0113) 
+(0114)     //if input error count is too large.
+(0115)     if(input_err_count>5)
+    02B1 E085      LDI	R24,5
+    02B2 90200069  LDS	R2,input_err_count
+    02B4 1582      CP	R24,R2
+    02B5 F440      BCC	0x02BE
+(0116)     {
+(0117)         clear_pswd_status();
+    02B6 DFCE      RCALL	_clear_pswd_status
+(0118)         tips_err();
+    02B7 DF23      RCALL	_tips_err
+(0119)         //set time out. 200ms*5*60
+(0120)         set_timer(PASSWORDTIMEOUTTIMER, 300, cannot_input_time_out);
+    02B8 E588      LDI	R24,0x58
+    02B9 940E089B  CALL	0x89B
+    02BB E001      LDI	R16,1
+    02BC D147      RCALL	_set_timer
+(0121)         return;
+    02BD C133      RJMP	0x03F1
+(0122)     }
+(0123)  
+(0124)     //read a card.
+(0125)     if(type==IDREADEDIDCARD)
+    02BE 20EE      TST	R14
+    02BF F009      BEQ	0x02C1
+    02C0 C059      RJMP	0x031A
+(0126)     {
+(0127)         clear_pswd_status();
+    02C1 DFC3      RCALL	_clear_pswd_status
+(0128)         //read paswd item num.
+(0129)         pswd_item_num = readPasswordItemNum();
+    02C2 DF54      RCALL	_readPasswordItemNum
+    02C3 2EA0      MOV	R10,R16
+(0130)         //loop find it.
+(0131)         for(i=0;i<pswd_item_num;++i)
+    02C4 24CC      CLR	R12
+    02C5 C039      RJMP	0x02FF
+(0132)         {
+(0133)             //read a item.
+(0134)             item = readPasswordItem(i);
+    02C6 940E08F9  CALL	0x8F9
+    02C8 DF59      RCALL	_readPasswordItem
+(0135)             //if item need id card, and is this id card.
+(0136)             if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
+    02C9 842C      LDD	R2,Y+12
+    02CA FE20      SBRS	R2,0
+    02CB C032      RJMP	0x02FE
+    02CC 940E080B  CALL	0x80B
+    02CE 01FE      MOVW	R30,R28
+    02CF 8465      LDD	R6,Z+13
+    02D0 8476      LDD	R7,Z+14
+    02D1 8487      LDD	R8,Z+15
+    02D2 8890      LDD	R9,Z+16
+    02D3 940E0842  CALL	0x842
+    02D5 F009      BEQ	0x02D7
+    02D6 C027      RJMP	0x02FE
+(0137)             {
+(0138)                 //need paswd.
+(0139)                 if(item.flags&PASSWORDFLAGS_PASSWORD)
+    02D7 842C      LDD	R2,Y+12
+    02D8 FE21      SBRS	R2,1
+    02D9 C00A      RJMP	0x02E4
+(0140)                 {
+(0141)                     //id card ok, but need password.
+(0142)                     //tips_id_ok();
+(0143)                     //id card ok, but not input password, led on.
+(0144)                     tips_led_on();
+    02DA DEEB      RCALL	_tips_led_on
+(0145)                     current_index = i;
+    02DB 92C00068  STS	current_index,R12
+(0146)                     password_read_flags = PASSWORDREADIDCARDOK;
+    02DD E081      LDI	R24,1
+    02DE 93800067  STS	password_read_flags,R24
+    02E0 940E08AD  CALL	0x8AD
+(0147)                     //set time out. 200ms*5*30
+(0148)                     set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
+    02E2 D121      RCALL	_set_timer
+(0149)                 }
+    02E3 C10D      RJMP	0x03F1
+(0150)                 else //only id card.
+(0151)                 {
+(0152)                     //record log
+(0153)                     log(LOGTYPEIDOK, i, code, 0, 0);
+    02E4 940E07CC  CALL	0x7CC
+    02E6 8748      STD	Y+8,R20
+    02E7 8759      STD	Y+9,R21
+    02E8 876A      STD	Y+10,R22
+    02E9 877B      STD	Y+11,R23
+    02EA 940E07CC  CALL	0x7CC
+    02EC 834C      STD	Y+4,R20
+    02ED 835D      STD	Y+5,R21
+    02EE 836E      STD	Y+6,R22
+    02EF 837F      STD	Y+7,R23
+    02F0 940E080B  CALL	0x80B
+    02F2 940E086F  CALL	0x86F
+    02F4 2D2C      MOV	R18,R12
+    02F5 E001      LDI	R16,1
+    02F6 D19B      RCALL	_log
+(0154)                     //clear pswd statuc.
+(0155)                     clear_pswd_status();
+    02F7 DF8D      RCALL	_clear_pswd_status
+(0156)                     tips_ok();
+    02F8 DED9      RCALL	_tips_ok
+(0157)                     locker_unlock();
+    02F9 D19A      RCALL	_locker_unlock
+(0158)                     //error count clear.
+(0159)                     input_err_count = 0;
+    02FA 2422      CLR	R2
+    02FB 92200069  STS	input_err_count,R2
+(0160)                 } //else
+(0161)                 return;
+    02FD C0F3      RJMP	0x03F1
+    02FE 94C3      INC	R12
+    02FF 14CA      CP	R12,R10
+    0300 F408      BCC	0x0302
+    0301 CFC4      RJMP	0x02C6
+(0162)             }  //if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
+(0163)         }	  //for(i=0;i<pswd_item_num;++i)
+(0164)         //unkown id card.
+(0165)         log(LOGTYPEIDERR, 0, code, 0, 0);
+    0302 940E07CC  CALL	0x7CC
+    0304 8748      STD	Y+8,R20
+    0305 8759      STD	Y+9,R21
+    0306 876A      STD	Y+10,R22
+    0307 877B      STD	Y+11,R23
+    0308 940E07CC  CALL	0x7CC
+    030A 834C      STD	Y+4,R20
+    030B 835D      STD	Y+5,R21
+    030C 836E      STD	Y+6,R22
+    030D 837F      STD	Y+7,R23
+    030E 940E080B  CALL	0x80B
+    0310 940E086F  CALL	0x86F
+    0312 2722      CLR	R18
+    0313 E002      LDI	R16,2
+    0314 D17D      RCALL	_log
+(0166)         //clear password.
+(0167)         clear_pswd_status();
+    0315 DF6F      RCALL	_clear_pswd_status
+(0168)         //error password and log.
+(0169)         tips_err();
+    0316 DEC4      RCALL	_tips_err
+    0317 940E08A1  CALL	0x8A1
+(0170)         //error count ++
+(0171)         ++input_err_count;
+(0172)         return;
+    0319 C0D7      RJMP	0x03F1
+(0173)     }	  //if(type==IDREADEDIDCARD)
+(0174)     else if(type==IDREADEDKEYPAD) // read a keypad input.
+    031A 2D8E      MOV	R24,R14
+    031B 3081      CPI	R24,1
+    031C F009      BEQ	0x031E
+    031D C0D3      RJMP	0x03F1
+(0175)     {
+(0176)         code &= 0x0000000f;
+    031E E04F      LDI	R20,0xF
+    031F 940E07C7  CALL	0x7C7
+    0321 940E0824  CALL	0x824
+    0323 940E0829  CALL	0x829
+    0325 01FE      MOVW	R30,R28
+    0326 AA20      STD	Z+48,R2
+    0327 AA31      STD	Z+49,R3
+    0328 AA42      STD	Z+50,R4
+    0329 AA53      STD	Z+51,R5
+(0177)         if(code == 0x0000000a)  //*
+    032A E04A      LDI	R20,0xA
+    032B 940E07C7  CALL	0x7C7
+    032D 940E0824  CALL	0x824
+    032F 940E08FE  CALL	0x8FE
+    0331 F411      BNE	0x0334
+(0178)         {
+(0179)             //clear password.
+(0180)             clear_pswd_status();
+    0332 DF52      RCALL	_clear_pswd_status
+(0181)         }
+    0333 C0BD      RJMP	0x03F1
+(0182)         else if(code == 0x0000000b) //#
+    0334 E04B      LDI	R20,0xB
+    0335 940E07C7  CALL	0x7C7
+    0337 940E0824  CALL	0x824
+    0339 940E08FE  CALL	0x8FE
+    033B F009      BEQ	0x033D
+    033C C07D      RJMP	0x03BA
+(0183)         {
+(0184)             //need id card password.
+(0185)             if(password_read_flags==PASSWORDREADIDCARDOK)
+    033D 91800067  LDS	R24,password_read_flags
+    033F 3081      CPI	R24,1
+    0340 F009      BEQ	0x0342
+    0341 C035      RJMP	0x0377
+(0186)             {
+(0187)                 passwordItem_t current_item = readPasswordItem(current_index);
+    0342 91200068  LDS	R18,current_index
+    0344 018E      MOVW	R16,R28
+    0345 5E07      SUBI	R16,0xE7
+    0346 4F1F      SBCI	R17,0xFF
+    0347 DEDA      RCALL	_readPasswordItem
+    0348 940E07DA  CALL	0x7DA
+(0188)                 //password is ok.
+(0189)                 if((current_item.passwordH==passwordH)&&(current_item.passwordL==passwordL))
+    034A 01FE      MOVW	R30,R28
+    034B 8C66      LDD	R6,Z+30
+    034C 8C77      LDD	R7,Z+31
+    034D A080      LDD	R8,Z+32
+    034E A091      LDD	R9,Z+33
+    034F 940E0842  CALL	0x842
+    0351 F009      BEQ	0x0353
+    0352 C017      RJMP	0x036A
+    0353 940E07E3  CALL	0x7E3
+    0355 01FE      MOVW	R30,R28
+    0356 A062      LDD	R6,Z+34
+    0357 A073      LDD	R7,Z+35
+    0358 A084      LDD	R8,Z+36
+    0359 A095      LDD	R9,Z+37
+    035A 940E0842  CALL	0x842
+    035C F469      BNE	0x036A
+    035D 940E07AD  CALL	0x7AD
+    035F 940E082E  CALL	0x82E
+(0190)                 {
+(0191)                     log(LOGTYPEIDANDPSWDOK, current_index, current_item.idCard, passwordH, passwordL);
+    0361 E003      LDI	R16,3
+    0362 D12F      RCALL	_log
+(0192)                     //clear password status.
+(0193)                     clear_pswd_status();
+    0363 DF21      RCALL	_clear_pswd_status
+(0194)                     //unlock and write log.
+(0195)                     tips_ok();
+    0364 DE6D      RCALL	_tips_ok
+(0196)                     locker_unlock();
+    0365 D12E      RCALL	_locker_unlock
+(0197)                     //error count clear.
+(0198)                     input_err_count = 0;
+    0366 2422      CLR	R2
+    0367 92200069  STS	input_err_count,R2
+(0199)                 }
+    0369 C087      RJMP	0x03F1
+(0200)                 else //password is error.
+(0201)                 {
+(0202)                     log(LOGTYPEIDANDPSWDERR, current_index, current_item.idCard, passwordH, passwordL);
+    036A 940E07E3  CALL	0x7E3
+    036C 940E07AD  CALL	0x7AD
+    036E 940E082E  CALL	0x82E
+    0370 E004      LDI	R16,4
+    0371 D120      RCALL	_log
+(0203)                     //clear password.
+(0204)                     clear_pswd_status();
+    0372 DF12      RCALL	_clear_pswd_status
+(0205)                     //error password and log.
+(0206)                     tips_err();
+    0373 DE67      RCALL	_tips_err
+    0374 940E08A1  CALL	0x8A1
+(0207)                     //error count ++.
+(0208)                     ++input_err_count;
+(0209)                 }
+(0210)             }
+    0376 C07A      RJMP	0x03F1
+(0211)             else //only password.
+(0212)             {
+(0213)                 //read paswd item num.
+(0214)                 pswd_item_num = readPasswordItemNum();
+    0377 DE9F      RCALL	_readPasswordItemNum
+    0378 2EA0      MOV	R10,R16
+(0215)                 //loop find it.
+(0216)                 for(i=0;i<pswd_item_num;++i)
+    0379 24CC      CLR	R12
+    037A C02C      RJMP	0x03A7
+(0217)                 {
+(0218)                     //read a item.
+(0219)                     item = readPasswordItem(i);
+    037B 940E08F9  CALL	0x8F9
+    037D DEA4      RCALL	_readPasswordItem
+(0220)                     //if item need id card, and is this id card.
+(0221)                     if((item.flags==PASSWORDFLAGS_PASSWORD)&&(item.passwordH==passwordH)
+    037E 858C      LDD	R24,Y+12
+    037F 3082      CPI	R24,2
+    0380 F009      BEQ	0x0382
+    0381 C024      RJMP	0x03A6
+    0382 940E07DA  CALL	0x7DA
+    0384 01FE      MOVW	R30,R28
+    0385 8861      LDD	R6,Z+17
+    0386 8872      LDD	R7,Z+18
+    0387 8883      LDD	R8,Z+19
+    0388 8894      LDD	R9,Z+20
+    0389 940E0842  CALL	0x842
+    038B F4D1      BNE	0x03A6
+    038C 940E07E3  CALL	0x7E3
+    038E 01FE      MOVW	R30,R28
+    038F 8865      LDD	R6,Z+21
+    0390 8876      LDD	R7,Z+22
+    0391 8887      LDD	R8,Z+23
+    0392 8C90      LDD	R9,Z+24
+    0393 940E0842  CALL	0x842
+    0395 F481      BNE	0x03A6
+    0396 940E07AD  CALL	0x7AD
+    0398 940E07CC  CALL	0x7CC
+    039A 940E08EF  CALL	0x8EF
+(0222)                         &&(item.passwordL==passwordL))
+(0223)                     {
+(0224)                         log(LOGTYPEPSWDOK, i, 0, passwordH, passwordL);
+    039C 2D2C      MOV	R18,R12
+    039D E005      LDI	R16,5
+    039E D0F3      RCALL	_log
+(0225)                         //clear password.
+(0226)                         clear_pswd_status();
+    039F DEE5      RCALL	_clear_pswd_status
+(0227)                         //password is right. unlock and log.
+(0228)                         tips_ok();
+    03A0 DE31      RCALL	_tips_ok
+(0229)                         locker_unlock();
+    03A1 D0F2      RCALL	_locker_unlock
+(0230)                         //error count clear.
+(0231)                         input_err_count = 0;
+    03A2 2422      CLR	R2
+    03A3 92200069  STS	input_err_count,R2
+(0232)                         return;
+    03A5 C04B      RJMP	0x03F1
+    03A6 94C3      INC	R12
+    03A7 14CA      CP	R12,R10
+    03A8 F408      BCC	0x03AA
+    03A9 CFD1      RJMP	0x037B
+(0233)                     }
+(0234)                 }
+(0235)                 //password is error.
+(0236)                 log(LOGTYPEPSWDERR, 0, 0, passwordH, passwordL);
+    03AA 940E07E3  CALL	0x7E3
+    03AC 940E07AD  CALL	0x7AD
+    03AE 940E07CC  CALL	0x7CC
+    03B0 940E08EF  CALL	0x8EF
+    03B2 2722      CLR	R18
+    03B3 E006      LDI	R16,6
+    03B4 D0DD      RCALL	_log
+(0237)                 //clear password.
+(0238)                 clear_pswd_status();
+    03B5 DECF      RCALL	_clear_pswd_status
+(0239)                 //password is error, and log.
+(0240)                 tips_err();
+    03B6 DE24      RCALL	_tips_err
+    03B7 940E08A1  CALL	0x8A1
+(0241)                 //error count++.
+(0242)                 ++input_err_count;
+(0243)                 return;
+    03B9 C037      RJMP	0x03F1
+(0244)             }
+(0245)         }
+(0246)         else
+(0247)         {
+(0248)             tips_led_on();
+    03BA DE0B      RCALL	_tips_led_on
+    03BB 940E08AD  CALL	0x8AD
+(0249)             //set time out. 200ms*5*30
+(0250)             set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
+    03BD D046      RCALL	_set_timer
+    03BE 940E07E3  CALL	0x7E3
+(0251)             passwordL = passwordL*10 + code;
+    03C0 E04A      LDI	R20,0xA
+    03C1 E050      LDI	R21,0
+    03C2 E060      LDI	R22,0
+    03C3 E070      LDI	R23,0
+    03C4 940E08EA  CALL	0x8EA
+    03C6 018A      MOVW	R16,R20
+    03C7 019B      MOVW	R18,R22
+    03C8 D2C1      RCALL	empy32u
+    03C9 0118      MOVW	R2,R16
+    03CA 0129      MOVW	R4,R18
+    03CB 01FE      MOVW	R30,R28
+    03CC A860      LDD	R6,Z+48
+    03CD A871      LDD	R7,Z+49
+    03CE A882      LDD	R8,Z+50
+    03CF A893      LDD	R9,Z+51
+    03D0 0C26      ADD	R2,R6
+    03D1 1C37      ADC	R3,R7
+    03D2 1C48      ADC	R4,R8
+    03D3 1C59      ADC	R5,R9
+    03D4 9230006F  STS	passwordL+1,R3
+    03D6 9220006E  STS	passwordL,R2
+    03D8 92500071  STS	passwordL+3,R5
+    03DA 92400070  STS	passwordL+2,R4
+(0252)             //passwordH save password hight 9 num.
+(0253)             if(passwordL>999999999)
+    03DC EF4F      LDI	R20,0xFF
+    03DD EC59      LDI	R21,0xC9
+    03DE E96A      LDI	R22,0x9A
+    03DF E37B      LDI	R23,0x3B
+    03E0 1542      CP	R20,R2
+    03E1 0553      CPC	R21,R3
+    03E2 0564      CPC	R22,R4
+    03E3 0575      CPC	R23,R5
+    03E4 F460      BCC	0x03F1
+(0254)             {
+(0255)                 passwordH = passwordL;
+    03E5 9230006B  STS	passwordH+1,R3
+    03E7 9220006A  STS	passwordH,R2
+    03E9 9250006D  STS	passwordH+3,R5
+    03EB 9240006C  STS	passwordH+2,R4
+    03ED 940E0806  CALL	0x806
+    03EF 940E087E  CALL	0x87E
+(0256)                 passwordL = 1;
+(0257)             }
+(0258)         }
+(0259)     }
+(0260)     return;
+    03F1 96A6      ADIW	R28,0x26
+    03F2 D2C7      RCALL	pop_gset5
+    03F3 9622      ADIW	R28,2
+    03F4 9508      RET
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\timer.c
 (0001) #include<iom16v.h>
 (0002) #include <macros.h>
 (0003) 
@@ -1452,49 +1430,49 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\timer.c
 (0008)     //enable interrupt.
 (0009)     SREG |= 0x80;
 _timer_init:
-    0400 9478      BSET	7
+    03F5 9478      BSET	7
 (0010)     //timer0 normal mode.ck/1024.
 (0011)     TCCR0 |= 0x05;
-    0401 B783      IN	R24,0x33
-    0402 6085      ORI	R24,5
-    0403 BF83      OUT	0x33,R24
+    03F6 B783      IN	R24,0x33
+    03F7 6085      ORI	R24,5
+    03F8 BF83      OUT	0x33,R24
 (0012)     //init TCNT0.
 (0013)     TCNT0 = 0;
-    0404 2422      CLR	R2
-    0405 BE22      OUT	0x32,R2
+    03F9 2422      CLR	R2
+    03FA BE22      OUT	0x32,R2
 (0014)     //TIMSK
 (0015)     //TIMSK |= 0x01;
 (0016)     return; 
-    0406 9508      RET
+    03FB 9508      RET
 (0017) }
 (0018) //cpu timer0 start
 (0019) static void t0_start(void)
 (0020) {
 (0021)     TIMSK |= 0x01;
 _t0_start:
-    0407 B789      IN	R24,0x39
-    0408 6081      ORI	R24,1
-    0409 BF89      OUT	0x39,R24
+    03FC B789      IN	R24,0x39
+    03FD 6081      ORI	R24,1
+    03FE BF89      OUT	0x39,R24
 (0022)     return;
-    040A 9508      RET
+    03FF 9508      RET
 (0023) }
 (0024) //cpu timer0 stop
 (0025) static void t0_stop(void)
 (0026) {
 (0027)     TIMSK &= 0xfe;
 _t0_stop:
-    040B B789      IN	R24,0x39
-    040C 7F8E      ANDI	R24,0xFE
-    040D BF89      OUT	0x39,R24
+    0400 B789      IN	R24,0x39
+    0401 7F8E      ANDI	R24,0xFE
+    0402 BF89      OUT	0x39,R24
 (0028)     return;
-    040E 9508      RET
+    0403 9508      RET
 _set_timer:
   cb                   --> Y+4
   value                --> R22
   timer                --> R20
-    040F D2A4      RCALL	push_gset2
-    0410 01B9      MOVW	R22,R18
-    0411 2F40      MOV	R20,R16
+    0404 D2BD      RCALL	push_gset2
+    0405 01B9      MOVW	R22,R18
+    0406 2F40      MOV	R20,R16
 (0029) }
 (0030) //
 (0031) static timer_t g_timer[MAXTIMER];
@@ -1503,36 +1481,36 @@ _set_timer:
 (0034) {
 (0035)     //value=0, stoped timer.
 (0036)     g_timer[timer].value = value+1;
-    0412 E084      LDI	R24,4
-    0413 9F84      MUL	R24,R20
-    0414 940E07E4  CALL	0x7E4
-    0416 01CB      MOVW	R24,R22
-    0417 9601      ADIW	R24,1
-    0418 8391      STD	Z+1,R25
-    0419 8380      STD	Z+0,R24
+    0407 E084      LDI	R24,4
+    0408 9F84      MUL	R24,R20
+    0409 940E0800  CALL	0x800
+    040B 01CB      MOVW	R24,R22
+    040C 9601      ADIW	R24,1
+    040D 8391      STD	Z+1,R25
+    040E 8380      STD	Z+0,R24
 (0037)     g_timer[timer].cb = cb;
-    041A E084      LDI	R24,4
-    041B 9F84      MUL	R24,R20
-    041C 940E0865  CALL	0x865
-    041E 800C      LDD	R0,Y+4
-    041F 801D      LDD	R1,Y+5
-    0420 8211      STD	Z+1,R1
-    0421 8200      STD	Z+0,R0
+    040F E084      LDI	R24,4
+    0410 9F84      MUL	R24,R20
+    0411 940E0851  CALL	0x851
+    0413 800C      LDD	R0,Y+4
+    0414 801D      LDD	R1,Y+5
+    0415 8211      STD	Z+1,R1
+    0416 8200      STD	Z+0,R0
 (0038)     if(g_timer[timer].value)
-    0422 E084      LDI	R24,4
-    0423 9F84      MUL	R24,R20
-    0424 940E07E4  CALL	0x7E4
-    0426 8020      LDD	R2,Z+0
-    0427 8031      LDD	R3,Z+1
-    0428 2022      TST	R2
-    0429 F411      BNE	0x042C
-    042A 2033      TST	R3
-    042B F009      BEQ	0x042D
+    0417 E084      LDI	R24,4
+    0418 9F84      MUL	R24,R20
+    0419 940E0800  CALL	0x800
+    041B 8020      LDD	R2,Z+0
+    041C 8031      LDD	R3,Z+1
+    041D 2022      TST	R2
+    041E F411      BNE	0x0421
+    041F 2033      TST	R3
+    0420 F009      BEQ	0x0422
 (0039)         t0_start();
-    042C DFDA      RCALL	_t0_start
+    0421 DFDA      RCALL	_t0_start
 (0040)     return;
-    042D D278      RCALL	pop_gset2
-    042E 9508      RET
+    0422 D293      RCALL	pop_gset2
+    0423 9508      RET
 (0041) }
 (0042) //stop timer and clean timer.
 (0043) void stop_timer(char timer)
@@ -1540,35 +1518,35 @@ _set_timer:
 (0045)     if(g_timer[timer].value)
 _stop_timer:
   timer                --> R16
-    042F E084      LDI	R24,4
-    0430 9F80      MUL	R24,R16
-    0431 940E07E4  CALL	0x7E4
-    0433 8020      LDD	R2,Z+0
-    0434 8031      LDD	R3,Z+1
-    0435 2022      TST	R2
-    0436 F411      BNE	0x0439
-    0437 2033      TST	R3
-    0438 F059      BEQ	0x0444
+    0424 E084      LDI	R24,4
+    0425 9F80      MUL	R24,R16
+    0426 940E0800  CALL	0x800
+    0428 8020      LDD	R2,Z+0
+    0429 8031      LDD	R3,Z+1
+    042A 2022      TST	R2
+    042B F411      BNE	0x042E
+    042C 2033      TST	R3
+    042D F059      BEQ	0x0439
 (0046)     {
 (0047)         //stop this timer.
 (0048)         g_timer[timer].value = 0;
-    0439 E084      LDI	R24,4
-    043A 9F80      MUL	R24,R16
-    043B 940E07E4  CALL	0x7E4
-    043D 940E08D4  CALL	0x8D4
+    042E E084      LDI	R24,4
+    042F 9F80      MUL	R24,R16
+    0430 940E0800  CALL	0x800
+    0432 940E08D3  CALL	0x8D3
 (0049)         g_timer[timer].cb = 0;
-    043F 9F80      MUL	R24,R16
-    0440 940E0865  CALL	0x865
-    0442 8231      STD	Z+1,R3
-    0443 8220      STD	Z+0,R2
+    0434 9F80      MUL	R24,R16
+    0435 940E0851  CALL	0x851
+    0437 8231      STD	Z+1,R3
+    0438 8220      STD	Z+0,R2
 (0050)     }
 (0051)     return;
-    0444 9508      RET
+    0439 9508      RET
 _timer0_isr:
   running_timer_count  --> R20
   i                    --> R22
-    0445 D2B5      RCALL	push_lset
-    0446 D26D      RCALL	push_gset2
+    043A D2CE      RCALL	push_lset
+    043B D286      RCALL	push_gset2
 (0052) }
 (0053) //timer spank.
 (0054) #pragma interrupt_handler timer0_isr:10
@@ -1576,115 +1554,115 @@ _timer0_isr:
 (0056) {
 (0057)     static char time_pices = 0;
 (0058)     ++time_pices;
-    0447 91800072  LDS	R24,time_pices
-    0449 5F8F      SUBI	R24,0xFF
-    044A 93800072  STS	time_pices,R24
+    043C 91800072  LDS	R24,time_pices
+    043E 5F8F      SUBI	R24,0xFF
+    043F 93800072  STS	time_pices,R24
 (0059)     //200ms.
 (0060)     if(time_pices == 5)
-    044C 3085      CPI	R24,5
-    044D F009      BEQ	0x044F
-    044E C04B      RJMP	0x049A
+    0441 3085      CPI	R24,5
+    0442 F009      BEQ	0x0444
+    0443 C04B      RJMP	0x048F
 (0061)     {
 (0062)         char running_timer_count = 0;
-    044F 2744      CLR	R20
+    0444 2744      CLR	R20
 (0063)         char i;
 (0064)         for(i=0;i<MAXTIMER;i++)
-    0450 2766      CLR	R22
-    0451 C03F      RJMP	0x0491
+    0445 2766      CLR	R22
+    0446 C03F      RJMP	0x0486
 (0065)         {
 (0066)             if(g_timer[i].value>1)
-    0452 E084      LDI	R24,4
-    0453 9F86      MUL	R24,R22
-    0454 940E07E4  CALL	0x7E4
-    0456 8020      LDD	R2,Z+0
-    0457 8031      LDD	R3,Z+1
-    0458 E081      LDI	R24,1
-    0459 E090      LDI	R25,0
-    045A 1582      CP	R24,R2
-    045B 0593      CPC	R25,R3
-    045C F478      BCC	0x046C
+    0447 E084      LDI	R24,4
+    0448 9F86      MUL	R24,R22
+    0449 940E0800  CALL	0x800
+    044B 8020      LDD	R2,Z+0
+    044C 8031      LDD	R3,Z+1
+    044D E081      LDI	R24,1
+    044E E090      LDI	R25,0
+    044F 1582      CP	R24,R2
+    0450 0593      CPC	R25,R3
+    0451 F478      BCC	0x0461
 (0067)             {
 (0068)                 --g_timer[i].value;
-    045D E084      LDI	R24,4
-    045E 9F86      MUL	R24,R22
-    045F 0110      MOVW	R2,R0
-    0460 E783      LDI	R24,0x73
-    0461 E090      LDI	R25,0
-    0462 0E28      ADD	R2,R24
-    0463 1E39      ADC	R3,R25
-    0464 01F1      MOVW	R30,R2
-    0465 8180      LDD	R24,Z+0
-    0466 8191      LDD	R25,Z+1
-    0467 9701      SBIW	R24,1
-    0468 8391      STD	Z+1,R25
-    0469 8380      STD	Z+0,R24
+    0452 E084      LDI	R24,4
+    0453 9F86      MUL	R24,R22
+    0454 0110      MOVW	R2,R0
+    0455 E783      LDI	R24,0x73
+    0456 E090      LDI	R25,0
+    0457 0E28      ADD	R2,R24
+    0458 1E39      ADC	R3,R25
+    0459 01F1      MOVW	R30,R2
+    045A 8180      LDD	R24,Z+0
+    045B 8191      LDD	R25,Z+1
+    045C 9701      SBIW	R24,1
+    045D 8391      STD	Z+1,R25
+    045E 8380      STD	Z+0,R24
 (0069)                 ++running_timer_count;
-    046A 9543      INC	R20
+    045F 9543      INC	R20
 (0070)             }
-    046B C024      RJMP	0x0490
+    0460 C024      RJMP	0x0485
 (0071)             //timer call back.
 (0072)             else if(g_timer[i].value==1)
-    046C E084      LDI	R24,4
-    046D 9F86      MUL	R24,R22
-    046E 940E07E4  CALL	0x7E4
-    0470 8180      LDD	R24,Z+0
-    0471 8191      LDD	R25,Z+1
-    0472 3081      CPI	R24,1
-    0473 E0E0      LDI	R30,0
-    0474 079E      CPC	R25,R30
-    0475 F4D1      BNE	0x0490
+    0461 E084      LDI	R24,4
+    0462 9F86      MUL	R24,R22
+    0463 940E0800  CALL	0x800
+    0465 8180      LDD	R24,Z+0
+    0466 8191      LDD	R25,Z+1
+    0467 3081      CPI	R24,1
+    0468 E0E0      LDI	R30,0
+    0469 079E      CPC	R25,R30
+    046A F4D1      BNE	0x0485
 (0073)             {
 (0074)                 g_timer[i].value = 0;
-    0476 E084      LDI	R24,4
-    0477 9F86      MUL	R24,R22
-    0478 940E07E4  CALL	0x7E4
-    047A 940E08D4  CALL	0x8D4
+    046B E084      LDI	R24,4
+    046C 9F86      MUL	R24,R22
+    046D 940E0800  CALL	0x800
+    046F 940E08D3  CALL	0x8D3
 (0075)                 if(g_timer[i].cb)
-    047C 9F86      MUL	R24,R22
-    047D 940E0865  CALL	0x865
-    047F 8020      LDD	R2,Z+0
-    0480 8031      LDD	R3,Z+1
-    0481 2022      TST	R2
-    0482 F411      BNE	0x0485
-    0483 2033      TST	R3
-    0484 F059      BEQ	0x0490
+    0471 9F86      MUL	R24,R22
+    0472 940E0851  CALL	0x851
+    0474 8020      LDD	R2,Z+0
+    0475 8031      LDD	R3,Z+1
+    0476 2022      TST	R2
+    0477 F411      BNE	0x047A
+    0478 2033      TST	R3
+    0479 F059      BEQ	0x0485
 (0076)                 {
 (0077)                     //disable cpu timer.
 (0078)                     t0_stop();
-    0485 DF85      RCALL	_t0_stop
+    047A DF85      RCALL	_t0_stop
 (0079)                     (g_timer[i].cb)(i);
-    0486 2F06      MOV	R16,R22
-    0487 E084      LDI	R24,4
-    0488 9F86      MUL	R24,R22
-    0489 940E0865  CALL	0x865
-    048B 81A0      LDD	R26,Z+0
-    048C 81B1      LDD	R27,Z+1
-    048D 01FD      MOVW	R30,R26
-    048E D23E      RCALL	xicall
+    047B 2F06      MOV	R16,R22
+    047C E084      LDI	R24,4
+    047D 9F86      MUL	R24,R22
+    047E 940E0851  CALL	0x851
+    0480 81A0      LDD	R26,Z+0
+    0481 81B1      LDD	R27,Z+1
+    0482 01FD      MOVW	R30,R26
+    0483 D257      RCALL	xicall
 (0080)                     //enable cpu timer.
 (0081)                     t0_start();
-    048F DF77      RCALL	_t0_start
-    0490 9563      INC	R22
-    0491 3064      CPI	R22,4
-    0492 F408      BCC	0x0494
-    0493 CFBE      RJMP	0x0452
+    0484 DF77      RCALL	_t0_start
+    0485 9563      INC	R22
+    0486 3064      CPI	R22,4
+    0487 F408      BCC	0x0489
+    0488 CFBE      RJMP	0x0447
 (0082)                 }
 (0083)             }
 (0084)         }
 (0085)         time_pices = 0;
-    0494 2422      CLR	R2
-    0495 92200072  STS	time_pices,R2
+    0489 2422      CLR	R2
+    048A 92200072  STS	time_pices,R2
 (0086)         //if no timer running, stop cpu timer.
 (0087)         if(!running_timer_count) t0_stop();
-    0497 2344      TST	R20
-    0498 F409      BNE	0x049A
-    0499 DF71      RCALL	_t0_stop
+    048C 2344      TST	R20
+    048D F409      BNE	0x048F
+    048E DF71      RCALL	_t0_stop
 (0088)     }
 (0089)     return;
-    049A D20B      RCALL	pop_gset2
-    049B D272      RCALL	pop_lset
-    049C 9518      RETI
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\log.c
+    048F D226      RCALL	pop_gset2
+    0490 D28B      RCALL	pop_lset
+    0491 9518      RETI
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\log.c
 (0001) #include<iom16v.h>
 (0002) 
 (0003) #include "log.h"
@@ -1697,8 +1675,8 @@ _log:
   id_code              --> Y+4
   index                --> Y+2
   type                 --> Y+0
-    049D 9508      RET
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\locker.c
+    0492 9508      RET
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\locker.c
 (0001) #include<iom16v.h>
 (0002) 
 (0003) #include "locker.h"
@@ -1706,21 +1684,21 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\locker.c
 (0005) void locker_init(void)
 (0006) {
 _locker_init:
-    049E 9508      RET
+    0493 9508      RET
 (0007) 
 (0008) }
 (0009) void locker_unlock(void)
 (0010) {
 _locker_unlock:
-    049F 9508      RET
+    0494 9508      RET
 (0011) 
 (0012) }
 (0013) 
 (0014) void locker_lock(void)
 (0015) {
 _locker_lock:
-    04A0 9508      RET
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
+    0495 9508      RET
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
 (0001) #include<iom16v.h>
 (0002) #include <macros.h>
 (0003) 
@@ -1744,34 +1722,34 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\ringandscreen.c
 (0021)     //PC0,PC1,PC2 INPUT.
 (0022)     DDRC &= 0xf8;
 _ringandscreen_init:
-    04A1 B384      IN	R24,0x14
-    04A2 7F88      ANDI	R24,0xF8
-    04A3 BB84      OUT	0x14,R24
+    0496 B384      IN	R24,0x14
+    0497 7F88      ANDI	R24,0xF8
+    0498 BB84      OUT	0x14,R24
 (0023)     //PC3,PC4,PC5 OUTPUT.
 (0024)     DDRC |= 0x38;
-    04A4 B384      IN	R24,0x14
-    04A5 6388      ORI	R24,0x38
-    04A6 BB84      OUT	0x14,R24
+    0499 B384      IN	R24,0x14
+    049A 6388      ORI	R24,0x38
+    049B BB84      OUT	0x14,R24
 (0025)     //
 (0026)     PORTC = 0xff;
-    04A7 EF8F      LDI	R24,0xFF
-    04A8 BB85      OUT	0x15,R24
+    049C EF8F      LDI	R24,0xFF
+    049D BB85      OUT	0x15,R24
 (0027)     //init interrput.
 (0028)     return;
-    04A9 9508      RET
+    049E 9508      RET
 (0029) }
 (0030) 
 (0031) static void disable_input(void)
 (0032) {
 _disable_input:
-    04AA 9508      RET
+    049F 9508      RET
 (0033) 
 (0034) }
 (0035) 
 (0036) static void enable_input(void)
 (0037) {
 _enable_input:
-    04AB 9508      RET
+    04A0 9508      RET
 (0038) 
 (0039) }
 (0040) 
@@ -1779,160 +1757,160 @@ _enable_input:
 (0042) {
 (0043)     if((PORTC&=0x04))
 _screen_on:
-    04AC B385      IN	R24,0x15
-    04AD 7084      ANDI	R24,4
-    04AE BB85      OUT	0x15,R24
-    04AF 2388      TST	R24
-    04B0 F069      BEQ	0x04BE
+    04A1 B385      IN	R24,0x15
+    04A2 7084      ANDI	R24,4
+    04A3 BB85      OUT	0x15,R24
+    04A4 2388      TST	R24
+    04A5 F069      BEQ	0x04B3
 (0044)     {
 (0045)         SCREEN_ON;
-    04B1 B385      IN	R24,0x15
-    04B2 7F87      ANDI	R24,0xF7
-    04B3 BB85      OUT	0x15,R24
+    04A6 B385      IN	R24,0x15
+    04A7 7F87      ANDI	R24,0xF7
+    04A8 BB85      OUT	0x15,R24
 (0046)         delay_ms(500);
-    04B4 EF04      LDI	R16,0xF4
-    04B5 E011      LDI	R17,1
-    04B6 DCE3      RCALL	_delay_ms
+    04A9 EF04      LDI	R16,0xF4
+    04AA E011      LDI	R17,1
+    04AB DD06      RCALL	_delay_ms
 (0047)         SCREEN_RESET_START;
-    04B7 B385      IN	R24,0x15
-    04B8 7E8F      ANDI	R24,0xEF
-    04B9 BB85      OUT	0x15,R24
+    04AC B385      IN	R24,0x15
+    04AD 7E8F      ANDI	R24,0xEF
+    04AE BB85      OUT	0x15,R24
 (0048)         delay_ms(100);
-    04BA E604      LDI	R16,0x64
-    04BB E010      LDI	R17,0
-    04BC DCDD      RCALL	_delay_ms
+    04AF E604      LDI	R16,0x64
+    04B0 E010      LDI	R17,0
+    04B1 DD00      RCALL	_delay_ms
 (0049)         SCREEN_RESET_STOP;
-    04BD 9AAC      SBI	0x15,4
+    04B2 9AAC      SBI	0x15,4
 (0050)     }
 (0051)     return;
-    04BE 9508      RET
+    04B3 9508      RET
 (0052) }
 (0053) 
 (0054) void screen_off(void)
 (0055) {
 (0056)     SCREEN_OFF;
 _screen_off:
-    04BF 9AAA      SBI	0x15,2
+    04B4 9AAA      SBI	0x15,2
 (0057)     return;
-    04C0 9508      RET
+    04B5 9508      RET
 (0058) }
 (0059) 
 (0060) void ring_on(void)
 (0061) {
 (0062)     RING_ON;
 _ring_on:
-    04C1 B385      IN	R24,0x15
-    04C2 7D8F      ANDI	R24,0xDF
-    04C3 BB85      OUT	0x15,R24
+    04B6 B385      IN	R24,0x15
+    04B7 7D8F      ANDI	R24,0xDF
+    04B8 BB85      OUT	0x15,R24
 (0063)     delay_ms(20);
-    04C4 E104      LDI	R16,0x14
-    04C5 E010      LDI	R17,0
-    04C6 DCD3      RCALL	_delay_ms
+    04B9 E104      LDI	R16,0x14
+    04BA E010      LDI	R17,0
+    04BB DCF6      RCALL	_delay_ms
 (0064)     RING_OFF;
-    04C7 B385      IN	R24,0x15
-    04C8 7280      ANDI	R24,0x20
-    04C9 BB85      OUT	0x15,R24
+    04BC B385      IN	R24,0x15
+    04BD 7280      ANDI	R24,0x20
+    04BE BB85      OUT	0x15,R24
 (0065)     return;
-    04CA 9508      RET
+    04BF 9508      RET
 _ring_screen_timeout:
   timer                --> R20
-    04CB D1EA      RCALL	push_gset1
-    04CC 2F40      MOV	R20,R16
+    04C0 D203      RCALL	push_gset1
+    04C1 2F40      MOV	R20,R16
 (0066) }
 (0067) 
 (0068) void ring_screen_timeout(char timer)
 (0069) {
 (0070)     if(timer==RINGANDSCREENINPUTTIMER)
-    04CD 3042      CPI	R20,2
-    04CE F409      BNE	0x04D0
+    04C2 3042      CPI	R20,2
+    04C3 F409      BNE	0x04C5
 (0071)     {
 (0072)         screen_off();
-    04CF DFEF      RCALL	_screen_off
+    04C4 DFEF      RCALL	_screen_off
 (0073)     }
-    04D0 D1E8      RCALL	pop_gset1
-    04D1 9508      RET
+    04C5 D201      RCALL	pop_gset1
+    04C6 9508      RET
 _door_minitor_timeout:
   timer                --> R20
-    04D2 D1E3      RCALL	push_gset1
-    04D3 2F40      MOV	R20,R16
-    04D4 9722      SBIW	R28,2
+    04C7 D1FC      RCALL	push_gset1
+    04C8 2F40      MOV	R20,R16
+    04C9 9722      SBIW	R28,2
 (0074) }
 (0075) 
 (0076) void door_minitor_timeout(char timer)
 (0077) {
 (0078)     if(timer==RINGANDSCREENINPUTTIMER)
-    04D5 3042      CPI	R20,2
-    04D6 F449      BNE	0x04E0
+    04CA 3042      CPI	R20,2
+    04CB F449      BNE	0x04D5
 (0079)     {
 (0080)         tips_err();
-    04D7 DCEB      RCALL	_tips_err
+    04CC DD0E      RCALL	_tips_err
 (0081)         //start timer. 10s.
 (0082)         set_timer(RINGANDSCREENINPUTTIMER, 70, door_minitor_timeout); 
-    04D8 E58C      LDI	R24,0x5C
-    04D9 E090      LDI	R25,0
-    04DA 8399      STD	Y+1,R25
-    04DB 8388      STD	Y+0,R24
-    04DC E426      LDI	R18,0x46
-    04DD E030      LDI	R19,0
-    04DE E002      LDI	R16,2
-    04DF DF2F      RCALL	_set_timer
+    04CD E58C      LDI	R24,0x5C
+    04CE E090      LDI	R25,0
+    04CF 8399      STD	Y+1,R25
+    04D0 8388      STD	Y+0,R24
+    04D1 E426      LDI	R18,0x46
+    04D2 E030      LDI	R19,0
+    04D3 E002      LDI	R16,2
+    04D4 DF2F      RCALL	_set_timer
 (0083)     }
-    04E0 9622      ADIW	R28,2
-    04E1 D1D7      RCALL	pop_gset1
-    04E2 9508      RET
+    04D5 9622      ADIW	R28,2
+    04D6 D1F0      RCALL	pop_gset1
+    04D7 9508      RET
 _input_isr:
-    04E3 9722      SBIW	R28,2
+    04D8 9722      SBIW	R28,2
 (0084) }
 (0085) 
 (0086) void input_isr(void)
 (0087) {
 (0088)     disable_input();
-    04E4 DFC5      RCALL	_disable_input
+    04D9 DFC5      RCALL	_disable_input
 (0089)     //
 (0090)     delay_ms(100);
-    04E5 E604      LDI	R16,0x64
-    04E6 E010      LDI	R17,0
-    04E7 DCB2      RCALL	_delay_ms
+    04DA E604      LDI	R16,0x64
+    04DB E010      LDI	R17,0
+    04DC DCD5      RCALL	_delay_ms
 (0091)     if(!(PINC&0x01)) //ring input.
-    04E8 9998      SBIC	0x13,0
-    04E9 C009      RJMP	0x04F3
+    04DD 9998      SBIC	0x13,0
+    04DE C009      RJMP	0x04E8
 (0092)     {
 (0093)         screen_on();
-    04EA DFC1      RCALL	_screen_on
+    04DF DFC1      RCALL	_screen_on
 (0094)         ring_on();
-    04EB DFD5      RCALL	_ring_on
+    04E0 DFD5      RCALL	_ring_on
 (0095)         tips_ring_on();
-    04EC DD06      RCALL	_tips_ring_on
+    04E1 DD29      RCALL	_tips_ring_on
 (0096)         //start timer. 50s.
 (0097)         set_timer(RINGANDSCREENINPUTTIMER, 300, ring_screen_timeout);
-    04ED E58A      LDI	R24,0x5A
-    04EE 940E089F  CALL	0x89F
-    04F0 E002      LDI	R16,2
-    04F1 DF1D      RCALL	_set_timer
+    04E2 E58A      LDI	R24,0x5A
+    04E3 940E089B  CALL	0x89B
+    04E5 E002      LDI	R16,2
+    04E6 DF1D      RCALL	_set_timer
 (0098)     }
-    04F2 C00B      RJMP	0x04FE
+    04E7 C00B      RJMP	0x04F3
 (0099)     else if(!(PIND&0x02)) //screen key input.
-    04F3 9981      SBIC	0x10,1
-    04F4 C009      RJMP	0x04FE
+    04E8 9981      SBIC	0x10,1
+    04E9 C009      RJMP	0x04F3
 (0100)     {
 (0101)         screen_on();
-    04F5 DFB6      RCALL	_screen_on
+    04EA DFB6      RCALL	_screen_on
 (0102)         delay_ms(800);
-    04F6 E200      LDI	R16,0x20
-    04F7 E013      LDI	R17,3
-    04F8 DCA1      RCALL	_delay_ms
+    04EB E200      LDI	R16,0x20
+    04EC E013      LDI	R17,3
+    04ED DCC4      RCALL	_delay_ms
 (0103)         //start timer. 50s.
 (0104)         set_timer(RINGANDSCREENINPUTTIMER, 300, ring_screen_timeout);
-    04F9 E58A      LDI	R24,0x5A
-    04FA 940E089F  CALL	0x89F
-    04FC E002      LDI	R16,2
-    04FD DF11      RCALL	_set_timer
+    04EE E58A      LDI	R24,0x5A
+    04EF 940E089B  CALL	0x89B
+    04F1 E002      LDI	R16,2
+    04F2 DF11      RCALL	_set_timer
 (0105)     }
 (0106)     enable_input();
-    04FE DFAC      RCALL	_enable_input
+    04F3 DFAC      RCALL	_enable_input
 (0107)     return;
-    04FF 9622      ADIW	R28,2
-    0500 9508      RET
+    04F4 9622      ADIW	R28,2
+    04F5 9508      RET
 (0108) }
 (0109) 
 (0110) //when door open, return 1.
@@ -1940,15 +1918,15 @@ _input_isr:
 (0112) {
 (0113)     return (!(PIND&0x04));
 _check_door:
-    0501 9982      SBIC	0x10,2
-    0502 C003      RJMP	0x0506
-    0503 E001      LDI	R16,1
-    0504 E010      LDI	R17,0
-    0505 C002      RJMP	0x0508
-    0506 2700      CLR	R16
-    0507 2711      CLR	R17
-    0508 9508      RET
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
+    04F6 9982      SBIC	0x10,2
+    04F7 C003      RJMP	0x04FB
+    04F8 E001      LDI	R16,1
+    04F9 E010      LDI	R17,0
+    04FA C002      RJMP	0x04FD
+    04FB 2700      CLR	R16
+    04FC 2711      CLR	R17
+    04FD 9508      RET
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
 (0001) #include<iom16v.h>
 (0002) #include <macros.h>
 (0003) 
@@ -2000,15 +1978,15 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\eeprom.c
 (0049)     //pc4 and pc5 output mode.
 (0050)     DDRB |= 0x30;
 _at24c256_init:
-    0509 B387      IN	R24,0x17
-    050A 6380      ORI	R24,0x30
-    050B BB87      OUT	0x17,R24
+    04FE B387      IN	R24,0x17
+    04FF 6380      ORI	R24,0x30
+    0500 BB87      OUT	0x17,R24
 (0051)     PORTB |= 0x30;
-    050C B388      IN	R24,0x18
-    050D 6380      ORI	R24,0x30
-    050E BB88      OUT	0x18,R24
+    0501 B388      IN	R24,0x18
+    0502 6380      ORI	R24,0x30
+    0503 BB88      OUT	0x18,R24
 (0052)     return;
-    050F 9508      RET
+    0504 9508      RET
 _rw24c256:
   i                    --> R10
   err                  --> R20
@@ -2016,572 +1994,599 @@ _rw24c256:
   addr                 --> R12
   len                  --> R14
   data                 --> Y+10
-    0510 D166      RCALL	push_arg4
-    0511 D19C      RCALL	push_gset5
-    0512 2EE2      MOV	R14,R18
-    0513 84CE      LDD	R12,Y+14
-    0514 84DF      LDD	R13,Y+15
-    0515 8968      LDD	R22,Y+16
+    0505 D181      RCALL	push_arg4
+    0506 D1B5      RCALL	push_gset5
+    0507 2EE2      MOV	R14,R18
+    0508 84CE      LDD	R12,Y+14
+    0509 84DF      LDD	R13,Y+15
+    050A 8968      LDD	R22,Y+16
 (0053) }
 (0054) 
 (0055) char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned char rwFlag)    
 (0056) {
 (0057)     unsigned char i = MAXRETRY;
-    0516 E08A      LDI	R24,0xA
-    0517 2EA8      MOV	R10,R24
+    050B E08A      LDI	R24,0xA
+    050C 2EA8      MOV	R10,R24
 (0058)     char err = 1;  /*   出错标志   */   
-    0518 E041      LDI	R20,1
-    0519 C045      RJMP	0x055F
+    050D E041      LDI	R20,1
+    050E C047      RJMP	0x0556
 (0059)     while(i--)    
 (0060)     {    
 (0061)         start();  /*   启动总线   */
-    051A D0C9      RCALL	_start
+    050F D0E4      RCALL	_start
 (0062)         sendByte(AT24C256DEVADDR |0x00); /*   向IIC总线写数据，器件地址 */   
-    051B EA00      LDI	R16,0xA0
-    051C D10B      RCALL	_sendByte
+    0510 EA00      LDI	R16,0xA0
+    0511 D126      RCALL	_sendByte
 (0063)         if(recAck()) continue; /*   如写不正确结束本次循环   */   
-    051D D0DB      RCALL	_recAck
-    051E 2300      TST	R16
-    051F F009      BEQ	0x0521
-    0520 C03E      RJMP	0x055F
+    0512 D0F6      RCALL	_recAck
+    0513 2300      TST	R16
+    0514 F009      BEQ	0x0516
+    0515 C040      RJMP	0x0556
 (0064)         sendByte((unsigned char)(addr >> 8));//把整型数据转换为字符型数据：弃高取低，只取低8位.如果容量大于32K位，使用16位地址寻址，写入高八位地址    
-    0521 0186      MOVW	R16,R12
-    0522 2F01      MOV	R16,R17
-    0523 2711      CLR	R17
-    0524 D103      RCALL	_sendByte
+    0516 0186      MOVW	R16,R12
+    0517 2F01      MOV	R16,R17
+    0518 2711      CLR	R17
+    0519 D11E      RCALL	_sendByte
 (0065)         if(recAck())  continue;    
-    0525 D0D3      RCALL	_recAck
-    0526 2300      TST	R16
-    0527 F009      BEQ	0x0529
-    0528 C036      RJMP	0x055F
+    051A D0EE      RCALL	_recAck
+    051B 2300      TST	R16
+    051C F009      BEQ	0x051E
+    051D C038      RJMP	0x0556
 (0066)         sendByte((unsigned char)addr); /*   向IIC总线写数据   */   
-    0529 2D0C      MOV	R16,R12
-    052A D0FD      RCALL	_sendByte
+    051E 2D0C      MOV	R16,R12
+    051F D118      RCALL	_sendByte
 (0067)         if(recAck())  continue; /*   如写正确结束本次循环   */
-    052B D0CD      RCALL	_recAck
-    052C 2300      TST	R16
-    052D F009      BEQ	0x052F
-    052E C030      RJMP	0x055F
+    0520 D0E8      RCALL	_recAck
+    0521 2300      TST	R16
+    0522 F009      BEQ	0x0524
+    0523 C032      RJMP	0x0556
 (0068)         if(rwFlag == RW24C256WRITE)   //判断是读器件还是写器件    
-    052F 2366      TST	R22
-    0530 F4A1      BNE	0x0545
+    0524 2366      TST	R22
+    0525 F4A1      BNE	0x053A
 (0069)         {
 (0070)             err=0;         /* 清错误特征位 */   
-    0531 2744      CLR	R20
-    0532 C00C      RJMP	0x053F
+    0526 2744      CLR	R20
+    0527 C00C      RJMP	0x0534
 (0071)             while(len--)    
 (0072)             {
 (0073)                 sendByte(*(data++)); /*   向IIC总线写数据   */   
-    0533 85EA      LDD	R30,Y+10
-    0534 85FB      LDD	R31,Y+11
-    0535 9101      LD	R16,Z+
-    0536 87FB      STD	Y+11,R31
-    0537 87EA      STD	Y+10,R30
-    0538 D0EF      RCALL	_sendByte
+    0528 85EA      LDD	R30,Y+10
+    0529 85FB      LDD	R31,Y+11
+    052A 9101      LD	R16,Z+
+    052B 87FB      STD	Y+11,R31
+    052C 87EA      STD	Y+10,R30
+    052D D10A      RCALL	_sendByte
 (0074)                 if(!recAck()) continue; /*   如写正确结束本次循环   */   
-    0539 D0BF      RCALL	_recAck
-    053A 2300      TST	R16
-    053B F409      BNE	0x053D
-    053C C002      RJMP	0x053F
+    052E D0DA      RCALL	_recAck
+    052F 2300      TST	R16
+    0530 F409      BNE	0x0532
+    0531 C002      RJMP	0x0534
 (0075)                 err=1;    
-    053D E041      LDI	R20,1
+    0532 E041      LDI	R20,1
 (0076)                 break;    
-    053E C003      RJMP	0x0542
-    053F 940E08BB  CALL	0x8BB
-    0541 F789      BNE	0x0533
+    0533 C003      RJMP	0x0537
+    0534 940E08C2  CALL	0x8C2
+    0536 F789      BNE	0x0528
 (0077)             }    
 (0078)             if(err==1) continue;    
-    0542 3041      CPI	R20,1
-    0543 F519      BNE	0x0567
-    0544 C01A      RJMP	0x055F
+    0537 3041      CPI	R20,1
+    0538 F529      BNE	0x055E
+    0539 C01C      RJMP	0x0556
 (0079)             break;    
 (0080)         }    
 (0081)         else   
 (0082)         { 
 (0083)             start();  /*   启动总线   */   
-    0545 D09E      RCALL	_start
+    053A D0B9      RCALL	_start
 (0084)             sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线写数据   */   
-    0546 EA01      LDI	R16,0xA1
-    0547 D0E0      RCALL	_sendByte
+    053B EA01      LDI	R16,0xA1
+    053C D0FB      RCALL	_sendByte
 (0085)             if(recAck()) continue;//器件没应答结束本次本层循环    
-    0548 D0B0      RCALL	_recAck
-    0549 2300      TST	R16
-    054A F049      BEQ	0x0554
-    054B C013      RJMP	0x055F
-(0086)             while(len--)  /*   字节长为0结束   */   
-(0087)             {
-(0088)                 *(data++)= receiveByte();    
-    054C D0F7      RCALL	_receiveByte
-    054D 2E20      MOV	R2,R16
-    054E 85EA      LDD	R30,Y+10
-    054F 85FB      LDD	R31,Y+11
-    0550 9221      ST	R2,Z+
-    0551 87FB      STD	Y+11,R31
-    0552 87EA      STD	Y+10,R30
-(0089)                 ack();   /*   对IIC总线产生应答   */   
-    0553 D0C6      RCALL	_ack
-    0554 940E08BB  CALL	0x8BB
-    0556 F7A9      BNE	0x054C
-(0090)             }    
-(0091)             *data=receiveByte(); /* 读最后一个字节 */   
-    0557 D0EC      RCALL	_receiveByte
-    0558 2E20      MOV	R2,R16
-    0559 85EA      LDD	R30,Y+10
-    055A 85FB      LDD	R31,Y+11
-    055B 8220      STD	Z+0,R2
-(0092)             noAck();  /*   不对IIC总线产生应答   */   
-    055C D0C6      RCALL	_noAck
-(0093)             err=0;    
-    055D 2744      CLR	R20
-(0094)             break;    
-    055E C008      RJMP	0x0567
-    055F 2C2A      MOV	R2,R10
-    0560 2433      CLR	R3
-    0561 2D82      MOV	R24,R2
-    0562 5081      SUBI	R24,1
-    0563 2EA8      MOV	R10,R24
-    0564 2022      TST	R2
-    0565 F009      BEQ	0x0567
-    0566 CFB3      RJMP	0x051A
-(0095)         }    
-(0096)     }    
-(0097)     stop();  /*   停止IIC总线   */   
-    0567 D086      RCALL	_stop
-(0098)     if(rwFlag == RW24C256WRITE)    
-    0568 2366      TST	R22
-    0569 F419      BNE	0x056D
-(0099)     {     
-(0100)         delay_ms(50);    
-    056A E302      LDI	R16,0x32
-    056B E010      LDI	R17,0
-    056C DC2D      RCALL	_delay_ms
-(0101)     }    
-(0102)     return err;    
-    056D 2F04      MOV	R16,R20
-    056E D13D      RCALL	pop_gset5
-    056F 9624      ADIW	R28,4
-    0570 9508      RET
+    053D D0CB      RCALL	_recAck
+    053E 2300      TST	R16
+    053F F009      BEQ	0x0541
+    0540 C015      RJMP	0x0556
+(0086)             //循环数量要减一。
+(0087)             len--;
+    0541 94EA      DEC	R14
+    0542 C008      RJMP	0x054B
+(0088)             while(len--)  /*   字节长为0结束   */   
+(0089)             {
+(0090)                 *(data++)= receiveByte();    
+    0543 D110      RCALL	_receiveByte
+    0544 2E20      MOV	R2,R16
+    0545 85EA      LDD	R30,Y+10
+    0546 85FB      LDD	R31,Y+11
+    0547 9221      ST	R2,Z+
+    0548 87FB      STD	Y+11,R31
+    0549 87EA      STD	Y+10,R30
+(0091)                 ack();   /*   对IIC总线产生应答   */   
+    054A D0DF      RCALL	_ack
+    054B 940E08C2  CALL	0x8C2
+    054D F7A9      BNE	0x0543
+(0092)             }    
+(0093)             *data=receiveByte(); /* 读最后一个字节 */   
+    054E D105      RCALL	_receiveByte
+    054F 2E20      MOV	R2,R16
+    0550 85EA      LDD	R30,Y+10
+    0551 85FB      LDD	R31,Y+11
+    0552 8220      STD	Z+0,R2
+(0094)             noAck();  /*   不对IIC总线产生应答   */   
+    0553 D0DF      RCALL	_noAck
+(0095)             err=0;    
+    0554 2744      CLR	R20
+(0096)             break;    
+    0555 C008      RJMP	0x055E
+    0556 2C2A      MOV	R2,R10
+    0557 2433      CLR	R3
+    0558 2D82      MOV	R24,R2
+    0559 5081      SUBI	R24,1
+    055A 2EA8      MOV	R10,R24
+    055B 2022      TST	R2
+    055C F009      BEQ	0x055E
+    055D CFB1      RJMP	0x050F
+(0097)         }    
+(0098)     }    
+(0099)     stop();  /*   停止IIC总线   */   
+    055E D09F      RCALL	_stop
+(0100)     if(rwFlag == RW24C256WRITE)    
+    055F 2366      TST	R22
+    0560 F419      BNE	0x0564
+(0101)     {     
+(0102)         delay_ms(50);    
+    0561 E302      LDI	R16,0x32
+    0562 E010      LDI	R17,0
+    0563 DC4E      RCALL	_delay_ms
+(0103)     }    
+(0104)     return err;    
+    0564 2F04      MOV	R16,R20
+    0565 D154      RCALL	pop_gset5
+    0566 9624      ADIW	R28,4
+    0567 9508      RET
 _rw24c256Int:
-  tmp                  --> Y+3
-  rwFlag               --> Y+15
-  addr                 --> R12
-  data                 --> R10
-    0571 D13E      RCALL	push_gset4
-    0572 0169      MOVW	R12,R18
-    0573 0158      MOVW	R10,R16
-    0574 9727      SBIW	R28,7
-(0103) }    
-(0104) 
-(0105) void rw24c256Int(unsigned long *data, unsigned int addr, unsigned char rwFlag)
-(0106) {
-(0107)     unsigned char tmp[4] = {0, 0, 0, 0};
-    0575 E58E      LDI	R24,0x5E
-    0576 E090      LDI	R25,0
-    0577 01FE      MOVW	R30,R28
-    0578 9633      ADIW	R30,3
-    0579 E004      LDI	R16,4
-    057A E010      LDI	R17,0
-    057B 93FA      ST	R31,-Y
-    057C 93EA      ST	R30,-Y
-    057D 939A      ST	R25,-Y
-    057E 938A      ST	R24,-Y
-    057F D1BD      RCALL	asgncblk
-(0108)     
-(0109)     if(rwFlag==RW24C256WRITE)
-    0580 840F      LDD	R0,Y+15
-    0581 2000      TST	R0
-    0582 F009      BEQ	0x0584
-    0583 C02F      RJMP	0x05B3
-(0110)     {
-(0111)         tmp[0] = (unsigned char)((*data)&0x000000ff);
-    0584 940E087D  CALL	0x87D
-    0586 01F5      MOVW	R30,R10
-    0587 940E080C  CALL	0x80C
-    0589 940E0847  CALL	0x847
-    058B 822B      STD	Y+3,R2
-(0112)         tmp[1] = (unsigned char)(((*data)>>8)&0x000000ff);
-    058C E088      LDI	R24,0x8
-    058D 940E07D2  CALL	0x7D2
-    058F D1A1      RCALL	lsr32
-    0590 0118      MOVW	R2,R16
-    0591 0129      MOVW	R4,R18
-    0592 940E087D  CALL	0x87D
-    0594 940E0847  CALL	0x847
-    0596 822C      STD	Y+4,R2
-    0597 940E087D  CALL	0x87D
-(0113)         tmp[2] = (unsigned char)(((*data)>>16)&0x000000ff);
-    0599 01F5      MOVW	R30,R10
-    059A 940E080C  CALL	0x80C
-    059C 0112      MOVW	R2,R4
-    059D 2444      CLR	R4
-    059E 2455      CLR	R5
-    059F 940E0847  CALL	0x847
-    05A1 822D      STD	Y+5,R2
-(0114)         tmp[3] = (unsigned char)(((*data)>>24)&0x000000ff);
-    05A2 E188      LDI	R24,0x18
-    05A3 940E07D2  CALL	0x7D2
-    05A5 D18B      RCALL	lsr32
-    05A6 0118      MOVW	R2,R16
-    05A7 0129      MOVW	R4,R18
-    05A8 940E087D  CALL	0x87D
-    05AA 940E0847  CALL	0x847
-    05AC 822E      STD	Y+6,R2
-(0115) 
-(0116)         rw24c256((unsigned char*)&tmp, 4, addr, RW24C256WRITE);
-    05AD 2422      CLR	R2
-    05AE 822A      STD	Y+2,R2
-    05AF 940E08C2  CALL	0x8C2
-    05B1 DF5E      RCALL	_rw24c256
-(0117)     }
-    05B2 C02E      RJMP	0x05E1
-(0118)     else
-(0119)     {
-(0120)         rw24c256((unsigned char*)&tmp, 4, addr, RW24C256READ);
-    05B3 E081      LDI	R24,1
-    05B4 838A      STD	Y+2,R24
-    05B5 940E08C2  CALL	0x8C2
-    05B7 DF58      RCALL	_rw24c256
-    05B8 940E07B6  CALL	0x7B6
-(0121) 
-(0122)         *data = 0;
-    05BA 01F5      MOVW	R30,R10
-    05BB 8340      STD	Z+0,R20
-    05BC 8351      STD	Z+1,R21
-    05BD 8362      STD	Z+2,R22
-    05BE 8373      STD	Z+3,R23
-(0123)         *data |= tmp[0];
-    05BF 802B      LDD	R2,Y+3
-    05C0 940E0783  CALL	0x783
-(0124)         *data <<= 8;
-    05C2 D162      RCALL	lsl32
-    05C3 940E08A5  CALL	0x8A5
-(0125)         *data |= tmp[1];
-    05C5 802C      LDD	R2,Y+4
-    05C6 940E0783  CALL	0x783
-(0126)         *data <<= 8;
-    05C8 D15C      RCALL	lsl32
-    05C9 940E08A5  CALL	0x8A5
-(0127)         *data |= tmp[2];
-    05CB 802D      LDD	R2,Y+5
-    05CC 940E0783  CALL	0x783
-(0128)         *data <<= 8;
-    05CE D156      RCALL	lsl32
-    05CF 940E08A5  CALL	0x8A5
-(0129)         *data |= tmp[3];
-    05D1 802E      LDD	R2,Y+6
-    05D2 2433      CLR	R3
-    05D3 2444      CLR	R4
-    05D4 2455      CLR	R5
-    05D5 8060      LDD	R6,Z+0
-    05D6 8071      LDD	R7,Z+1
-    05D7 8082      LDD	R8,Z+2
-    05D8 8093      LDD	R9,Z+3
-    05D9 2862      OR	R6,R2
-    05DA 2873      OR	R7,R3
-    05DB 2884      OR	R8,R4
-    05DC 2895      OR	R9,R5
-    05DD 8260      STD	Z+0,R6
-    05DE 8271      STD	Z+1,R7
-    05DF 8282      STD	Z+2,R8
-    05E0 8293      STD	Z+3,R9
-(0130)     }
-(0131)     return;
-    05E1 9627      ADIW	R28,7
-    05E2 D0C7      RCALL	pop_gset4
-    05E3 9508      RET
-(0132) }
-(0133) 
-(0134) /* * * * * 以下是对IIC总线的操作子程序 * * * * */   
-(0135) /* * * * * * 启动总线 * * * * */   
-(0136) static void start(void)    
-(0137) {    
-(0138)     //SCL=0; /* SCL处于高电平时,SDA从高电平转向低电平表示 */   
-(0139)     //CLR_SCL;
-(0140)     //SDA=1; /* 一个"开始"状态,该状态必须在其他命令之前执行 */   
-(0141)     SET_SDA;
+  tmp                  --> Y+7
+  out                  --> Y+3
+  rwFlag               --> Y+21
+  addr                 --> Y+19
+  data                 --> Y+15
+    0568 D11E      RCALL	push_arg4
+    0569 D158      RCALL	push_gset2
+    056A 972B      SBIW	R28,0xB
+(0105) }    
+(0106) 
+(0107) unsigned long rw24c256Int(unsigned long data, unsigned int addr, unsigned char rwFlag)
+(0108) {
+(0109)     unsigned char tmp[4] = {0, 0, 0, 0};
+    056B E58E      LDI	R24,0x5E
+    056C E090      LDI	R25,0
+    056D 01FE      MOVW	R30,R28
+    056E 9637      ADIW	R30,7
+    056F E004      LDI	R16,4
+    0570 E010      LDI	R17,0
+    0571 93FA      ST	R31,-Y
+    0572 93EA      ST	R30,-Y
+    0573 939A      ST	R25,-Y
+    0574 938A      ST	R24,-Y
+    0575 D1D5      RCALL	asgncblk
+(0110) 	unsigned long out = 0;
+    0576 E040      LDI	R20,0
+    0577 940E07C7  CALL	0x7C7
+    0579 940E08E5  CALL	0x8E5
+(0111) 
+(0112)     if(rwFlag==RW24C256WRITE)
+    057B 880D      LDD	R0,Y+21
+    057C 2000      TST	R0
+    057D F009      BEQ	0x057F
+    057E C03E      RJMP	0x05BD
+(0113)     {
+(0114)         tmp[0] = (unsigned char)(data&0x000000ff);
+    057F EF4F      LDI	R20,0xFF
+    0580 940E07C7  CALL	0x7C7
+    0582 940E084C  CALL	0x84C
+    0584 940E0829  CALL	0x829
+    0586 822F      STD	Y+7,R2
+(0115)         tmp[1] = (unsigned char)((data>>8)&0x000000ff);
+    0587 E088      LDI	R24,0x8
+    0588 E090      LDI	R25,0
+    0589 940E0817  CALL	0x817
+    058B 938A      ST	R24,-Y
+    058C 0181      MOVW	R16,R2
+    058D 0192      MOVW	R18,R4
+    058E D1B0      RCALL	lsr32
+    058F 0118      MOVW	R2,R16
+    0590 0129      MOVW	R4,R18
+    0591 940E0887  CALL	0x887
+    0593 940E0829  CALL	0x829
+    0595 8628      STD	Y+8,R2
+(0116)         tmp[2] = (unsigned char)((data>>16)&0x000000ff);
+    0596 EF4F      LDI	R20,0xFF
+    0597 940E07C7  CALL	0x7C7
+    0599 940E084C  CALL	0x84C
+    059B 0112      MOVW	R2,R4
+    059C 2444      CLR	R4
+    059D 2455      CLR	R5
+    059E 940E0829  CALL	0x829
+    05A0 8629      STD	Y+9,R2
+(0117)         tmp[3] = (unsigned char)((data>>24)&0x000000ff);
+    05A1 E188      LDI	R24,0x18
+    05A2 E090      LDI	R25,0
+    05A3 940E0817  CALL	0x817
+    05A5 938A      ST	R24,-Y
+    05A6 0181      MOVW	R16,R2
+    05A7 0192      MOVW	R18,R4
+    05A8 D196      RCALL	lsr32
+    05A9 0118      MOVW	R2,R16
+    05AA 0129      MOVW	R4,R18
+    05AB 940E0887  CALL	0x887
+    05AD 940E0829  CALL	0x829
+    05AF 862A      STD	Y+10,R2
+(0118)         rw24c256((unsigned char*)&tmp, 4, addr, RW24C256WRITE);
+    05B0 2422      CLR	R2
+    05B1 822A      STD	Y+2,R2
+    05B2 940E088C  CALL	0x88C
+    05B4 DF50      RCALL	_rw24c256
+    05B5 940E0817  CALL	0x817
+(0119) 		out = data;
+    05B7 01FE      MOVW	R30,R28
+    05B8 8223      STD	Z+3,R2
+    05B9 8234      STD	Z+4,R3
+    05BA 8245      STD	Z+5,R4
+    05BB 8256      STD	Z+6,R5
+(0120)     }
+    05BC C02E      RJMP	0x05EB
+(0121)     else
+(0122)     {
+(0123)         rw24c256((unsigned char*)&tmp, 4, addr, RW24C256READ);
+    05BD E081      LDI	R24,1
+    05BE 838A      STD	Y+2,R24
+    05BF 940E088C  CALL	0x88C
+    05C1 DF43      RCALL	_rw24c256
+(0124) 
+(0125)         out= 0;
+    05C2 E040      LDI	R20,0
+    05C3 940E07C7  CALL	0x7C7
+    05C5 940E08E5  CALL	0x8E5
+(0126)         out |= tmp[0];
+    05C7 802F      LDD	R2,Y+7
+    05C8 940E077C  CALL	<created procedures>
+(0127)         out <<= 8;
+    05CA D168      RCALL	lsl32
+    05CB 940E0895  CALL	0x895
+(0128)         out |= tmp[1];
+    05CD 8428      LDD	R2,Y+8
+    05CE 940E077C  CALL	<created procedures>
+(0129)         out <<= 8;
+    05D0 D162      RCALL	lsl32
+    05D1 940E0895  CALL	0x895
+(0130)         out |= tmp[2];
+    05D3 8429      LDD	R2,Y+9
+    05D4 940E077C  CALL	<created procedures>
+(0131)         out <<= 8;
+    05D6 D15C      RCALL	lsl32
+    05D7 940E0895  CALL	0x895
+(0132)         out |= tmp[3];
+    05D9 842A      LDD	R2,Y+10
+    05DA 2433      CLR	R3
+    05DB 2444      CLR	R4
+    05DC 2455      CLR	R5
+    05DD 01FE      MOVW	R30,R28
+    05DE 8063      LDD	R6,Z+3
+    05DF 8074      LDD	R7,Z+4
+    05E0 8085      LDD	R8,Z+5
+    05E1 8096      LDD	R9,Z+6
+    05E2 2862      OR	R6,R2
+    05E3 2873      OR	R7,R3
+    05E4 2884      OR	R8,R4
+    05E5 2895      OR	R9,R5
+    05E6 01FE      MOVW	R30,R28
+    05E7 8263      STD	Z+3,R6
+    05E8 8274      STD	Z+4,R7
+    05E9 8285      STD	Z+5,R8
+    05EA 8296      STD	Z+6,R9
+(0133)     }
+(0134)     return out;
+    05EB 01FE      MOVW	R30,R28
+    05EC 8103      LDD	R16,Z+3
+    05ED 8114      LDD	R17,Z+4
+    05EE 8125      LDD	R18,Z+5
+    05EF 8136      LDD	R19,Z+6
+    05F0 962B      ADIW	R28,0xB
+    05F1 D0C4      RCALL	pop_gset2
+    05F2 9624      ADIW	R28,4
+    05F3 9508      RET
+(0135) }
+(0136) 
+(0137) /* * * * * 以下是对IIC总线的操作子程序 * * * * */   
+(0138) /* * * * * * 启动总线 * * * * */   
+(0139) static void start(void)    
+(0140) {    
+(0141)     //SCL=0; /* SCL处于高电平时,SDA从高电平转向低电平表示 */   
+(0142)     //CLR_SCL;
+(0143)     //SDA=1; /* 一个"开始"状态,该状态必须在其他命令之前执行 */   
+(0144)     SET_SDA;
 _start:
-    05E4 9AC5      SBI	0x18,5
-(0142)     NOP();
-    05E5 0000      NOP
-    05E6 940E0860  CALL	0x860
-(0143)     //SCL=1;
-(0144)     SET_SCL;
-(0145)     NOP(); NOP(); NOP();    
-(0146)     //SDA=0;
-(0147)     CLR_SDA;
-    05E8 B388      IN	R24,0x18
-    05E9 7D8F      ANDI	R24,0xDF
-    05EA BB88      OUT	0x18,R24
-    05EB 940E0858  CALL	0x858
-(0148)     NOP(); NOP(); NOP(); NOP();    
-(0149)     //SCL=0;
-(0150)     CLR_SCL;
-(0151)     //SDA=1;
-(0152)     //SET_SDA;
-(0153) 
-(0154)     return;
-    05ED 9508      RET
-(0155) }    
-(0156)    
-(0157) /* * * * * 停止IIC总线 * * * * */   
-(0158) static void stop(void)    
-(0159) {     
-(0160)     //SCL=0; /*SCL处于高电平时,SDA从低电平转向高电平 */
-(0161)     //CLR_SCL;   
-(0162)     //SDA=0; /*表示一个"停止"状态,该状态终止所有通讯 */
-(0163)     CLR_SDA;
-_stop:
-    05EE B388      IN	R24,0x18
-    05EF 7D8F      ANDI	R24,0xDF
-    05F0 BB88      OUT	0x18,R24
-(0164)     NOP();
-    05F1 0000      NOP
-    05F2 940E0860  CALL	0x860
-(0165)     //SCL=1;
-(0166)     SET_SCL;
-(0167)     NOP(); NOP(); NOP(); /* 空操作 */
-(0168)     //SDA=1;
-(0169)     SET_SDA;
     05F4 9AC5      SBI	0x18,5
-(0170)     NOP(); NOP(); NOP();
+(0145)     NOP();
     05F5 0000      NOP
-    05F6 0000      NOP
-    05F7 0000      NOP
-(0171)     //SCL=0;
-(0172)     //CLR_SCL;
-(0173)     
-(0174)     return;
-    05F8 9508      RET
-(0175) }    
-(0176)    
-(0177) /* * * * * 检查应答位 * * * * */   
-(0178) static unsigned char recAck(void)    
-(0179) {
-(0180)     unsigned char result;
-(0181)      unsigned char i=0;
+    05F6 940E0847  CALL	0x847
+(0146)     //SCL=1;
+(0147)     SET_SCL;
+(0148)     NOP(); NOP(); NOP();    
+(0149)     //SDA=0;
+(0150)     CLR_SDA;
+    05F8 B388      IN	R24,0x18
+    05F9 7D8F      ANDI	R24,0xDF
+    05FA BB88      OUT	0x18,R24
+    05FB 940E083A  CALL	0x83A
+(0151)     NOP(); NOP(); NOP(); NOP();    
+(0152)     //SCL=0;
+(0153)     CLR_SCL;
+(0154)     //SDA=1;
+(0155)     //SET_SDA;
+(0156) 
+(0157)     return;
+    05FD 9508      RET
+(0158) }    
+(0159)    
+(0160) /* * * * * 停止IIC总线 * * * * */   
+(0161) static void stop(void)    
+(0162) {     
+(0163)     //SCL=0; /*SCL处于高电平时,SDA从低电平转向高电平 */
+(0164)     //CLR_SCL;   
+(0165)     //SDA=0; /*表示一个"停止"状态,该状态终止所有通讯 */
+(0166)     CLR_SDA;
+_stop:
+    05FE B388      IN	R24,0x18
+    05FF 7D8F      ANDI	R24,0xDF
+    0600 BB88      OUT	0x18,R24
+(0167)     NOP();
+    0601 0000      NOP
+    0602 940E0847  CALL	0x847
+(0168)     //SCL=1;
+(0169)     SET_SCL;
+(0170)     NOP(); NOP(); NOP(); /* 空操作 */
+(0171)     //SDA=1;
+(0172)     SET_SDA;
+    0604 9AC5      SBI	0x18,5
+(0173)     NOP(); NOP(); NOP();
+    0605 0000      NOP
+    0606 0000      NOP
+    0607 0000      NOP
+(0174)     //SCL=0;
+(0175)     //CLR_SCL;
+(0176)     
+(0177)     return;
+    0608 9508      RET
+(0178) }    
+(0179)    
+(0180) /* * * * * 检查应答位 * * * * */   
+(0181) static unsigned char recAck(void)    
+(0182) {
+(0183)     unsigned char result;
+(0184)      unsigned char i=0;
 _recAck:
   result               --> R16
   i                    --> R16
-    05F9 2700      CLR	R16
-    05FA 940E08DA  CALL	0x8DA
-    05FC 940E0860  CALL	0x860
-(0182)     
-(0183)     //SCL=0;
-(0184)     //CLR_SCL;   
-(0185)     //SDA=1;
-(0186)     SET_SDA;
-(0187)     SDA_IN;
-(0188)     //SCL=1;
-(0189)     SET_SCL;
-(0190)     //change sda input mode.
-(0191)     NOP(); NOP(); NOP(); NOP();
-    05FE 0000      NOP
-    05FF C001      RJMP	0x0601
-(0192)     //CY=SDA;     /* 因为返回值总是放在CY中的 */
-(0193)     while(TEST_SDA&&(i>250)) i++;
-    0600 9503      INC	R16
-    0601 9BB5      SBIS	0x16,5
-    0602 C003      RJMP	0x0606
-    0603 E021      LDI	R18,1
-    0604 E030      LDI	R19,0
-    0605 C002      RJMP	0x0608
-    0606 2722      CLR	R18
-    0607 2733      CLR	R19
-    0608 3020      CPI	R18,0
-    0609 0723      CPC	R18,R19
-    060A F019      BEQ	0x060E
-    060B EF8A      LDI	R24,0xFA
-    060C 1780      CP	R24,R16
-    060D F390      BCS	0x0600
-(0194)     result = TEST_SDA;
-    060E 9BB5      SBIS	0x16,5
-    060F C003      RJMP	0x0613
-    0610 E001      LDI	R16,1
-    0611 E010      LDI	R17,0
-    0612 C002      RJMP	0x0615
-    0613 2700      CLR	R16
-    0614 2711      CLR	R17
-(0195)     //SCL=0;
-(0196)     CLR_SCL;
-    0615 B388      IN	R24,0x18
-    0616 7E8F      ANDI	R24,0xEF
-    0617 BB88      OUT	0x18,R24
-(0197)     //SDA_OUT;
-(0198)     SDA_OUT;
-    0618 9ABD      SBI	0x17,5
-(0199)     return result;
-    0619 9508      RET
-(0200) }    
-(0201)    
-(0202) /* * * * *对IIC总线产生应答 * * * * */   
-(0203) static void ack(void)    
-(0204) {     
-(0205)     //SDA=0; /* EEPROM通过在收到每个地址或数据之后, */
-(0206)     CLR_SDA;
+    0609 2700      CLR	R16
+    060A 940E08DF  CALL	0x8DF
+    060C 940E0847  CALL	0x847
+(0185)     
+(0186)     //SCL=0;
+(0187)     //CLR_SCL;   
+(0188)     //SDA=1;
+(0189)     SET_SDA;
+(0190)     SDA_IN;
+(0191)     //SCL=1;
+(0192)     SET_SCL;
+(0193)     //change sda input mode.
+(0194)     NOP(); NOP(); NOP(); NOP();
+    060E 0000      NOP
+    060F C001      RJMP	0x0611
+(0195)     //CY=SDA;     /* 因为返回值总是放在CY中的 */
+(0196)     while(TEST_SDA&&(i>250)) i++;
+    0610 9503      INC	R16
+    0611 9BB5      SBIS	0x16,5
+    0612 C003      RJMP	0x0616
+    0613 E021      LDI	R18,1
+    0614 E030      LDI	R19,0
+    0615 C002      RJMP	0x0618
+    0616 2722      CLR	R18
+    0617 2733      CLR	R19
+    0618 3020      CPI	R18,0
+    0619 0723      CPC	R18,R19
+    061A F019      BEQ	0x061E
+    061B EF8A      LDI	R24,0xFA
+    061C 1780      CP	R24,R16
+    061D F390      BCS	0x0610
+(0197)     result = TEST_SDA;
+    061E 9BB5      SBIS	0x16,5
+    061F C003      RJMP	0x0623
+    0620 E001      LDI	R16,1
+    0621 E010      LDI	R17,0
+    0622 C002      RJMP	0x0625
+    0623 2700      CLR	R16
+    0624 2711      CLR	R17
+(0198)     //SCL=0;
+(0199)     CLR_SCL;
+    0625 B388      IN	R24,0x18
+    0626 7E8F      ANDI	R24,0xEF
+    0627 BB88      OUT	0x18,R24
+(0200)     //SDA_OUT;
+(0201)     SDA_OUT;
+    0628 9ABD      SBI	0x17,5
+(0202)     return result;
+    0629 9508      RET
+(0203) }    
+(0204)    
+(0205) /* * * * *对IIC总线产生应答 * * * * */   
+(0206) static void ack(void)    
+(0207) {     
+(0208)     //SDA=0; /* EEPROM通过在收到每个地址或数据之后, */
+(0209)     CLR_SDA;
 _ack:
-    061A B388      IN	R24,0x18
-    061B 7D8F      ANDI	R24,0xDF
-    061C BB88      OUT	0x18,R24
-(0207)     //SCL=1; /* 置SDA低电平的方式确认表示收到读SDA口状态 */
-(0208)     SET_SCL;
-    061D 9AC4      SBI	0x18,4
-    061E 940E0858  CALL	0x858
-(0209)     NOP(); NOP(); NOP(); NOP();
-(0210)     //SCL=0;
-(0211)     CLR_SCL;   
-(0212)     NOP();
-    0620 0000      NOP
-(0213)     //SDA=1;
-(0214)     SET_SDA;
-    0621 9AC5      SBI	0x18,5
-(0215) 
-(0216)     return;
-    0622 9508      RET
-(0217) }    
-(0218)    
-(0219) /* * * * * * * * * 不对IIC总线产生应答 * * * * */   
-(0220) static void noAck(void)    
-(0221) {    
-(0222)     //SDA=1;
-(0223)     SET_SDA;
+    062A B388      IN	R24,0x18
+    062B 7D8F      ANDI	R24,0xDF
+    062C BB88      OUT	0x18,R24
+(0210)     //SCL=1; /* 置SDA低电平的方式确认表示收到读SDA口状态 */
+(0211)     SET_SCL;
+    062D 9AC4      SBI	0x18,4
+    062E 940E083A  CALL	0x83A
+(0212)     NOP(); NOP(); NOP(); NOP();
+(0213)     //SCL=0;
+(0214)     CLR_SCL;   
+(0215)     NOP();
+    0630 0000      NOP
+(0216)     //SDA=1;
+(0217)     SET_SDA;
+    0631 9AC5      SBI	0x18,5
+(0218) 
+(0219)     return;
+    0632 9508      RET
+(0220) }    
+(0221)    
+(0222) /* * * * * * * * * 不对IIC总线产生应答 * * * * */   
+(0223) static void noAck(void)    
+(0224) {    
+(0225)     //SDA=1;
+(0226)     SET_SDA;
 _noAck:
-    0623 9AC5      SBI	0x18,5
-(0224)     //SCL=1;
-(0225)     SET_SCL;
-    0624 9AC4      SBI	0x18,4
-    0625 940E0858  CALL	0x858
-(0226)     NOP(); NOP(); NOP(); NOP();    
-(0227)     //SCL=0;
-(0228)     CLR_SCL;
-(0229)     
-(0230)     return;
-    0627 9508      RET
+    0633 9AC5      SBI	0x18,5
+(0227)     //SCL=1;
+(0228)     SET_SCL;
+    0634 9AC4      SBI	0x18,4
+    0635 940E083A  CALL	0x83A
+(0229)     NOP(); NOP(); NOP(); NOP();    
+(0230)     //SCL=0;
+(0231)     CLR_SCL;
+(0232)     
+(0233)     return;
+    0637 9508      RET
 _sendByte:
   mask                 --> R20
   byte                 --> R16
-    0628 D08D      RCALL	push_gset1
-(0231) }    
-(0232)    
-(0233) /* * * * * * * * * 向IIC总线写数据 * * * * */   
-(0234) static void sendByte(unsigned char byte)    
-(0235) {
-(0236)     unsigned char mask = 0x80;
-    0629 E840      LDI	R20,0x80
-(0237)     for(;mask>0;)    
-    062A C011      RJMP	0x063C
-(0238)     {
-(0239)         //SCL=0;
-(0240)         CLR_SCL;
-    062B 940E08C9  CALL	0x8C9
-(0241)         NOP();NOP();
-    062D 0000      NOP
-(0242)         if(mask&byte)
-    062E 2E24      MOV	R2,R20
-    062F 2220      AND	R2,R16
-    0630 F011      BEQ	0x0633
-(0243)         {
-(0244)             //SDA=1;
-(0245)             SET_SDA;
-    0631 9AC5      SBI	0x18,5
-(0246)         }
-    0632 C003      RJMP	0x0636
-(0247)         else
-(0248)         {
-(0249)             //SDA=0;
-(0250)             CLR_SDA;
-    0633 B388      IN	R24,0x18
-    0634 7D8F      ANDI	R24,0xDF
-    0635 BB88      OUT	0x18,R24
-(0251)         }
-(0252)         mask >>= 1;
-    0636 9546      LSR	R20
-(0253)         NOP();NOP();
-    0637 0000      NOP
-    0638 0000      NOP
-(0254)         //SCL=1;
-(0255)         SET_SCL;
-    0639 9AC4      SBI	0x18,4
+    0638 D08B      RCALL	push_gset1
+(0234) }    
+(0235)    
+(0236) /* * * * * * * * * 向IIC总线写数据 * * * * */   
+(0237) static void sendByte(unsigned char byte)    
+(0238) {
+(0239)     unsigned char mask = 0x80;
+    0639 E840      LDI	R20,0x80
+(0240)     for(;mask>0;)    
+    063A C011      RJMP	0x064C
+(0241)     {
+(0242)         //SCL=0;
+(0243)         CLR_SCL;
+    063B 940E08BD  CALL	0x8BD
+(0244)         NOP();NOP();
+    063D 0000      NOP
+(0245)         if(mask&byte)
+    063E 2E24      MOV	R2,R20
+    063F 2220      AND	R2,R16
+    0640 F011      BEQ	0x0643
+(0246)         {
+(0247)             //SDA=1;
+(0248)             SET_SDA;
+    0641 9AC5      SBI	0x18,5
+(0249)         }
+    0642 C003      RJMP	0x0646
+(0250)         else
+(0251)         {
+(0252)             //SDA=0;
+(0253)             CLR_SDA;
+    0643 B388      IN	R24,0x18
+    0644 7D8F      ANDI	R24,0xDF
+    0645 BB88      OUT	0x18,R24
+(0254)         }
+(0255)         mask >>= 1;
+    0646 9546      LSR	R20
 (0256)         NOP();NOP();
-    063A 0000      NOP
-    063B 0000      NOP
-    063C 2422      CLR	R2
-    063D 1624      CP	R2,R20
-    063E F360      BCS	0x062B
-(0257)     }
-(0258)     //SCL=0;
-(0259)     CLR_SCL;
-    063F B388      IN	R24,0x18
-    0640 7E8F      ANDI	R24,0xEF
-    0641 BB88      OUT	0x18,R24
-(0260) 
-(0261)     return;
-    0642 D076      RCALL	pop_gset1
-    0643 9508      RET
+    0647 0000      NOP
+    0648 0000      NOP
+(0257)         //SCL=1;
+(0258)         SET_SCL;
+    0649 9AC4      SBI	0x18,4
+(0259)         NOP();NOP();
+    064A 0000      NOP
+    064B 0000      NOP
+    064C 2422      CLR	R2
+    064D 1624      CP	R2,R20
+    064E F360      BCS	0x063B
+(0260)     }
+(0261)     //SCL=0;
+(0262)     CLR_SCL;
+    064F B388      IN	R24,0x18
+    0650 7E8F      ANDI	R24,0xEF
+    0651 BB88      OUT	0x18,R24
+(0263) 
+(0264)     return;
+    0652 D074      RCALL	pop_gset1
+    0653 9508      RET
 _receiveByte:
   i                    --> R16
   receivebyte          --> R18
-    0644 D071      RCALL	push_gset1
-(0262) }
-(0263)    
-(0264) /* * * * * * * * * 从IIC总线上读数据子程序 * * * * */   
-(0265) static unsigned char receiveByte(void)    
-(0266) {     
-(0267)     unsigned char receivebyte = 0, i=8;     
-    0645 2722      CLR	R18
-    0646 E008      LDI	R16,0x8
-(0268)     //SCL=0;
-(0269)     CLR_SCL;
-    0647 B388      IN	R24,0x18
-    0648 7E8F      ANDI	R24,0xEF
-    0649 BB88      OUT	0x18,R24
-    064A 940E08DA  CALL	0x8DA
-(0270)     //SDA = 1;
-(0271)     SET_SDA;
-(0272)     SDA_IN;
-(0273)     NOP();NOP();
-    064C 0000      NOP
-    064D 0000      NOP
-    064E C013      RJMP	0x0662
-(0274)     while(i--)    
-(0275)     {     
-(0276)         //SCL=1;
-(0277)         SET_SCL;
-    064F 9AC4      SBI	0x18,4
-(0278)         NOP();NOP();
-    0650 0000      NOP
-    0651 0000      NOP
-(0279)         receivebyte = (receivebyte <<1 ) | TEST_SDA;
-    0652 9BB5      SBIS	0x16,5
-    0653 C003      RJMP	0x0657
-    0654 E041      LDI	R20,1
-    0655 E050      LDI	R21,0
-    0656 C002      RJMP	0x0659
-    0657 2744      CLR	R20
-    0658 2755      CLR	R21
-    0659 2E22      MOV	R2,R18
-    065A 2433      CLR	R3
-    065B 0C22      LSL	R2
-    065C 1C33      ROL	R3
-    065D 2A24      OR	R2,R20
-    065E 2A35      OR	R3,R21
-    065F 2D22      MOV	R18,R2
-    0660 940E08C9  CALL	0x8C9
-    0662 2E20      MOV	R2,R16
-    0663 2433      CLR	R3
-    0664 5001      SUBI	R16,1
-    0665 2022      TST	R2
-    0666 F741      BNE	0x064F
-(0280)         //SCL=0;
-(0281)         CLR_SCL;
-(0282)         NOP();
-(0283)     }
-(0284)     SDA_OUT;
-    0667 9ABD      SBI	0x17,5
-(0285)     return receivebyte;    
-    0668 2F02      MOV	R16,R18
-    0669 D04F      RCALL	pop_gset1
-    066A 9508      RET
-FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
+    0654 D06F      RCALL	push_gset1
+(0265) }
+(0266)    
+(0267) /* * * * * * * * * 从IIC总线上读数据子程序 * * * * */   
+(0268) static unsigned char receiveByte(void)    
+(0269) {     
+(0270)     unsigned char receivebyte = 0, i=8;     
+    0655 2722      CLR	R18
+    0656 E008      LDI	R16,0x8
+(0271)     //SCL=0;
+(0272)     CLR_SCL;
+    0657 B388      IN	R24,0x18
+    0658 7E8F      ANDI	R24,0xEF
+    0659 BB88      OUT	0x18,R24
+    065A 940E08DF  CALL	0x8DF
+(0273)     //SDA = 1;
+(0274)     SET_SDA;
+(0275)     SDA_IN;
+(0276)     NOP();NOP();
+    065C 0000      NOP
+    065D 0000      NOP
+    065E C013      RJMP	0x0672
+(0277)     while(i--)    
+(0278)     {     
+(0279)         //SCL=1;
+(0280)         SET_SCL;
+    065F 9AC4      SBI	0x18,4
+(0281)         NOP();NOP();
+    0660 0000      NOP
+    0661 0000      NOP
+(0282)         receivebyte = (receivebyte <<1 ) | TEST_SDA;
+    0662 9BB5      SBIS	0x16,5
+    0663 C003      RJMP	0x0667
+    0664 E041      LDI	R20,1
+    0665 E050      LDI	R21,0
+    0666 C002      RJMP	0x0669
+    0667 2744      CLR	R20
+    0668 2755      CLR	R21
+    0669 2E22      MOV	R2,R18
+    066A 2433      CLR	R3
+    066B 0C22      LSL	R2
+    066C 1C33      ROL	R3
+    066D 2A24      OR	R2,R20
+    066E 2A35      OR	R3,R21
+    066F 2D22      MOV	R18,R2
+    0670 940E08BD  CALL	0x8BD
+    0672 2E20      MOV	R2,R16
+    0673 2433      CLR	R3
+    0674 5001      SUBI	R16,1
+    0675 2022      TST	R2
+    0676 F741      BNE	0x065F
+(0283)         //SCL=0;
+(0284)         CLR_SCL;
+(0285)         NOP();
+(0286)     }
+(0287)     SDA_OUT;
+    0677 9ABD      SBI	0x17,5
+(0288)     return receivebyte;    
+    0678 2F02      MOV	R16,R18
+    0679 D04D      RCALL	pop_gset1
+    067A 9508      RET
+FILE: D:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
 (0001) #include<iom16v.h>
 (0002) #include <macros.h>
 (0003) 
@@ -2592,656 +2597,645 @@ FILE: Z:\yang-home-shanghai\smarthome\门禁系统资料\code\uart.c
 (0008) {
 (0009)     UCSRB = 0x00;                //禁止UART发送和接收
 _uart0_init:
-    066B 2422      CLR	R2
-    066C B82A      OUT	0x0A,R2
+    067B 2422      CLR	R2
+    067C B82A      OUT	0x0A,R2
 (0010)     UCSRA = 0x02;               //倍速
-    066D E082      LDI	R24,2
-    066E B98B      OUT	0x0B,R24
+    067D E082      LDI	R24,2
+    067E B98B      OUT	0x0B,R24
 (0011)     UCSRC = 0x06;                //8位数据
-    066F E086      LDI	R24,6
-    0670 BD80      OUT	0x20,R24
+    067F E086      LDI	R24,6
+    0680 BD80      OUT	0x20,R24
 (0012)     UBRRL = 0x67;                 //9600bps
-    0671 E687      LDI	R24,0x67
-    0672 B989      OUT	0x09,R24
+    0681 E687      LDI	R24,0x67
+    0682 B989      OUT	0x09,R24
 (0013)     UBRRH = 0x00;
-    0673 BC20      OUT	0x20,R2
+    0683 BC20      OUT	0x20,R2
 (0014)     UCSRB = 0x18;
 FILE: <library>
-    0674 E188      LDI	R24,0x18
-    0675 B98A      OUT	0x0A,R24
-    0676 9508      RET
+    0684 E188      LDI	R24,0x18
+    0685 B98A      OUT	0x0A,R24
+    0686 9508      RET
 push_arg4:
-    0677 940E08E6  CALL	0x8E6
+    0687 940E0903  CALL	0x903
 push_arg2:
-    0679 9508      RET
-empy32s:
+    0689 9508      RET
 empy32u:
-    067A D05B      RCALL	long_prolog
-    067B 927F      PUSH	R7
-    067C D072      RCALL	tstzero1
-    067D F131      BEQ	0x06A4
-    067E 2477      CLR	R7
-    067F D075      RCALL	tstzero2
-    0680 F419      BNE	0x0684
-    0681 018C      MOVW	R16,R24
-    0682 019D      MOVW	R18,R26
-    0683 C020      RJMP	0x06A4
-    0684 9F08      MUL	R16,R24
-    0685 2CB0      MOV	R11,R0
-    0686 2CA1      MOV	R10,R1
-    0687 9F28      MUL	R18,R24
-    0688 2C90      MOV	R9,R0
-    0689 2C81      MOV	R8,R1
-    068A 9F18      MUL	R17,R24
-    068B 0CA0      ADD	R10,R0
-    068C 1C91      ADC	R9,R1
-    068D 1C87      ADC	R8,R7
-    068E 9F09      MUL	R16,R25
-    068F 0CA0      ADD	R10,R0
-    0690 1C91      ADC	R9,R1
-    0691 1C87      ADC	R8,R7
-    0692 9F19      MUL	R17,R25
-    0693 0C90      ADD	R9,R0
-    0694 1C81      ADC	R8,R1
-    0695 9F0A      MUL	R16,R26
-    0696 0C90      ADD	R9,R0
-    0697 1C81      ADC	R8,R1
-    0698 9F38      MUL	R19,R24
-    0699 0C80      ADD	R8,R0
-    069A 9F29      MUL	R18,R25
-    069B 0C80      ADD	R8,R0
-    069C 9F1A      MUL	R17,R26
-    069D 0C80      ADD	R8,R0
-    069E 9F0B      MUL	R16,R27
-    069F 0C80      ADD	R8,R0
-    06A0 2D0B      MOV	R16,R11
-    06A1 2D1A      MOV	R17,R10
-    06A2 2D29      MOV	R18,R9
-    06A3 2D38      MOV	R19,R8
-    06A4 907F      POP	R7
-    06A5 C03E      RJMP	long_epilog
+empy32s:
+    068A D059      RCALL	long_prolog
+    068B 927F      PUSH	R7
+    068C D070      RCALL	tstzero1
+    068D F131      BEQ	0x06B4
+    068E 2477      CLR	R7
+    068F D073      RCALL	tstzero2
+    0690 F419      BNE	0x0694
+    0691 018C      MOVW	R16,R24
+    0692 019D      MOVW	R18,R26
+    0693 C020      RJMP	0x06B4
+    0694 9F08      MUL	R16,R24
+    0695 2CB0      MOV	R11,R0
+    0696 2CA1      MOV	R10,R1
+    0697 9F28      MUL	R18,R24
+    0698 2C90      MOV	R9,R0
+    0699 2C81      MOV	R8,R1
+    069A 9F18      MUL	R17,R24
+    069B 0CA0      ADD	R10,R0
+    069C 1C91      ADC	R9,R1
+    069D 1C87      ADC	R8,R7
+    069E 9F09      MUL	R16,R25
+    069F 0CA0      ADD	R10,R0
+    06A0 1C91      ADC	R9,R1
+    06A1 1C87      ADC	R8,R7
+    06A2 9F19      MUL	R17,R25
+    06A3 0C90      ADD	R9,R0
+    06A4 1C81      ADC	R8,R1
+    06A5 9F0A      MUL	R16,R26
+    06A6 0C90      ADD	R9,R0
+    06A7 1C81      ADC	R8,R1
+    06A8 9F38      MUL	R19,R24
+    06A9 0C80      ADD	R8,R0
+    06AA 9F29      MUL	R18,R25
+    06AB 0C80      ADD	R8,R0
+    06AC 9F1A      MUL	R17,R26
+    06AD 0C80      ADD	R8,R0
+    06AE 9F0B      MUL	R16,R27
+    06AF 0C80      ADD	R8,R0
+    06B0 2D0B      MOV	R16,R11
+    06B1 2D1A      MOV	R17,R10
+    06B2 2D29      MOV	R18,R9
+    06B3 2D38      MOV	R19,R8
+    06B4 907F      POP	R7
+    06B5 C03C      RJMP	long_epilog
 pop_gset2:
-    06A6 E0E2      LDI	R30,2
-    06A7 C012      RJMP	pop
+    06B6 E0E2      LDI	R30,2
+    06B7 C010      RJMP	pop
 pop_gset3:
-    06A8 E0E4      LDI	R30,4
-    06A9 C010      RJMP	pop
-pop_gset4:
-    06AA E0E8      LDI	R30,0x8
-    06AB C00E      RJMP	pop
+    06B8 E0E4      LDI	R30,4
+    06B9 C00E      RJMP	pop
 pop_gset5:
-    06AC 27EE      CLR	R30
-    06AD C00C      RJMP	pop
+    06BA 27EE      CLR	R30
+    06BB C00C      RJMP	pop
 push_gset5:
-    06AE 92FA      ST	R15,-Y
-    06AF 92EA      ST	R14,-Y
+    06BC 92FA      ST	R15,-Y
+    06BD 92EA      ST	R14,-Y
 push_gset4:
-    06B0 92DA      ST	R13,-Y
-    06B1 92CA      ST	R12,-Y
+    06BE 92DA      ST	R13,-Y
+    06BF 92CA      ST	R12,-Y
 push_gset3:
-    06B2 92BA      ST	R11,-Y
-    06B3 92AA      ST	R10,-Y
+    06C0 92BA      ST	R11,-Y
+    06C1 92AA      ST	R10,-Y
 push_gset2:
-    06B4 937A      ST	R23,-Y
-    06B5 936A      ST	R22,-Y
+    06C2 937A      ST	R23,-Y
+    06C3 936A      ST	R22,-Y
 push_gset1:
-    06B6 935A      ST	R21,-Y
-    06B7 934A      ST	R20,-Y
-    06B8 9508      RET
+    06C4 935A      ST	R21,-Y
+    06C5 934A      ST	R20,-Y
+    06C6 9508      RET
 pop_gset1:
-    06B9 E0E1      LDI	R30,1
+    06C7 E0E1      LDI	R30,1
 pop:
-    06BA 9149      LD	R20,Y+
-    06BB 9159      LD	R21,Y+
-    06BC FDE0      SBRC	R30,0
-    06BD 9508      RET
-    06BE 9169      LD	R22,Y+
-    06BF 9179      LD	R23,Y+
-    06C0 FDE1      SBRC	R30,1
-    06C1 9508      RET
-    06C2 90A9      LD	R10,Y+
-    06C3 90B9      LD	R11,Y+
-    06C4 FDE2      SBRC	R30,2
-    06C5 9508      RET
-    06C6 90C9      LD	R12,Y+
-    06C7 90D9      LD	R13,Y+
-    06C8 FDE3      SBRC	R30,3
-    06C9 9508      RET
-    06CA 90E9      LD	R14,Y+
-    06CB 90F9      LD	R15,Y+
-    06CC 9508      RET
+    06C8 9149      LD	R20,Y+
+    06C9 9159      LD	R21,Y+
+    06CA FDE0      SBRC	R30,0
+    06CB 9508      RET
+    06CC 9169      LD	R22,Y+
+    06CD 9179      LD	R23,Y+
+    06CE FDE1      SBRC	R30,1
+    06CF 9508      RET
+    06D0 90A9      LD	R10,Y+
+    06D1 90B9      LD	R11,Y+
+    06D2 FDE2      SBRC	R30,2
+    06D3 9508      RET
+    06D4 90C9      LD	R12,Y+
+    06D5 90D9      LD	R13,Y+
+    06D6 FDE3      SBRC	R30,3
+    06D7 9508      RET
+    06D8 90E9      LD	R14,Y+
+    06D9 90F9      LD	R15,Y+
+    06DA 9508      RET
 xicall:
-    06CD 920A      ST	R0,-Y
-    06CE 95C8      LPM
-    06CF 920A      ST	R0,-Y
-    06D0 9631      ADIW	R30,1
-    06D1 95C8      LPM
-    06D2 2DF0      MOV	R31,R0
-    06D3 91E9      LD	R30,Y+
-    06D4 9009      LD	R0,Y+
-    06D5 9409      IJMP
+    06DB 920A      ST	R0,-Y
+    06DC 95C8      LPM
+    06DD 920A      ST	R0,-Y
+    06DE 9631      ADIW	R30,1
+    06DF 95C8      LPM
+    06E0 2DF0      MOV	R31,R0
+    06E1 91E9      LD	R30,Y+
+    06E2 9009      LD	R0,Y+
+    06E3 9409      IJMP
 long_prolog:
-    06D6 928A      ST	R8,-Y
-    06D7 929A      ST	R9,-Y
-    06D8 92AA      ST	R10,-Y
-    06D9 92BA      ST	R11,-Y
-    06DA 93EA      ST	R30,-Y
-    06DB 938A      ST	R24,-Y
-    06DC 939A      ST	R25,-Y
-    06DD 93AA      ST	R26,-Y
-    06DE 93BA      ST	R27,-Y
-    06DF 8589      LDD	R24,Y+9
-    06E0 859A      LDD	R25,Y+10
-    06E1 85AB      LDD	R26,Y+11
-    06E2 85BC      LDD	R27,Y+12
-    06E3 9508      RET
+    06E4 928A      ST	R8,-Y
+    06E5 929A      ST	R9,-Y
+    06E6 92AA      ST	R10,-Y
+    06E7 92BA      ST	R11,-Y
+    06E8 93EA      ST	R30,-Y
+    06E9 938A      ST	R24,-Y
+    06EA 939A      ST	R25,-Y
+    06EB 93AA      ST	R26,-Y
+    06EC 93BA      ST	R27,-Y
+    06ED 8589      LDD	R24,Y+9
+    06EE 859A      LDD	R25,Y+10
+    06EF 85AB      LDD	R26,Y+11
+    06F0 85BC      LDD	R27,Y+12
+    06F1 9508      RET
 long_epilog:
-    06E4 91B9      LD	R27,Y+
-    06E5 91A9      LD	R26,Y+
-    06E6 9199      LD	R25,Y+
-    06E7 9189      LD	R24,Y+
-    06E8 91E9      LD	R30,Y+
-    06E9 90B9      LD	R11,Y+
-    06EA 90A9      LD	R10,Y+
-    06EB 9099      LD	R9,Y+
-    06EC 9089      LD	R8,Y+
-    06ED 9624      ADIW	R28,4
-    06EE 9508      RET
+    06F2 91B9      LD	R27,Y+
+    06F3 91A9      LD	R26,Y+
+    06F4 9199      LD	R25,Y+
+    06F5 9189      LD	R24,Y+
+    06F6 91E9      LD	R30,Y+
+    06F7 90B9      LD	R11,Y+
+    06F8 90A9      LD	R10,Y+
+    06F9 9099      LD	R9,Y+
+    06FA 9089      LD	R8,Y+
+    06FB 9624      ADIW	R28,4
+    06FC 9508      RET
 tstzero1:
-    06EF 27EE      CLR	R30
-    06F0 2BE0      OR	R30,R16
-    06F1 2BE1      OR	R30,R17
-    06F2 2BE2      OR	R30,R18
-    06F3 2BE3      OR	R30,R19
-    06F4 9508      RET
+    06FD 27EE      CLR	R30
+    06FE 2BE0      OR	R30,R16
+    06FF 2BE1      OR	R30,R17
+    0700 2BE2      OR	R30,R18
+    0701 2BE3      OR	R30,R19
+    0702 9508      RET
 tstzero2:
-    06F5 27EE      CLR	R30
-    06F6 2BE8      OR	R30,R24
-    06F7 2BE9      OR	R30,R25
-    06F8 2BEA      OR	R30,R26
-    06F9 2BEB      OR	R30,R27
-    06FA 9508      RET
+    0703 27EE      CLR	R30
+    0704 2BE8      OR	R30,R24
+    0705 2BE9      OR	R30,R25
+    0706 2BEA      OR	R30,R26
+    0707 2BEB      OR	R30,R27
+    0708 9508      RET
 push_lset:
-    06FB 93FA      ST	R31,-Y
-    06FC 93EA      ST	R30,-Y
-    06FD 93BA      ST	R27,-Y
-    06FE 93AA      ST	R26,-Y
-    06FF 939A      ST	R25,-Y
-    0700 938A      ST	R24,-Y
-    0701 940E08E6  CALL	0x8E6
-    0703 929A      ST	R9,-Y
-    0704 928A      ST	R8,-Y
-    0705 927A      ST	R7,-Y
-    0706 926A      ST	R6,-Y
-    0707 940E08FF  CALL	0x8FF
-    0709 921A      ST	R1,-Y
-    070A 920A      ST	R0,-Y
-    070B B60F      IN	R0,0x3F
-    070C 920A      ST	R0,-Y
-    070D 9508      RET
+    0709 93FA      ST	R31,-Y
+    070A 93EA      ST	R30,-Y
+    070B 93BA      ST	R27,-Y
+    070C 93AA      ST	R26,-Y
+    070D 939A      ST	R25,-Y
+    070E 938A      ST	R24,-Y
+    070F 940E0903  CALL	0x903
+    0711 929A      ST	R9,-Y
+    0712 928A      ST	R8,-Y
+    0713 927A      ST	R7,-Y
+    0714 926A      ST	R6,-Y
+    0715 940E08EA  CALL	0x8EA
+    0717 921A      ST	R1,-Y
+    0718 920A      ST	R0,-Y
+    0719 B60F      IN	R0,0x3F
+    071A 920A      ST	R0,-Y
+    071B 9508      RET
 pop_lset:
-    070E 9009      LD	R0,Y+
-    070F BE0F      OUT	0x3F,R0
-    0710 9009      LD	R0,Y+
-    0711 9019      LD	R1,Y+
-    0712 9029      LD	R2,Y+
-    0713 9039      LD	R3,Y+
-    0714 9049      LD	R4,Y+
-    0715 9059      LD	R5,Y+
-    0716 9069      LD	R6,Y+
-    0717 9079      LD	R7,Y+
-    0718 9089      LD	R8,Y+
-    0719 9099      LD	R9,Y+
-    071A 9109      LD	R16,Y+
-    071B 9119      LD	R17,Y+
-    071C 9129      LD	R18,Y+
-    071D 9139      LD	R19,Y+
-    071E 9189      LD	R24,Y+
-    071F 9199      LD	R25,Y+
-    0720 91A9      LD	R26,Y+
-    0721 91B9      LD	R27,Y+
-    0722 91E9      LD	R30,Y+
-    0723 91F9      LD	R31,Y+
-    0724 9508      RET
+    071C 9009      LD	R0,Y+
+    071D BE0F      OUT	0x3F,R0
+    071E 9009      LD	R0,Y+
+    071F 9019      LD	R1,Y+
+    0720 9029      LD	R2,Y+
+    0721 9039      LD	R3,Y+
+    0722 9049      LD	R4,Y+
+    0723 9059      LD	R5,Y+
+    0724 9069      LD	R6,Y+
+    0725 9079      LD	R7,Y+
+    0726 9089      LD	R8,Y+
+    0727 9099      LD	R9,Y+
+    0728 9109      LD	R16,Y+
+    0729 9119      LD	R17,Y+
+    072A 9129      LD	R18,Y+
+    072B 9139      LD	R19,Y+
+    072C 9189      LD	R24,Y+
+    072D 9199      LD	R25,Y+
+    072E 91A9      LD	R26,Y+
+    072F 91B9      LD	R27,Y+
+    0730 91E9      LD	R30,Y+
+    0731 91F9      LD	R31,Y+
+    0732 9508      RET
 lsl32:
-    0725 920F      PUSH	R0
-    0726 9009      LD	R0,Y+
-    0727 2000      TST	R0
-    0728 F031      BEQ	0x072F
-    0729 0F00      LSL	R16
-    072A 1F11      ROL	R17
-    072B 1F22      ROL	R18
-    072C 1F33      ROL	R19
-    072D 940A      DEC	R0
-    072E CFF8      RJMP	0x0727
-    072F 900F      POP	R0
-    0730 9508      RET
+    0733 920F      PUSH	R0
+    0734 9009      LD	R0,Y+
+    0735 2000      TST	R0
+    0736 F031      BEQ	0x073D
+    0737 0F00      LSL	R16
+    0738 1F11      ROL	R17
+    0739 1F22      ROL	R18
+    073A 1F33      ROL	R19
+    073B 940A      DEC	R0
+    073C CFF8      RJMP	0x0735
+    073D 900F      POP	R0
+    073E 9508      RET
 lsr32:
-    0731 920F      PUSH	R0
-    0732 9009      LD	R0,Y+
-    0733 2000      TST	R0
-    0734 F031      BEQ	0x073B
-    0735 9536      LSR	R19
-    0736 9527      ROR	R18
-    0737 9517      ROR	R17
-    0738 9507      ROR	R16
-    0739 940A      DEC	R0
-    073A CFF8      RJMP	0x0733
-    073B 900F      POP	R0
-    073C 9508      RET
+    073F 920F      PUSH	R0
+    0740 9009      LD	R0,Y+
+    0741 2000      TST	R0
+    0742 F031      BEQ	0x0749
+    0743 9536      LSR	R19
+    0744 9527      ROR	R18
+    0745 9517      ROR	R17
+    0746 9507      ROR	R16
+    0747 940A      DEC	R0
+    0748 CFF8      RJMP	0x0741
+    0749 900F      POP	R0
+    074A 9508      RET
 asgncblk:
-    073D 93AA      ST	R26,-Y
-    073E 93BA      ST	R27,-Y
-    073F 93EA      ST	R30,-Y
-    0740 93FA      ST	R31,-Y
-    0741 920A      ST	R0,-Y
-    0742 81AF      LDD	R26,Y+7
-    0743 85B8      LDD	R27,Y+8
-    0744 81ED      LDD	R30,Y+5
-    0745 81FE      LDD	R31,Y+6
-    0746 3000      CPI	R16,0
-    0747 0701      CPC	R16,R17
-    0748 F031      BEQ	0x074F
-    0749 95C8      LPM
-    074A 920D      ST	R0,X+
-    074B 9631      ADIW	R30,1
-    074C 5001      SUBI	R16,1
-    074D 4010      SBCI	R17,0
-    074E CFF7      RJMP	0x0746
-    074F 9009      LD	R0,Y+
-    0750 91F9      LD	R31,Y+
-    0751 91E9      LD	R30,Y+
-    0752 91B9      LD	R27,Y+
-    0753 91A9      LD	R26,Y+
-    0754 9624      ADIW	R28,4
-    0755 9508      RET
+    074B 93AA      ST	R26,-Y
+    074C 93BA      ST	R27,-Y
+    074D 93EA      ST	R30,-Y
+    074E 93FA      ST	R31,-Y
+    074F 920A      ST	R0,-Y
+    0750 81AF      LDD	R26,Y+7
+    0751 85B8      LDD	R27,Y+8
+    0752 81ED      LDD	R30,Y+5
+    0753 81FE      LDD	R31,Y+6
+    0754 3000      CPI	R16,0
+    0755 0701      CPC	R16,R17
+    0756 F031      BEQ	0x075D
+    0757 95C8      LPM
+    0758 920D      ST	R0,X+
+    0759 9631      ADIW	R30,1
+    075A 5001      SUBI	R16,1
+    075B 4010      SBCI	R17,0
+    075C CFF7      RJMP	0x0754
+    075D 9009      LD	R0,Y+
+    075E 91F9      LD	R31,Y+
+    075F 91E9      LD	R30,Y+
+    0760 91B9      LD	R27,Y+
+    0761 91A9      LD	R26,Y+
+    0762 9624      ADIW	R28,4
+    0763 9508      RET
 asgnblk:
-    0756 93AA      ST	R26,-Y
-    0757 93BA      ST	R27,-Y
-    0758 93EA      ST	R30,-Y
-    0759 93FA      ST	R31,-Y
-    075A 920A      ST	R0,-Y
-    075B 81AF      LDD	R26,Y+7
-    075C 85B8      LDD	R27,Y+8
-    075D 81ED      LDD	R30,Y+5
-    075E 81FE      LDD	R31,Y+6
-    075F 3000      CPI	R16,0
-    0760 0701      CPC	R16,R17
-    0761 F029      BEQ	0x0767
-    0762 9001      LD	R0,Z+
-    0763 920D      ST	R0,X+
-    0764 5001      SUBI	R16,1
-    0765 4010      SBCI	R17,0
-    0766 CFF8      RJMP	0x075F
-    0767 9009      LD	R0,Y+
-    0768 91F9      LD	R31,Y+
-    0769 91E9      LD	R30,Y+
-    076A 91B9      LD	R27,Y+
-    076B 91A9      LD	R26,Y+
-    076C 9624      ADIW	R28,4
-    076D 9508      RET
+    0764 93AA      ST	R26,-Y
+    0765 93BA      ST	R27,-Y
+    0766 93EA      ST	R30,-Y
+    0767 93FA      ST	R31,-Y
+    0768 920A      ST	R0,-Y
+    0769 81AF      LDD	R26,Y+7
+    076A 85B8      LDD	R27,Y+8
+    076B 81ED      LDD	R30,Y+5
+    076C 81FE      LDD	R31,Y+6
+    076D 3000      CPI	R16,0
+    076E 0701      CPC	R16,R17
+    076F F029      BEQ	0x0775
+    0770 9001      LD	R0,Z+
+    0771 920D      ST	R0,X+
+    0772 5001      SUBI	R16,1
+    0773 4010      SBCI	R17,0
+    0774 CFF8      RJMP	0x076D
+    0775 9009      LD	R0,Y+
+    0776 91F9      LD	R31,Y+
+    0777 91E9      LD	R30,Y+
+    0778 91B9      LD	R27,Y+
+    0779 91A9      LD	R26,Y+
+    077A 9624      ADIW	R28,4
+    077B 9508      RET
 <created procedures>:
-    076E 90400062  LDS	R4,id_code+2
-    0770 90500063  LDS	R5,id_code+3
-    0772 90200060  LDS	R2,id_code
-    0774 90300061  LDS	R3,id_code+1
-    0776 0C22      LSL	R2
-    0777 1C33      ROL	R3
-    0778 1C44      ROL	R4
-    0779 1C55      ROL	R5
-    077A 92300061  STS	id_code+1,R3
-    077C 92200060  STS	id_code,R2
-    077E 92500063  STS	id_code+3,R5
-    0780 92400062  STS	id_code+2,R4
-    0782 9508      RET
-    0783 2433      CLR	R3
-    0784 2444      CLR	R4
-    0785 2455      CLR	R5
-    0786 8060      LDD	R6,Z+0
-    0787 8071      LDD	R7,Z+1
-    0788 8082      LDD	R8,Z+2
-    0789 8093      LDD	R9,Z+3
-    078A 2862      OR	R6,R2
-    078B 2873      OR	R7,R3
-    078C 2884      OR	R8,R4
-    078D 2895      OR	R9,R5
-    078E 8260      STD	Z+0,R6
-    078F 8271      STD	Z+1,R7
-    0790 8282      STD	Z+2,R8
-    0791 8293      STD	Z+3,R9
-    0792 E088      LDI	R24,0x8
-    0793 E090      LDI	R25,0
-    0794 8020      LDD	R2,Z+0
-    0795 8031      LDD	R3,Z+1
-    0796 8042      LDD	R4,Z+2
-    0797 8053      LDD	R5,Z+3
-    0798 938A      ST	R24,-Y
-    0799 0181      MOVW	R16,R2
-    079A 0192      MOVW	R18,R4
-    079B 9508      RET
-    079C 8628      STD	Y+8,R2
-    079D 8639      STD	Y+9,R3
-    079E 864A      STD	Y+10,R4
-    079F 865B      STD	Y+11,R5
-    07A0 9040006C  LDS	R4,passwordH+2
-    07A2 9050006D  LDS	R5,passwordH+3
-    07A4 9020006A  LDS	R2,passwordH
-    07A6 9030006B  LDS	R3,passwordH+1
-    07A8 822C      STD	Y+4,R2
-    07A9 823D      STD	Y+5,R3
-    07AA 824E      STD	Y+6,R4
-    07AB 825F      STD	Y+7,R5
+    077C 2433      CLR	R3
+    077D 2444      CLR	R4
+    077E 2455      CLR	R5
+    077F 01FE      MOVW	R30,R28
+    0780 8063      LDD	R6,Z+3
+    0781 8074      LDD	R7,Z+4
+    0782 8085      LDD	R8,Z+5
+    0783 8096      LDD	R9,Z+6
+    0784 2862      OR	R6,R2
+    0785 2873      OR	R7,R3
+    0786 2884      OR	R8,R4
+    0787 2895      OR	R9,R5
+    0788 01FE      MOVW	R30,R28
+    0789 8263      STD	Z+3,R6
+    078A 8274      STD	Z+4,R7
+    078B 8285      STD	Z+5,R8
+    078C 8296      STD	Z+6,R9
+    078D E088      LDI	R24,0x8
+    078E E090      LDI	R25,0
+    078F 01FE      MOVW	R30,R28
+    0790 8023      LDD	R2,Z+3
+    0791 8034      LDD	R3,Z+4
+    0792 8045      LDD	R4,Z+5
+    0793 8056      LDD	R5,Z+6
+    0794 938A      ST	R24,-Y
+    0795 0181      MOVW	R16,R2
+    0796 0192      MOVW	R18,R4
+    0797 9508      RET
+    0798 90400062  LDS	R4,id_code+2
+    079A 90500063  LDS	R5,id_code+3
+    079C 90200060  LDS	R2,id_code
+    079E 90300061  LDS	R3,id_code+1
+    07A0 0C22      LSL	R2
+    07A1 1C33      ROL	R3
+    07A2 1C44      ROL	R4
+    07A3 1C55      ROL	R5
+    07A4 92300061  STS	id_code+1,R3
+    07A6 92200060  STS	id_code,R2
+    07A8 92500063  STS	id_code+3,R5
+    07AA 92400062  STS	id_code+2,R4
     07AC 9508      RET
-    07AD 92300061  STS	id_code+1,R3
-    07AF 92200060  STS	id_code,R2
-    07B1 92500063  STS	id_code+3,R5
-    07B3 92400062  STS	id_code+2,R4
-    07B5 9508      RET
-    07B6 E040      LDI	R20,0
-    07B7 E050      LDI	R21,0
-    07B8 E060      LDI	R22,0
-    07B9 E070      LDI	R23,0
-    07BA 9508      RET
-    07BB E050      LDI	R21,0
-    07BC E060      LDI	R22,0
-    07BD E070      LDI	R23,0
-    07BE 01FE      MOVW	R30,R28
-    07BF 9508      RET
-    07C0 9040006C  LDS	R4,passwordH+2
-    07C2 9050006D  LDS	R5,passwordH+3
-    07C4 9020006A  LDS	R2,passwordH
-    07C6 9030006B  LDS	R3,passwordH+1
-    07C8 9508      RET
-    07C9 90400062  LDS	R4,id_code+2
-    07CB 90500063  LDS	R5,id_code+3
-    07CD 90200060  LDS	R2,id_code
-    07CF 90300061  LDS	R3,id_code+1
-    07D1 9508      RET
-    07D2 E090      LDI	R25,0
-    07D3 8020      LDD	R2,Z+0
-    07D4 8031      LDD	R3,Z+1
-    07D5 8042      LDD	R4,Z+2
-    07D6 8053      LDD	R5,Z+3
-    07D7 938A      ST	R24,-Y
-    07D8 0181      MOVW	R16,R2
-    07D9 0192      MOVW	R18,R4
-    07DA 9508      RET
-    07DB 90400070  LDS	R4,passwordL+2
-    07DD 90500071  LDS	R5,passwordL+3
-    07DF 9020006E  LDS	R2,passwordL
-    07E1 9030006F  LDS	R3,passwordL+1
-    07E3 9508      RET
-    07E4 01F0      MOVW	R30,R0
-    07E5 E783      LDI	R24,0x73
-    07E6 E090      LDI	R25,0
-    07E7 0FE8      ADD	R30,R24
-    07E8 1FF9      ADC	R31,R25
-    07E9 9508      RET
-    07EA B382      IN	R24,0x12
-    07EB 7E8F      ANDI	R24,0xEF
-    07EC BB82      OUT	0x12,R24
-    07ED E604      LDI	R16,0x64
-    07EE E010      LDI	R17,0
-    07EF 9508      RET
-    07F0 01FE      MOVW	R30,R28
-    07F1 8343      STD	Z+3,R20
-    07F2 8354      STD	Z+4,R21
-    07F3 8365      STD	Z+5,R22
-    07F4 8376      STD	Z+6,R23
-    07F5 E081      LDI	R24,1
-    07F6 8388      STD	Y+0,R24
-    07F7 E08D      LDI	R24,0xD
-    07F8 9D8C      MUL	R24,R12
-    07F9 0190      MOVW	R18,R0
-    07FA 9508      RET
-    07FB 01FE      MOVW	R30,R28
-    07FC A820      LDD	R2,Z+48
-    07FD A831      LDD	R3,Z+49
-    07FE A842      LDD	R4,Z+50
-    07FF A853      LDD	R5,Z+51
-    0800 9508      RET
-    0801 01FE      MOVW	R30,R28
-    0802 8223      STD	Z+3,R2
-    0803 8234      STD	Z+4,R3
-    0804 8245      STD	Z+5,R4
-    0805 8256      STD	Z+6,R5
-    0806 2422      CLR	R2
-    0807 8228      STD	Y+0,R2
-    0808 E08D      LDI	R24,0xD
-    0809 9D8A      MUL	R24,R10
-    080A 0190      MOVW	R18,R0
-    080B 9508      RET
-    080C 8020      LDD	R2,Z+0
-    080D 8031      LDD	R3,Z+1
-    080E 8042      LDD	R4,Z+2
-    080F 8053      LDD	R5,Z+3
+    07AD 8628      STD	Y+8,R2
+    07AE 8639      STD	Y+9,R3
+    07AF 864A      STD	Y+10,R4
+    07B0 865B      STD	Y+11,R5
+    07B1 9040006C  LDS	R4,passwordH+2
+    07B3 9050006D  LDS	R5,passwordH+3
+    07B5 9020006A  LDS	R2,passwordH
+    07B7 9030006B  LDS	R3,passwordH+1
+    07B9 822C      STD	Y+4,R2
+    07BA 823D      STD	Y+5,R3
+    07BB 824E      STD	Y+6,R4
+    07BC 825F      STD	Y+7,R5
+    07BD 9508      RET
+    07BE 92300061  STS	id_code+1,R3
+    07C0 92200060  STS	id_code,R2
+    07C2 92500063  STS	id_code+3,R5
+    07C4 92400062  STS	id_code+2,R4
+    07C6 9508      RET
+    07C7 E050      LDI	R21,0
+    07C8 E060      LDI	R22,0
+    07C9 E070      LDI	R23,0
+    07CA 01FE      MOVW	R30,R28
+    07CB 9508      RET
+    07CC E040      LDI	R20,0
+    07CD E050      LDI	R21,0
+    07CE E060      LDI	R22,0
+    07CF E070      LDI	R23,0
+    07D0 9508      RET
+    07D1 90400062  LDS	R4,id_code+2
+    07D3 90500063  LDS	R5,id_code+3
+    07D5 90200060  LDS	R2,id_code
+    07D7 90300061  LDS	R3,id_code+1
+    07D9 9508      RET
+    07DA 9040006C  LDS	R4,passwordH+2
+    07DC 9050006D  LDS	R5,passwordH+3
+    07DE 9020006A  LDS	R2,passwordH
+    07E0 9030006B  LDS	R3,passwordH+1
+    07E2 9508      RET
+    07E3 90400070  LDS	R4,passwordL+2
+    07E5 90500071  LDS	R5,passwordL+3
+    07E7 9020006E  LDS	R2,passwordL
+    07E9 9030006F  LDS	R3,passwordL+1
+    07EB 9508      RET
+    07EC E060      LDI	R22,0
+    07ED E070      LDI	R23,0
+    07EE 01FE      MOVW	R30,R28
+    07EF 8741      STD	Z+9,R20
+    07F0 8752      STD	Z+10,R21
+    07F1 8763      STD	Z+11,R22
+    07F2 8774      STD	Z+12,R23
+    07F3 01CE      MOVW	R24,R28
+    07F4 01FE      MOVW	R30,R28
+    07F5 9508      RET
+    07F6 E00D      LDI	R16,0xD
+    07F7 E010      LDI	R17,0
+    07F8 93FA      ST	R31,-Y
+    07F9 93EA      ST	R30,-Y
+    07FA 939A      ST	R25,-Y
+    07FB 938A      ST	R24,-Y
+    07FC 940E0764  CALL	asgnblk
+    07FE 019E      MOVW	R18,R28
+    07FF 9508      RET
+    0800 01F0      MOVW	R30,R0
+    0801 E783      LDI	R24,0x73
+    0802 E090      LDI	R25,0
+    0803 0FE8      ADD	R30,R24
+    0804 1FF9      ADC	R31,R25
+    0805 9508      RET
+    0806 E041      LDI	R20,1
+    0807 E050      LDI	R21,0
+    0808 E060      LDI	R22,0
+    0809 E070      LDI	R23,0
+    080A 9508      RET
+    080B 01FE      MOVW	R30,R28
+    080C A820      LDD	R2,Z+48
+    080D A831      LDD	R3,Z+49
+    080E A842      LDD	R4,Z+50
+    080F A853      LDD	R5,Z+51
     0810 9508      RET
-    0811 E060      LDI	R22,0
-    0812 E070      LDI	R23,0
-    0813 01FE      MOVW	R30,R28
-    0814 8741      STD	Z+9,R20
-    0815 8752      STD	Z+10,R21
-    0816 8763      STD	Z+11,R22
-    0817 8774      STD	Z+12,R23
-    0818 01CE      MOVW	R24,R28
-    0819 01FE      MOVW	R30,R28
-    081A 9508      RET
-    081B E00D      LDI	R16,0xD
-    081C E010      LDI	R17,0
-    081D 93FA      ST	R31,-Y
-    081E 93EA      ST	R30,-Y
-    081F 939A      ST	R25,-Y
-    0820 938A      ST	R24,-Y
-    0821 940E0756  CALL	asgnblk
-    0823 019E      MOVW	R18,R28
-    0824 9508      RET
-    0825 01FE      MOVW	R30,R28
-    0826 8343      STD	Z+3,R20
-    0827 8354      STD	Z+4,R21
-    0828 8365      STD	Z+5,R22
-    0829 8376      STD	Z+6,R23
-    082A 9508      RET
-    082B A820      LDD	R2,Z+48
-    082C A831      LDD	R3,Z+49
-    082D A842      LDD	R4,Z+50
-    082E A853      LDD	R5,Z+51
-    082F 9508      RET
-    0830 4F3F      SBCI	R19,0xFF
-    0831 018E      MOVW	R16,R28
-    0832 5F0D      SUBI	R16,0xFD
-    0833 4F1F      SBCI	R17,0xFF
-    0834 9508      RET
-    0835 E041      LDI	R20,1
-    0836 E050      LDI	R21,0
-    0837 E060      LDI	R22,0
-    0838 E070      LDI	R23,0
-    0839 9350006F  STS	passwordL+1,R21
-    083B 9340006E  STS	passwordL,R20
-    083D 93700071  STS	passwordL+3,R23
-    083F 93600070  STS	passwordL+2,R22
+    0811 B382      IN	R24,0x12
+    0812 7E8F      ANDI	R24,0xEF
+    0813 BB82      OUT	0x12,R24
+    0814 E604      LDI	R16,0x64
+    0815 E010      LDI	R17,0
+    0816 9508      RET
+    0817 01FE      MOVW	R30,R28
+    0818 8427      LDD	R2,Z+15
+    0819 8830      LDD	R3,Z+16
+    081A 8841      LDD	R4,Z+17
+    081B 8852      LDD	R5,Z+18
+    081C 9508      RET
+    081D 8741      STD	Z+9,R20
+    081E 8752      STD	Z+10,R21
+    081F 8763      STD	Z+11,R22
+    0820 8774      STD	Z+12,R23
+    0821 01CE      MOVW	R24,R28
+    0822 01FE      MOVW	R30,R28
+    0823 9508      RET
+    0824 A820      LDD	R2,Z+48
+    0825 A831      LDD	R3,Z+49
+    0826 A842      LDD	R4,Z+50
+    0827 A853      LDD	R5,Z+51
+    0828 9508      RET
+    0829 2224      AND	R2,R20
+    082A 2235      AND	R3,R21
+    082B 2246      AND	R4,R22
+    082C 2257      AND	R5,R23
+    082D 9508      RET
+    082E 01FE      MOVW	R30,R28
+    082F 8C22      LDD	R2,Z+26
+    0830 8C33      LDD	R3,Z+27
+    0831 8C44      LDD	R4,Z+28
+    0832 8C55      LDD	R5,Z+29
+    0833 8228      STD	Y+0,R2
+    0834 8239      STD	Y+1,R3
+    0835 824A      STD	Y+2,R4
+    0836 825B      STD	Y+3,R5
+    0837 91200068  LDS	R18,current_index
+    0839 9508      RET
+    083A 0000      NOP
+    083B 0000      NOP
+    083C 0000      NOP
+    083D 0000      NOP
+    083E B388      IN	R24,0x18
+    083F 7E8F      ANDI	R24,0xEF
+    0840 BB88      OUT	0x18,R24
     0841 9508      RET
-    0842 E041      LDI	R20,1
-    0843 E050      LDI	R21,0
-    0844 E060      LDI	R22,0
-    0845 E070      LDI	R23,0
+    0842 1462      CP	R6,R2
+    0843 0473      CPC	R7,R3
+    0844 0484      CPC	R8,R4
+    0845 0495      CPC	R9,R5
     0846 9508      RET
-    0847 2224      AND	R2,R20
-    0848 2235      AND	R3,R21
-    0849 2246      AND	R4,R22
-    084A 2257      AND	R5,R23
+    0847 9AC4      SBI	0x18,4
+    0848 0000      NOP
+    0849 0000      NOP
+    084A 0000      NOP
     084B 9508      RET
-    084C 01FE      MOVW	R30,R28
-    084D 8C22      LDD	R2,Z+26
-    084E 8C33      LDD	R3,Z+27
-    084F 8C44      LDD	R4,Z+28
-    0850 8C55      LDD	R5,Z+29
-    0851 8228      STD	Y+0,R2
-    0852 8239      STD	Y+1,R3
-    0853 824A      STD	Y+2,R4
-    0854 825B      STD	Y+3,R5
-    0855 91200068  LDS	R18,current_index
-    0857 9508      RET
-    0858 0000      NOP
-    0859 0000      NOP
-    085A 0000      NOP
-    085B 0000      NOP
-    085C B388      IN	R24,0x18
-    085D 7E8F      ANDI	R24,0xEF
-    085E BB88      OUT	0x18,R24
-    085F 9508      RET
-    0860 9AC4      SBI	0x18,4
-    0861 0000      NOP
-    0862 0000      NOP
-    0863 0000      NOP
-    0864 9508      RET
-    0865 01F0      MOVW	R30,R0
-    0866 E785      LDI	R24,0x75
-    0867 E090      LDI	R25,0
-    0868 0FE8      ADD	R30,R24
-    0869 1FF9      ADC	R31,R25
-    086A 9508      RET
-    086B 1462      CP	R6,R2
-    086C 0473      CPC	R7,R3
-    086D 0484      CPC	R8,R4
-    086E 0495      CPC	R9,R5
-    086F 9508      RET
-    0870 91800066  LDS	R24,read_count
-    0872 5F8F      SUBI	R24,0xFF
-    0873 93800066  STS	read_count,R24
-    0875 9508      RET
-    0876 01FE      MOVW	R30,R28
-    0877 8023      LDD	R2,Z+3
-    0878 8034      LDD	R3,Z+4
-    0879 8045      LDD	R4,Z+5
-    087A 8056      LDD	R5,Z+6
-    087B 01FE      MOVW	R30,R28
-    087C 9508      RET
-    087D EF4F      LDI	R20,0xFF
-    087E E050      LDI	R21,0
-    087F E060      LDI	R22,0
-    0880 E070      LDI	R23,0
-    0881 9508      RET
-    0882 8228      STD	Y+0,R2
-    0883 8239      STD	Y+1,R3
-    0884 824A      STD	Y+2,R4
-    0885 825B      STD	Y+3,R5
+    084C 8427      LDD	R2,Z+15
+    084D 8830      LDD	R3,Z+16
+    084E 8841      LDD	R4,Z+17
+    084F 8852      LDD	R5,Z+18
+    0850 9508      RET
+    0851 01F0      MOVW	R30,R0
+    0852 E785      LDI	R24,0x75
+    0853 E090      LDI	R25,0
+    0854 0FE8      ADD	R30,R24
+    0855 1FF9      ADC	R31,R25
+    0856 9508      RET
+    0857 E081      LDI	R24,1
+    0858 838A      STD	Y+2,R24
+    0859 E08D      LDI	R24,0xD
+    085A 9F86      MUL	R24,R22
+    085B 01C0      MOVW	R24,R0
+    085C 9508      RET
+    085D 2422      CLR	R2
+    085E 822A      STD	Y+2,R2
+    085F E08D      LDI	R24,0xD
+    0860 9F86      MUL	R24,R22
+    0861 01C0      MOVW	R24,R0
+    0862 9508      RET
+    0863 91800066  LDS	R24,read_count
+    0865 5F8F      SUBI	R24,0xFF
+    0866 93800066  STS	read_count,R24
+    0868 9508      RET
+    0869 01FE      MOVW	R30,R28
+    086A 8345      STD	Z+5,R20
+    086B 8356      STD	Z+6,R21
+    086C 8367      STD	Z+7,R22
+    086D 8770      STD	Z+8,R23
+    086E 9508      RET
+    086F 8228      STD	Y+0,R2
+    0870 8239      STD	Y+1,R3
+    0871 824A      STD	Y+2,R4
+    0872 825B      STD	Y+3,R5
+    0873 9508      RET
+    0874 8345      STD	Z+5,R20
+    0875 8356      STD	Z+6,R21
+    0876 8367      STD	Z+7,R22
+    0877 8770      STD	Z+8,R23
+    0878 9508      RET
+    0879 8341      STD	Z+1,R20
+    087A 8352      STD	Z+2,R21
+    087B 8363      STD	Z+3,R22
+    087C 8374      STD	Z+4,R23
+    087D 9508      RET
+    087E 9350006F  STS	passwordL+1,R21
+    0880 9340006E  STS	passwordL,R20
+    0882 93700071  STS	passwordL+3,R23
+    0884 93600070  STS	passwordL+2,R22
     0886 9508      RET
-    0887 01FE      MOVW	R30,R28
-    0888 8341      STD	Z+1,R20
-    0889 8352      STD	Z+2,R21
-    088A 8363      STD	Z+3,R22
-    088B 8374      STD	Z+4,R23
-    088C 9508      RET
-    088D 01FE      MOVW	R30,R28
-    088E 8345      STD	Z+5,R20
-    088F 8356      STD	Z+6,R21
-    0890 8367      STD	Z+7,R22
-    0891 8770      STD	Z+8,R23
-    0892 9508      RET
-    0893 B382      IN	R24,0x12
-    0894 7E8F      ANDI	R24,0xEF
-    0895 BB82      OUT	0x12,R24
-    0896 E900      LDI	R16,0x90
-    0897 E011      LDI	R17,1
-    0898 9508      RET
-    0899 91800069  LDS	R24,input_err_count
-    089B 5F8F      SUBI	R24,0xFF
-    089C 93800069  STS	input_err_count,R24
-    089E 9508      RET
-    089F E090      LDI	R25,0
-    08A0 8399      STD	Y+1,R25
-    08A1 8388      STD	Y+0,R24
-    08A2 E22C      LDI	R18,0x2C
-    08A3 E031      LDI	R19,1
-    08A4 9508      RET
-    08A5 01F5      MOVW	R30,R10
-    08A6 8300      STD	Z+0,R16
-    08A7 8311      STD	Z+1,R17
-    08A8 8322      STD	Z+2,R18
-    08A9 8333      STD	Z+3,R19
-    08AA 9508      RET
-    08AB 2433      CLR	R3
-    08AC 8239      STD	Y+1,R3
-    08AD 8228      STD	Y+0,R2
-    08AE E021      LDI	R18,1
-    08AF 018E      MOVW	R16,R28
-    08B0 5F0D      SUBI	R16,0xFD
-    08B1 4F1F      SBCI	R17,0xFF
-    08B2 9508      RET
-    08B3 E586      LDI	R24,0x56
-    08B4 E090      LDI	R25,0
-    08B5 8399      STD	Y+1,R25
-    08B6 8388      STD	Y+0,R24
-    08B7 E926      LDI	R18,0x96
-    08B8 E030      LDI	R19,0
-    08B9 E001      LDI	R16,1
-    08BA 9508      RET
-    08BB 2C2E      MOV	R2,R14
-    08BC 2433      CLR	R3
-    08BD 2D82      MOV	R24,R2
-    08BE 5081      SUBI	R24,1
-    08BF 2EE8      MOV	R14,R24
-    08C0 2022      TST	R2
+    0887 EF4F      LDI	R20,0xFF
+    0888 E050      LDI	R21,0
+    0889 E060      LDI	R22,0
+    088A E070      LDI	R23,0
+    088B 9508      RET
+    088C 880B      LDD	R0,Y+19
+    088D 881C      LDD	R1,Y+20
+    088E 8219      STD	Y+1,R1
+    088F 8208      STD	Y+0,R0
+    0890 E024      LDI	R18,4
+    0891 018E      MOVW	R16,R28
+    0892 5F09      SUBI	R16,0xF9
+    0893 4F1F      SBCI	R17,0xFF
+    0894 9508      RET
+    0895 01FE      MOVW	R30,R28
+    0896 8303      STD	Z+3,R16
+    0897 8314      STD	Z+4,R17
+    0898 8325      STD	Z+5,R18
+    0899 8336      STD	Z+6,R19
+    089A 9508      RET
+    089B E090      LDI	R25,0
+    089C 8399      STD	Y+1,R25
+    089D 8388      STD	Y+0,R24
+    089E E22C      LDI	R18,0x2C
+    089F E031      LDI	R19,1
+    08A0 9508      RET
+    08A1 91800069  LDS	R24,input_err_count
+    08A3 5F8F      SUBI	R24,0xFF
+    08A4 93800069  STS	input_err_count,R24
+    08A6 9508      RET
+    08A7 B382      IN	R24,0x12
+    08A8 7E8F      ANDI	R24,0xEF
+    08A9 BB82      OUT	0x12,R24
+    08AA E900      LDI	R16,0x90
+    08AB E011      LDI	R17,1
+    08AC 9508      RET
+    08AD E586      LDI	R24,0x56
+    08AE E090      LDI	R25,0
+    08AF 8399      STD	Y+1,R25
+    08B0 8388      STD	Y+0,R24
+    08B1 E926      LDI	R18,0x96
+    08B2 E030      LDI	R19,0
+    08B3 E001      LDI	R16,1
+    08B4 9508      RET
+    08B5 2433      CLR	R3
+    08B6 8239      STD	Y+1,R3
+    08B7 8228      STD	Y+0,R2
+    08B8 E021      LDI	R18,1
+    08B9 018E      MOVW	R16,R28
+    08BA 5F0D      SUBI	R16,0xFD
+    08BB 4F1F      SBCI	R17,0xFF
+    08BC 9508      RET
+    08BD B388      IN	R24,0x18
+    08BE 7E8F      ANDI	R24,0xEF
+    08BF BB88      OUT	0x18,R24
+    08C0 0000      NOP
     08C1 9508      RET
-    08C2 82D9      STD	Y+1,R13
-    08C3 82C8      STD	Y+0,R12
-    08C4 E024      LDI	R18,4
-    08C5 018E      MOVW	R16,R28
-    08C6 5F0D      SUBI	R16,0xFD
-    08C7 4F1F      SBCI	R17,0xFF
+    08C2 2C2E      MOV	R2,R14
+    08C3 2433      CLR	R3
+    08C4 2D82      MOV	R24,R2
+    08C5 5081      SUBI	R24,1
+    08C6 2EE8      MOV	R14,R24
+    08C7 2022      TST	R2
     08C8 9508      RET
-    08C9 B388      IN	R24,0x18
-    08CA 7E8F      ANDI	R24,0xEF
-    08CB BB88      OUT	0x18,R24
-    08CC 0000      NOP
+    08C9 8399      STD	Y+1,R25
+    08CA 8388      STD	Y+0,R24
+    08CB E024      LDI	R18,4
+    08CC 018E      MOVW	R16,R28
     08CD 9508      RET
-    08CE E090      LDI	R25,0
-    08CF 93900065  STS	id_reader_flags+1,R25
-    08D1 93800064  STS	id_reader_flags,R24
-    08D3 9508      RET
-    08D4 2422      CLR	R2
-    08D5 2433      CLR	R3
-    08D6 8231      STD	Z+1,R3
-    08D7 8220      STD	Z+0,R2
-    08D8 E084      LDI	R24,4
-    08D9 9508      RET
-    08DA 9AC5      SBI	0x18,5
-    08DB B387      IN	R24,0x17
-    08DC 7D8F      ANDI	R24,0xDF
-    08DD BB87      OUT	0x17,R24
-    08DE 9AC5      SBI	0x18,5
-    08DF 9508      RET
-    08E0 01C0      MOVW	R24,R0
-    08E1 9601      ADIW	R24,1
-    08E2 8399      STD	Y+1,R25
-    08E3 8388      STD	Y+0,R24
-    08E4 E021      LDI	R18,1
-    08E5 9508      RET
-    08E6 933A      ST	R19,-Y
-    08E7 932A      ST	R18,-Y
-    08E8 931A      ST	R17,-Y
-    08E9 930A      ST	R16,-Y
-    08EA 9508      RET
-    08EB 8348      STD	Y+0,R20
-    08EC 8359      STD	Y+1,R21
-    08ED 836A      STD	Y+2,R22
-    08EE 837B      STD	Y+3,R23
-    08EF 9508      RET
-    08F0 1624      CP	R2,R20
-    08F1 0635      CPC	R3,R21
-    08F2 0646      CPC	R4,R22
-    08F3 0657      CPC	R5,R23
-    08F4 9508      RET
-    08F5 940E06FB  CALL	push_lset
-    08F7 940E06B4  CALL	push_gset2
-    08F9 9508      RET
-    08FA 2D2C      MOV	R18,R12
-    08FB 018E      MOVW	R16,R28
-    08FC 5F04      SUBI	R16,0xF4
-    08FD 4F1F      SBCI	R17,0xFF
-    08FE 9508      RET
-    08FF 925A      ST	R5,-Y
-    0900 924A      ST	R4,-Y
-    0901 923A      ST	R3,-Y
-    0902 922A      ST	R2,-Y
-    0903 9508      RET
+    08CE 8399      STD	Y+1,R25
+    08CF 8388      STD	Y+0,R24
+    08D0 E024      LDI	R18,4
+    08D1 018A      MOVW	R16,R20
+    08D2 9508      RET
+    08D3 2422      CLR	R2
+    08D4 2433      CLR	R3
+    08D5 8231      STD	Z+1,R3
+    08D6 8220      STD	Z+0,R2
+    08D7 E084      LDI	R24,4
+    08D8 9508      RET
+    08D9 E090      LDI	R25,0
+    08DA 93900065  STS	id_reader_flags+1,R25
+    08DC 93800064  STS	id_reader_flags,R24
+    08DE 9508      RET
+    08DF 9AC5      SBI	0x18,5
+    08E0 B387      IN	R24,0x17
+    08E1 7D8F      ANDI	R24,0xDF
+    08E2 BB87      OUT	0x17,R24
+    08E3 9AC5      SBI	0x18,5
+    08E4 9508      RET
+    08E5 8343      STD	Z+3,R20
+    08E6 8354      STD	Z+4,R21
+    08E7 8365      STD	Z+5,R22
+    08E8 8376      STD	Z+6,R23
+    08E9 9508      RET
+    08EA 925A      ST	R5,-Y
+    08EB 924A      ST	R4,-Y
+    08EC 923A      ST	R3,-Y
+    08ED 922A      ST	R2,-Y
+    08EE 9508      RET
+    08EF 8348      STD	Y+0,R20
+    08F0 8359      STD	Y+1,R21
+    08F1 836A      STD	Y+2,R22
+    08F2 837B      STD	Y+3,R23
+    08F3 9508      RET
+    08F4 9601      ADIW	R24,1
+    08F5 8399      STD	Y+1,R25
+    08F6 8388      STD	Y+0,R24
+    08F7 E021      LDI	R18,1
+    08F8 9508      RET
+    08F9 2D2C      MOV	R18,R12
+    08FA 018E      MOVW	R16,R28
+    08FB 5F04      SUBI	R16,0xF4
+    08FC 4F1F      SBCI	R17,0xFF
+    08FD 9508      RET
+    08FE 1624      CP	R2,R20
+    08FF 0635      CPC	R3,R21
+    0900 0646      CPC	R4,R22
+    0901 0657      CPC	R5,R23
+    0902 9508      RET
+    0903 933A      ST	R19,-Y
+    0904 932A      ST	R18,-Y
+    0905 931A      ST	R17,-Y
+    0906 930A      ST	R16,-Y
+    0907 9508      RET
