@@ -17,33 +17,39 @@
 int main(void)
 {
     unsigned int door_minitor_count = 0;
-    passwordItem_t t;
-
+    passwordItem_t t, ot;
+	
     uart0_init();
     init_interrupt();
     tips_port_init();
     timer_init();
     at24c256_init();
-    //printf("running...");
-    t.flags = PASSWORDFLAGS_ID |PASSWORDFLAGS_PASSWORD;
-    t.idCard = 1392618;
+
+    t.flags = PASSWORDFLAGS_PASSWORD;
+    t.idCard = 0;
     t.passwordH = 1;
     t.passwordL = 1007;
     insertPasswordItem(0, t);
 
     t.flags = PASSWORDFLAGS_PASSWORD;
     t.idCard = 0;
-    t.passwordH = 113564240;
-    t.passwordL = 1600;
+    t.passwordH = 1135642406;
+    t.passwordL = 100;
     insertPasswordItem(1, t);
 
     t.flags = PASSWORDFLAGS_PASSWORD;
     t.idCard = 0;
-    t.passwordH = 131415926;
-    t.passwordL = 15;
+    t.passwordH = 1314159265;
+    t.passwordL = 1;
     insertPasswordItem(2, t);
 
-    writePasswordItemNum(3);
+    t.flags = PASSWORDFLAGS_PASSWORD;
+    t.idCard = 0;
+    t.passwordH = 1;
+    t.passwordL = 1000;
+    insertPasswordItem(3, t);
+
+	writePasswordItemNum(4);
 
     while(1)
     {
@@ -62,6 +68,7 @@ int main(void)
             if(door_minitor_count)
                 door_minitor_count = 0;
         }
+		delay_ms(500);
     }
     return 0;
 }

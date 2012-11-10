@@ -83,6 +83,8 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
             start();  /*   启动总线   */   
             sendByte(AT24C256DEVADDR |0x01); /*   向IIC总线写数据   */   
             if(recAck()) continue;//器件没应答结束本次本层循环    
+            //循环数量要减一。
+            len--;
             while(len--)  /*   字节长为0结束   */   
             {
                 *(data++)= receiveByte();    
@@ -102,33 +104,34 @@ char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned 
     return err;    
 }    
 
-void rw24c256Int(unsigned long *data, unsigned int addr, unsigned char rwFlag)
+unsigned long rw24c256Int(unsigned long data, unsigned int addr, unsigned char rwFlag)
 {
     unsigned char tmp[4] = {0, 0, 0, 0};
-    
+	unsigned long out = 0;
+
     if(rwFlag==RW24C256WRITE)
     {
-        tmp[0] = (unsigned char)((*data)&0x000000ff);
-        tmp[1] = (unsigned char)(((*data)>>8)&0x000000ff);
-        tmp[2] = (unsigned char)(((*data)>>16)&0x000000ff);
-        tmp[3] = (unsigned char)(((*data)>>24)&0x000000ff);
-
+        tmp[0] = (unsigned char)(data&0x000000ff);
+        tmp[1] = (unsigned char)((data>>8)&0x000000ff);
+        tmp[2] = (unsigned char)((data>>16)&0x000000ff);
+        tmp[3] = (unsigned char)((data>>24)&0x000000ff);
         rw24c256((unsigned char*)&tmp, 4, addr, RW24C256WRITE);
+		out = data;
     }
     else
     {
         rw24c256((unsigned char*)&tmp, 4, addr, RW24C256READ);
 
-        *data = 0;
-        *data |= tmp[0];
-        *data <<= 8;
-        *data |= tmp[1];
-        *data <<= 8;
-        *data |= tmp[2];
-        *data <<= 8;
-        *data |= tmp[3];
+        out= 0;
+        out |= tmp[0];
+        out <<= 8;
+        out |= tmp[1];
+        out <<= 8;
+        out |= tmp[2];
+        out <<= 8;
+        out |= tmp[3];
     }
-    return;
+    return out;
 }
 
 /* * * * * 以下是对IIC总线的操作子程序 * * * * */   

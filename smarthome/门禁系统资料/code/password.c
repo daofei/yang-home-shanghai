@@ -33,41 +33,29 @@ passwordItem_t readPasswordItem(unsigned char index)
 {
     passwordItem_t item;
     unsigned char t = 0;
-    unsigned long tmp = 0;
 
     rw24c256(&t, 1, index*13+1, RW24C256READ);
     item.flags = t;
 
-    tmp = 0;
-    rw24c256Int(&tmp, index*13+2, RW24C256READ);
-    item.idCard = tmp;
+    rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RW24C256READ);
     
-    tmp = 0;
-    rw24c256Int(&tmp, index*13+6, RW24C256READ);
-    item.passwordH = tmp;
-    
-    tmp = 0;
-    rw24c256Int(&tmp, index*13+10, RW24C256READ);
-    item.passwordL = tmp;
+    rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RW24C256READ);
+	
+    rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RW24C256READ);
     
     return item;
 }
 
 void insertPasswordItem(unsigned char index, passwordItem_t item)
 {
-    unsigned long tmp = 0;
-
     rw24c256(&(item.flags), 1, index*13+1, RW24C256WRITE);
-
-    tmp = item.idCard;
-    rw24c256Int(&tmp, index*13+2, RW24C256WRITE);
-    
-    tmp = item.passwordH;
-    rw24c256Int(&tmp, index*13+6, RW24C256WRITE);
-    
-    tmp = item.passwordL;
-    rw24c256Int(&tmp, index*13+10, RW24C256WRITE);
-
+	
+    rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RW24C256WRITE);
+	
+    rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RW24C256WRITE);
+	
+    rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RW24C256WRITE);
+	
     return;
 }
 
