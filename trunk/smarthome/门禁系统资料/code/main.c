@@ -43,10 +43,10 @@ int main(void)
     t.passwordL = 1;
     insertPasswordItem(2, t);
 
-    t.flags = PASSWORDFLAGS_PASSWORD;
-    t.idCard = 0;
+    t.flags = PASSWORDFLAGS_ID;
+    t.idCard = 1392618;
     t.passwordH = 1;
-    t.passwordL = 1000;
+    t.passwordL = 1;
     insertPasswordItem(3, t);
 
 	writePasswordItemNum(4);

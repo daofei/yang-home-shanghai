@@ -30,7 +30,7 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0076   119A =   4506. bytes (rel,con,rom)
+                            text   0076   118A =   4490. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
@@ -38,72 +38,72 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
        003B  __start
        005A  _exit
        005B  _main
-       00E7  _init_interrupt
-       016F  _int0_isr
-       018D  _int1_isr
-       01A9  _delay_1ms
-       01B2  _delay_ms
-       01BF  _tips_port_init
-       01C6  _tips_led_on
-       01CA  _tips_led_off
-       01CC  _tips_beep_on
-       01D0  _tips_beep_off
-       01D2  _tips_ok
-       01DB  _tips_err
-       01F5  _tips_id_ok
-       020B  _tips_ring_on
-       0217  _readPasswordItemNum
-       0222  _readPasswordItem
-       0256  _insertPasswordItem
-       027B  _writePasswordItemNum
-       02AB  _password_handle
-       03F5  _timer_init
-       0404  _set_timer
-       0424  _stop_timer
-       043A  _timer0_isr
-       0492  _log
-       0493  _locker_init
-       0494  _locker_unlock
-       0495  _locker_lock
-       0496  _ringandscreen_init
-       04A1  _screen_on
-       04B4  _screen_off
-       04B6  _ring_on
-       04C0  _ring_screen_timeout
-       04C7  _door_minitor_timeout
-       04D8  _input_isr
-       04F6  _check_door
-       04FE  _at24c256_init
-       0505  _rw24c256
-       0568  _rw24c256Int
-       067B  _uart0_init
-       0687  push_arg4
-       0689  push_arg2
-       068A  empy32u
-       068A  empy32s
-       06B6  pop_gset2
-       06B8  pop_gset3
-       06BA  pop_gset5
-       06BC  push_gset5
-       06BE  push_gset4
-       06C0  push_gset3
-       06C2  push_gset2
-       06C4  push_gset1
-       06C7  pop_gset1
-       06C8  pop
-       06DB  xicall
-       06E4  long_prolog
-       06F2  long_epilog
-       06FD  tstzero1
-       0703  tstzero2
-       0709  push_lset
-       071C  pop_lset
-       0733  lsl32
-       073F  lsr32
-       074B  asgncblk
-       0764  asgnblk
-       077C  <created procedures>
-       0908  __text_end
+       00F3  _init_interrupt
+       017B  _int0_isr
+       0199  _int1_isr
+       01B5  _delay_1ms
+       01BE  _delay_ms
+       01CB  _tips_port_init
+       01D2  _tips_led_on
+       01D6  _tips_led_off
+       01D8  _tips_beep_on
+       01DC  _tips_beep_off
+       01DE  _tips_ok
+       01E7  _tips_err
+       0201  _tips_id_ok
+       0217  _tips_ring_on
+       0223  _readPasswordItemNum
+       022E  _readPasswordItem
+       0262  _insertPasswordItem
+       0287  _writePasswordItemNum
+       02B7  _password_handle
+       03E8  _timer_init
+       03F7  _set_timer
+       0417  _stop_timer
+       042D  _timer0_isr
+       0485  _log
+       0486  _locker_init
+       0487  _locker_unlock
+       0488  _locker_lock
+       0489  _ringandscreen_init
+       0494  _screen_on
+       04A7  _screen_off
+       04A9  _ring_on
+       04B3  _ring_screen_timeout
+       04BA  _door_minitor_timeout
+       04CB  _input_isr
+       04E9  _check_door
+       04F1  _at24c256_init
+       04F8  _rw24c256
+       055B  _rw24c256Int
+       066E  _uart0_init
+       067A  push_arg4
+       067C  push_arg2
+       067D  empy32u
+       067D  empy32s
+       06A9  pop_gset2
+       06AB  pop_gset3
+       06AD  pop_gset5
+       06AF  push_gset5
+       06B1  push_gset4
+       06B3  push_gset3
+       06B5  push_gset2
+       06B7  push_gset1
+       06BA  pop_gset1
+       06BB  pop
+       06CE  xicall
+       06D7  long_prolog
+       06E5  long_epilog
+       06F0  tstzero1
+       06F6  tstzero2
+       06FC  push_lset
+       070F  pop_lset
+       0726  lsl32
+       0732  lsr32
+       073E  asgncblk
+       0757  asgnblk
+       076F  <created procedures>
+       0900  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
