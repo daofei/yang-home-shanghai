@@ -57,7 +57,7 @@ void timer0_isr(void)
     static char time_pices = 0;
     ++time_pices;
     //200ms.
-    if(time_pices == 5)
+    if(time_pices == 2)
     {
         char running_timer_count = 0;
         char i;

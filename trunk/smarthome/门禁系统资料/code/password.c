@@ -116,8 +116,8 @@ void password_handle(char type, unsigned long code)
     {
         clear_pswd_status();
         tips_err();
-        //set time out. 200ms*5*60
-        set_timer(PASSWORDTIMEOUTTIMER, 300, cannot_input_time_out);
+        //set time out. 100ms*10*60
+        set_timer(PASSWORDTIMEOUTTIMER, 600, cannot_input_time_out);
         return;
     }
  
@@ -144,8 +144,8 @@ void password_handle(char type, unsigned long code)
                     tips_led_on();
                     current_index = i;
                     password_read_flags = PASSWORDREADIDCARDOK;
-                    //set time out. 200ms*5*30
-                    set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
+                    //set time out. 100ms*10*30
+                    set_timer(PASSWORDTIMEOUTTIMER, 300, input_time_out);
                 }
                 else //only id card.
                 {
@@ -246,8 +246,8 @@ void password_handle(char type, unsigned long code)
         else
         {
             tips_led_on();
-            //set time out. 200ms*5*30
-            set_timer(PASSWORDTIMEOUTTIMER, 150, input_time_out);
+            //set time out. 100ms*10*30
+            set_timer(PASSWORDTIMEOUTTIMER, 300, input_time_out);
             passwordL = passwordL*10 + code;
             //passwordH save password hight 9 num.
             if(passwordL>999999999)
