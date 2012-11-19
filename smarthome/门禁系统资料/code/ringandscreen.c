@@ -79,7 +79,7 @@ void door_minitor_timeout(char timer)
     {
         tips_err();
         //start timer. 10s.
-        set_timer(RINGANDSCREENINPUTTIMER, 70, door_minitor_timeout); 
+        set_timer(RINGANDSCREENINPUTTIMER, 140, door_minitor_timeout); 
     }
 }
 
@@ -94,14 +94,14 @@ void input_isr(void)
         ring_on();
         tips_ring_on();
         //start timer. 50s.
-        set_timer(RINGANDSCREENINPUTTIMER, 300, ring_screen_timeout);
+        set_timer(RINGANDSCREENINPUTTIMER, 600, ring_screen_timeout);
     }
     else if(!(PIND&0x02)) //screen key input.
     {
         screen_on();
         delay_ms(800);
         //start timer. 50s.
-        set_timer(RINGANDSCREENINPUTTIMER, 300, ring_screen_timeout);
+        set_timer(RINGANDSCREENINPUTTIMER, 600, ring_screen_timeout);
     }
     enable_input();
     return;

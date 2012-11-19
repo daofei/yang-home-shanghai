@@ -84,7 +84,7 @@ static void set_id_reading_status(void)
     {
         id_reader_flags = IDREADERFLAG_READING;
         id_code = 0;
-        //1*200ms.
+        //1*100ms.
         set_timer(IDREADERTIMEOUTTIMER, 1, read_time_out);
     }
     return;
