@@ -24,6 +24,7 @@ int main(void)
     tips_port_init();
     timer_init();
     at24c256_init();
+	doorandscreen_init();
 
     t.flags = PASSWORDFLAGS_PASSWORD;
     t.idCard = 0;
