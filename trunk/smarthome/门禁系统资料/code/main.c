@@ -20,7 +20,7 @@ int main(void)
     passwordItem_t t, ot;
 	
     uart0_init();
-    init_interrupt();
+    wg26_init_interrupt();
     tips_port_init();
     timer_init();
     at24c256_init();
@@ -53,21 +53,16 @@ int main(void)
 
     while(1)
     {
-        //door open.
-        if(check_door())
-        {
-            door_minitor_count++;
-            if(door_minitor_count>20)
-            {
-                tips_err();
-                door_minitor_count = 0;
-            }
-        }
-        else
-        {
-            if(door_minitor_count)
-                door_minitor_count = 0;
-        }
+		door_minitor_count++;
+		if(door_minitor_count>20)
+		{
+			//door open.
+			if(check_door())
+			{
+				tips_err();
+			}
+			door_minitor_count = 0;
+		}
 		delay_ms(500);
     }
     return 0;

@@ -21,7 +21,7 @@ tips.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\sm
 tips.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
 	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\tips.c
 password.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/log.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/locker.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/tips.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h
+ D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/eeprom.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/password.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/ringandscreen.h
 password.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
 	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\password.c
 timer.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code/timer.h

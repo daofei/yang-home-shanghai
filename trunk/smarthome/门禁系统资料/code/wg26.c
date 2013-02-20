@@ -3,32 +3,37 @@
 #include "password.h"
 #include "timer.h"
 
-//pd2 input wg26 d0, pd3 input wg26 pd3.
+//pc0 input wg26 d0, pc1 input wg26 d1.
 //wg26 d0 is 0, d1 is 1.
-void init_interrupt(void)
+void wg26_init_interrupt(void)
 {
-    //pd2,pd3 input mode.
-    DDRD &= 0xf3;
+    //pc0,pc1 input mode.
+    DDRC &= 0xfc;
     //…œ¿≠°£
-    PORTD |= 0x0c;
+    PORTC |= 0x03;
     //enable interrupt.
+    //pd2 input mode.
+    DDRD &= 0xfb;
+	//
+	PORTD |= 0x04;
+	
     SREG |= 0x80;
-    //int1 int0 enable.
-    GICR |= 0xc0;
-    //int1 int0 fall edge.
-    MCUCR |= 0x0a;
+    //int0 enable.
+    GICR |= 0x40;
+    //int0 fall edge.
+    MCUCR |= 0x02;
     return;
 }
 //diable reader.
 static void disable_reader(void)
 {
-    GICR &= 0x3f;
+    GICR &= 0xbf;
     return;
 }
 //enable reader.
 static void enable_reader(void)
 {
-    GICR |= 0xc0;
+    GICR |= 0x40;
     return;
 }
 
@@ -94,33 +99,17 @@ static void set_id_reading_status(void)
 void int0_isr(void)
 {
     set_id_reading_status();
-    if(!(PIND&0x08))
+    if(!(PINC&0x02))
     {
         id_code <<= 1;
         id_code |= 1;
         ++read_count;
     }
-    else if(!(PIND&0x04))
+    else if(!(PINC&0x01))
     {
         id_code <<= 1;
         ++read_count;
     }
     return;
 }
-#pragma interrupt_handler int1_isr:3
-void int1_isr(void)
-{
-    set_id_reading_status();
-    if(!(PIND&0x08))
-    {
-        id_code <<= 1;
-        id_code |= 1;
-        ++read_count;
-    }
-    else if(!(PIND&0x04))
-    {
-        id_code <<= 1;
-        ++read_count;
-    }
-    return;
-}
+

@@ -7,6 +7,7 @@
 #include "timer.h"
 #include "eeprom.h"
 #include "password.h"
+#include "ringandscreen.h"
 
 //eeprom 
 //addr: 0 number.
@@ -111,6 +112,8 @@ void password_handle(char type, unsigned long code)
     unsigned char i;
     passwordItem_t item;
 
+	//on screen
+	screen_on();
     //if input error count is too large.
     if(input_err_count>5)
     {

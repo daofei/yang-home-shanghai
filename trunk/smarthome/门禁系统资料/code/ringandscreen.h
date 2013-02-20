@@ -5,7 +5,9 @@
 extern "C" {
 #endif
 
-void ringandscreen_init(void);
+void doorandscreen_init(void);
+
+void screen_on(void);
 
 char check_door(void);
 

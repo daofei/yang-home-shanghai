@@ -6,7 +6,7 @@ extern "C" {
 #endif
 
 //tips port init.
-//pd4 beep,pd5 led.
+//pb5 beep,pb6 led.
 void tips_port_init(void);
 void tips_led_on(void);
 void tips_led_off(void);
