@@ -30,7 +30,7 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0072   10A0 =   4256. bytes (rel,con,rom)
+                            text   0072   1096 =   4246. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
@@ -38,34 +38,34 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
        0039  __start
        0058  _exit
        0059  _main
-       00EA  _wg26_init_interrupt
-       0172  _int0_isr
-       018D  _delay_1ms
-       0196  _delay_ms
-       01A3  _tips_port_init
-       01AA  _tips_led_on
-       01AE  _tips_led_off
-       01B0  _tips_beep_on
-       01B4  _tips_beep_off
-       01B6  _tips_ok
-       01BF  _tips_err
-       01D9  _tips_id_ok
-       01F1  _tips_ring_on
-       01FB  _readPasswordItemNum
-       0206  _readPasswordItem
-       023A  _insertPasswordItem
-       025F  _writePasswordItemNum
-       028F  _password_handle
-       03C4  _timer_init
-       03D3  _set_timer
-       03F3  _stop_timer
-       0409  _timer0_isr
-       0464  _log
-       0465  _locker_init
-       0466  _locker_unlock
-       0467  _locker_lock
-       0468  _doorandscreen_init
-       0471  _screen_on
+       00EB  _wg26_init_interrupt
+       0173  _int0_isr
+       018E  _delay_1ms
+       0197  _delay_ms
+       01A4  _tips_port_init
+       01AB  _tips_led_on
+       01AF  _tips_led_off
+       01B1  _tips_beep_on
+       01B5  _tips_beep_off
+       01B7  _tips_ok
+       01C0  _tips_err
+       01DA  _tips_id_ok
+       01F2  _tips_ring_on
+       01FC  _readPasswordItemNum
+       0207  _readPasswordItem
+       023B  _insertPasswordItem
+       0260  _writePasswordItemNum
+       0290  _password_handle
+       03C5  _timer_init
+       03D4  _set_timer
+       03F4  _stop_timer
+       040A  _timer0_isr
+       0465  _log
+       0466  _locker_init
+       0467  _locker_unlock
+       0468  _locker_lock
+       0469  _doorandscreen_init
+       0470  _screen_on
        0478  _check_door
        047B  _at24c256_init
        0482  _rw24c256
@@ -97,7 +97,7 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
        06C8  asgncblk
        06E1  asgnblk
        06F9  <created procedures>
-       0889  __text_end
+       0884  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------

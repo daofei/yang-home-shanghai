@@ -9,8 +9,8 @@
 //door monitor input is pa0.
 //screen power output pb7.
 
-#define SCREEN_ON (PORTB|=0x80)
-#define SCREEN_OFF (PORTB&=0x7f)
+#define SCREEN_ON (PORTB &= 0x7f)
+#define SCREEN_OFF (PORTB |= 0x80)
 
 void doorandscreen_init(void)
 {
@@ -20,7 +20,7 @@ void doorandscreen_init(void)
     //pb7 OUTPUT.
     DDRB |= 0x80;
     //init screen off
-    PORTB &= 0x7f;
+    PORTB |= 0x80;
     //init interrput.
     return;
 }
@@ -126,7 +126,7 @@ void input_isr(void)
 void screen_on(void)
 {
     SCREEN_ON;
-    NOP(); NOP(); NOP(); NOP();    
+	delay_ms(25);
 	SCREEN_OFF;
     return;
 }
