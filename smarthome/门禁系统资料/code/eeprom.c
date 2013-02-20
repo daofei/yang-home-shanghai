@@ -26,13 +26,13 @@ SDA和SCL由用户自定义，这里暂定义为P3^0和P3^1; */
 
 #define MAXRETRY    10
 
-#define SET_SCL (PORTB|=0x10)
-#define CLR_SCL (PORTB&=0xef)
-#define SET_SDA (PORTB|=0x20)
-#define CLR_SDA (PORTB&=0xdf)
-#define TEST_SDA ((PINB&0x20)?1:0)
-#define SDA_OUT (DDRB|=0x20)
-#define SDA_IN (DDRB&=0xdf,PORTB|=0x20)
+#define SET_SCL (PORTC|=0x80)
+#define CLR_SCL (PORTC&=0x7f)
+#define SET_SDA (PORTC|=0x40)
+#define CLR_SDA (PORTC&=0xbf)
+#define TEST_SDA ((PINC&0x40)?1:0)
+#define SDA_OUT (DDRC|=0x40)
+#define SDA_IN (DDRC&=0xbf,PORTC|=0x40)
 
 static void start(void);
 static void stop(void);
@@ -42,13 +42,13 @@ static void noAck(void);
 static void sendByte(unsigned char byte);
 static unsigned char receiveByte(void);
 
-//pc4 scl
-//pc5 sda
+//pc7 scl
+//pc6 sda
 void at24c256_init(void)
 {
-    //pc4 and pc5 output mode.
-    DDRB |= 0x30;
-    PORTB |= 0x30;
+    //pc6 and pc7 output mode.
+    DDRC |= 0xc0;
+    PORTC |= 0xc0;
     return;
 }
 

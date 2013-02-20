@@ -6,11 +6,26 @@
 #include "timer.h"
 #include "ringandscreen.h"
 
-//ring input pc0, screen key input pc1. door monitor input is pc2.
-//screen power output pc3, screen reset output pc4. ring output pc5.
+//door monitor input is pa0.
+//screen power output pb7.
 
-#define SCREEN_ON (PORTC&=0xf7)
-#define SCREEN_OFF (PORTC|=0x04)
+#define SCREEN_ON (PORTB|=0x80)
+#define SCREEN_OFF (PORTB&=0x7f)
+
+void doorandscreen_init(void)
+{
+    //PA0 INPUT.
+    DDRA &= 0xfe;
+	PORTA |= 0x01;
+    //pb7 OUTPUT.
+    DDRB |= 0x80;
+    //init screen off
+    PORTB &= 0x7f;
+    //init interrput.
+    return;
+}
+
+/**
 #define SCREEN_RESET_START (PORTC&=0xef)
 #define SCREEN_RESET_STOP (PORTC|=0x10)
 #define RING_ON (PORTC&=0xdf)
@@ -106,9 +121,19 @@ void input_isr(void)
     enable_input();
     return;
 }
+**/
+
+void screen_on(void)
+{
+    SCREEN_ON;
+    NOP(); NOP(); NOP(); NOP();    
+	SCREEN_OFF;
+    return;
+}
 
 //when door open, return 1.
 char check_door(void)
 {
-    return (!(PIND&0x04));
+    return (PINA&0x01);
 }
+

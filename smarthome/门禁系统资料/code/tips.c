@@ -4,17 +4,17 @@
 #include "tips.h"
 #include "util.h"
 
-#define BEEP_ON (PORTD&=0xef)
-#define BEEP_OFF (PORTD|=0x10)
-#define LED_ON (PORTD&=0xdf)
-#define LED_OFF (PORTD|=0x20)
+#define BEEP_ON (PORTB&=0xdf)
+#define BEEP_OFF (PORTB|=0x20)
+#define LED_ON (PORTB&=0xbf)
+#define LED_OFF (PORTB|=0x40)
 
-//pd4 beep,pd5 led.
+//pb5 beep,pb6 led.
 void tips_port_init(void)
 {
-    //PIND4 & PIND5 OUTPUT AND pull-up resistors.
-    PORTD |= 0x30;
-    DDRD |= 0x30;
+    //PINB5 & PINB6 OUTPUT AND pull-up resistors.
+    PORTB |= 0x60;
+    DDRB |= 0x60;
     return;
 }
 //led on.

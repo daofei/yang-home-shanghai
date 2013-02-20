@@ -5,7 +5,7 @@
 extern "C" {
 #endif
 
-void init_interrupt(void);
+void wg26_init_interrupt(void);
 
 #ifdef __cplusplus
 }
