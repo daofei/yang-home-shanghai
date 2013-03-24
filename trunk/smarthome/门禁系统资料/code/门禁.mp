@@ -3,101 +3,100 @@ All other addresses (including ones in FLASH) are byte addresses
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                        func_lit   0054   0006 =      6. bytes (rel,con,rom)
+                        func_lit   0054   0008 =      8. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
        0054  __func_lit_start
-       005A  __func_lit_end
+       005C  __func_lit_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                             lit   005A   0004 =      4. bytes (rel,con,rom)
+                             lit   005C   0004 =      4. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       005A  __lit_start
-       005E  __lit_end
+       005C  __lit_start
+       0060  __lit_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                           idata   005E   0013 =     19. bytes (rel,con,rom)
+                           idata   0060   0013 =     19. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       005E  __idata_start
-       0071  __idata_end
+       0060  __idata_start
+       0073  __idata_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0072   1096 =   4246. bytes (rel,con,rom)
+                            text   0074   10D2 =   4306. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       0039  __text_start
-       0039  __start
-       0058  _exit
-       0059  _main
-       00EB  _wg26_init_interrupt
-       0173  _int0_isr
-       018E  _delay_1ms
-       0197  _delay_ms
-       01A4  _tips_port_init
-       01AB  _tips_led_on
-       01AF  _tips_led_off
-       01B1  _tips_beep_on
-       01B5  _tips_beep_off
-       01B7  _tips_ok
-       01C0  _tips_err
-       01DA  _tips_id_ok
-       01F2  _tips_ring_on
-       01FC  _readPasswordItemNum
-       0207  _readPasswordItem
-       023B  _insertPasswordItem
-       0260  _writePasswordItemNum
-       0290  _password_handle
-       03C5  _timer_init
-       03D4  _set_timer
-       03F4  _stop_timer
-       040A  _timer0_isr
-       0465  _log
-       0466  _locker_init
-       0467  _locker_unlock
-       0468  _locker_lock
-       0469  _doorandscreen_init
-       0470  _screen_on
-       0478  _check_door
-       047B  _at24c256_init
-       0482  _rw24c256
-       04E5  _rw24c256Int
-       05F8  _uart0_init
-       0604  push_arg4
-       0606  push_arg2
-       0607  empy32s
-       0607  empy32u
-       0633  pop_gset2
-       0635  pop_gset3
-       0637  pop_gset5
-       0639  push_gset5
-       063B  push_gset4
-       063D  push_gset3
-       063F  push_gset2
-       0641  push_gset1
-       0644  pop_gset1
-       0645  pop
-       0658  xicall
-       0661  long_prolog
-       066F  long_epilog
-       067A  tstzero1
-       0680  tstzero2
-       0686  push_lset
-       0699  pop_lset
-       06B0  lsl32
-       06BC  lsr32
-       06C8  asgncblk
-       06E1  asgnblk
-       06F9  <created procedures>
-       0884  __text_end
+       003A  __text_start
+       003A  __start
+       0059  _exit
+       005A  _main
+       00E3  _wg26_init_interrupt
+       016B  _int0_isr
+       0192  _delay_1ms
+       019B  _delay_ms
+       01A8  _tips_port_init
+       01AF  _tips_led_on
+       01B3  _tips_led_off
+       01B5  _tips_beep_on
+       01B9  _tips_beep_off
+       01BB  _tips_ok
+       01C4  _tips_err
+       01DE  _tips_id_ok
+       01F6  _tips_ring_on
+       0200  _readPasswordItemNum
+       020B  _readPasswordItem
+       023F  _insertPasswordItem
+       0264  _writePasswordItemNum
+       0294  _password_handle
+       03C9  _timer_init
+       03D8  _set_timer
+       03F8  _stop_timer
+       040E  _timer0_isr
+       0469  _log
+       046A  _locker_init
+       0481  _locker_unlock
+       0496  _doorandscreen_init
+       049D  _screen_on
+       04A5  _check_door
+       04A8  _at24c256_init
+       04AF  _rw24c256
+       0512  _rw24c256Int
+       0625  _uart0_init
+       0631  push_arg4
+       0633  push_arg2
+       0634  empy32u
+       0634  empy32s
+       0660  pop_gset2
+       0662  pop_gset3
+       0664  pop_gset5
+       0666  push_gset5
+       0668  push_gset4
+       066A  push_gset3
+       066C  push_gset2
+       066E  push_gset1
+       0671  pop_gset1
+       0672  pop
+       0685  xicall
+       068E  long_prolog
+       069C  long_epilog
+       06A7  tstzero1
+       06AD  tstzero2
+       06B3  push_lset
+       06C6  pop_lset
+       06DD  lsl32
+       06E9  lsr32
+       06F5  asgncblk
+       070E  asgnblk
+       0726  <created procedures>
+       08A3  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------

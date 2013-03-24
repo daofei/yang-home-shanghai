@@ -7,7 +7,7 @@ extern "C" {
 
 #define IDREADERTIMEOUTTIMER        0
 #define PASSWORDTIMEOUTTIMER        1
-#define RINGANDSCREENINPUTTIMER     2
+#define UNLOCKTIMEOUTTIMER		    2
 
 #define MAXTIMER 4
 

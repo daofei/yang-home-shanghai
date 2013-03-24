@@ -13,6 +13,7 @@
 #include "ringandscreen.h"
 #include "eeprom.h"
 #include "password.h"
+#include "locker.h"
 
 int main(void)
 {
@@ -24,12 +25,13 @@ int main(void)
     tips_port_init();
     timer_init();
     at24c256_init();
+	locker_init();
 	doorandscreen_init();
 
-    t.flags = PASSWORDFLAGS_PASSWORD;
-    t.idCard = 0;
+    t.flags = PASSWORDFLAGS_ID;
+    t.idCard = 1163690;
     t.passwordH = 1;
-    t.passwordL = 1007;
+    t.passwordL = 1;
     insertPasswordItem(0, t);
 
     t.flags = PASSWORDFLAGS_PASSWORD;
