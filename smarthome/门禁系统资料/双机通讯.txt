@@ -38,3 +38,30 @@ CPU闲的时候通讯速率可以最快.忙的时候又可以无限等待.保证绝对同步,不会出错.
 
 18.从机发现MCLK=1,知道主机已经收起MCLK 
 19.从机将SCLK=1,准备下一轮通讯 
+
+
+控制码定义
+
+|type|[size|data|]
+| 8  |[   x     |] 
+
+锁控：
+	开锁：0x01
+显示器：
+	显示器开：0x02
+ID：
+	ID BEEP ON: 0x03
+	ID BEEP OFF: 0x04
+密码授权：
+	插入密码：|0x05|aa|bb|ID|PWD|
+	插入数字：|0x05|aa|bb|NUM|
+日志记录：
+	回传日志：|0x06|aa|bb|ID|PWD|
+说明：
+	aa:为后面的字节数；
+	bb:高四位表示分指令号0x0100 插入密码，0x0200 插入数字，0x03回传日志；低四位表示ID和密码类型：#define PASSWORDFLAGS_UNKOWN 0x00 #define PASSWORDFLAGS_ID 0x01 #define PASSWORDFLAGS_PASSWORD 0x02
+    unsigned long idCard;
+    unsigned long passwordH;
+    unsigned long passwordL;
+
+
