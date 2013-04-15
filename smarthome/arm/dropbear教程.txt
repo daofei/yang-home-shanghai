@@ -1,0 +1,80 @@
+ 嵌入式ssh实现 2012-04-16 23:04:45
+分类： LINUX
+一、编译
+1、下载软件包
+http://matt.ucc.asn.au/dropbear/dropbear.html
+dropbear-2012.55.tar.bz2
+
+2、配置编译环境变量
+export PREFIX=/develop/ssh
+
+3、编译
+tar xvfj dropbear-2012.55.tar.bz2
+./configure --host=arm-linux --prefix=$PREFIX --disable-zlib --disable-pam
+make -j4
+make install    /*需要root权限*/
+会在/develop/ssh生成2个目录
+bin
+    dbclient -> ssh客户端,嵌入式系统基本不用。
+    dropbearconvert -> 把openSSH密钥转成dropbear密钥的工具
+    dropbearkey -> dropbear密钥生成工具
+sbin
+    ropbear -> ssh服务器,其实构建好了后只要她就行了.
+
+/////////////////////////////////////////////////////////////////////
+二、构建执行环境
+1、拷贝/develop/ssh目录下的所有可执行文件到开发板
+
+2、生成密钥
+    mkdir -p /etc/dropbear/
+    dropbearkey -t rsa -f /etc/dropbear/dropbear_rsa_host_key
+    dropbearkey -t dss -f /etc/dropbear/dropbear_dss_host_key
+    
+3、运行
+    dropbear -E    #如果不要调试信息可以去掉"-E"
+
+2.交叉编译dropbear-0.52.tar.gz
+解压dropbear-0.52.tar.gz，创建/usr/local/dropbear；
+./configure –prefix=/usr/local/dropbear –with-zlib=/usr/local/zlib/ CC=arm-linux-gcc –host=arm
+注：这里要求使用绝对路径-如果希望放在home目录可以使用${HOME}/usr/locale/zlib与${HOME}/usr/locale/dropbear
+make；
+make scp；
+make install；
+cp scp /usr/local/dropbear/bin/
+3.移植到6410：
+将/usr/local/dropbear/bin/和/usr/local/dropbear/sbin/下的文件都复制到板上/usr/sbin目录。
+在板上生成server key:
+cd /etc
+mkdir dropbear
+cd dropbear
+dropbearkey -t rsa -f dropbear_rsa_host_key
+dropbearkey -t dss -f dropbear_dss_host_key
+在启动脚本/etc/init.d/rcS中增加: /usr/sbin/dropbear
+ 
+3.配置ssh：
+修改root密码（如果无法修改请在/etc中添加passwd与group文件）
+pwsswd文件中如下
+root:9.iWjoCN45yCg:0:0:Linux User,,,:/root/:/bin/sh
+我这里测试goup文件空的也可以
+ 
+或者：
+root状态下在板上输入命令添加用户michael和设置密码 //最好直接改root密码
+adduser michael
+ 注意：一定要有HOME目录,不然会登录失败
+注：
+如果连接出现以下问题：
+[plain] view plaincopy
+dragon@dragon-ubuntu10:/srv/nfs/rootfs/usr/local/dropbear/bin$ ssh 10.17.98.2 -l root  
+root@10.17.98.2's password:   
+PTY allocation request failed on channel 0  
+shell request failed on channel 0  
+解决方法：
+在dev中创建pts目录:mkdir /dev/pts -p
+在fstab文件中添加一段 none /dev/pts devpts defaults 0 0
+#vi /etc/fstab
+none    /dev/pts devpts defaults        0       0
+然后 mount -a
+问题应该能够得到解决
+
+ 
+用xshell连接就能连上去了~ 如果不行的话直接用root用户试试~
