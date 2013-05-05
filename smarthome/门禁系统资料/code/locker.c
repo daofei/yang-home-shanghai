@@ -23,7 +23,7 @@ static void unlock_time_out(char timer)
     if(timer==UNLOCKTIMEOUTTIMER)
     {
 		LOCKERLOCK;
-		delay_ms(1000);
+		delay_ms(800);
 		LOCKERINIT;
 	}
     return;
@@ -32,7 +32,7 @@ static void unlock_time_out(char timer)
 void locker_unlock(void)
 {
 	LOCKERUNLOCK;
-    delay_ms(1000);
+    delay_ms(800);
 	LOCKERINIT;
 	//set time out. 
 	set_timer(UNLOCKTIMEOUTTIMER, 100, unlock_time_out);
