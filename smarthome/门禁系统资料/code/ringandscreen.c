@@ -134,6 +134,6 @@ void screen_on(void)
 //when door open, return 1.
 char check_door(void)
 {
-    return (PINA&0x01);
+    return 0;//(PINA&0x01);
 }
 

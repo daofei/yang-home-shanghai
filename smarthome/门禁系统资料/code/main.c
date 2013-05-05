@@ -40,9 +40,9 @@ int main(void)
     t.passwordL = 100;
     insertPasswordItem(1, t);
 
-    t.flags = PASSWORDFLAGS_PASSWORD;
-    t.idCard = 0;
-    t.passwordH = 1314159265;
+    t.flags = PASSWORDFLAGS_ID;
+    t.idCard = 9512827;
+    t.passwordH = 1;
     t.passwordL = 1;
     insertPasswordItem(2, t);
 
