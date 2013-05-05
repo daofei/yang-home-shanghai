@@ -156,7 +156,7 @@ void password_handle(char type, unsigned long code)
                     log(LOGTYPEIDOK, i, code, 0, 0);
                     //clear pswd statuc.
                     clear_pswd_status();
-                    tips_ok();
+                    //tips_ok();
                     locker_unlock();
                     //error count clear.
                     input_err_count = 0;
@@ -195,7 +195,7 @@ void password_handle(char type, unsigned long code)
                     //clear password status.
                     clear_pswd_status();
                     //unlock and write log.
-                    tips_ok();
+                    //tips_ok();
                     locker_unlock();
                     //error count clear.
                     input_err_count = 0;
@@ -228,7 +228,7 @@ void password_handle(char type, unsigned long code)
                         //clear password.
                         clear_pswd_status();
                         //password is right. unlock and log.
-                        tips_ok();
+                        //tips_ok();
                         locker_unlock();
                         //error count clear.
                         input_err_count = 0;
