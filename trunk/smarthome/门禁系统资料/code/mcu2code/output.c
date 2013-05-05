@@ -4,6 +4,7 @@
 #include "output.h"
 #include "util.h"
 #include "input.h"
+#include "timer.h"
 
 #define KEY_DOWN (PORTB|=0x40)
 #define KEY_UP (PORTB&=0xbf)
@@ -31,7 +32,7 @@ void output_screen_off(void)
 		delay_ms(50);
 		loop++;
 		if(loop>0)
-			delay_ms(500);
+			delay_ms(800);
 	}
 	return;
 }
@@ -55,7 +56,7 @@ void output_screen_on(void)
 		delay_ms(50);
 		loop++;
 		if(loop>0)
-			delay_ms(500);
+			delay_ms(800);
 	}
 	
 	//400*100ms.
