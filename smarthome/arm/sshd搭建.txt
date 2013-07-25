@@ -1,0 +1,48 @@
+1.compile zlib
+	cd zlib-x.x
+	configure --prefix=xxxx
+	vi Makefile
+	<
+	CC=arm-linux-xxx
+	AR=arm-linux-xxx rc
+	CPP=arm-linux-gcc -E
+	LDSHARED=arm-linux-gcc
+	>
+	make
+	make install
+2.compile ssl
+	cd ssl-xxxx
+	./Configure --prefix=xxx os/compiler:arm-linux-gcc <cflags>
+	make
+	make install
+3.compile ssh
+	cd ssh-xxx
+	./configure --host=arm-linux --with-libs --with-zlib=xxx --with-ssl-dir=xxx --disable-etc-default-login CC=arm-linux-gcc AR=arm-linux-ar CFLAGS="xxx" LDFLAGS="xxx"
+	make
+4.建立环境：
+建立密钥：
+ssh-keygen -t rsa1 -f ssh_host_key -N ""
+ssh-keygen -t rsa -f ssh_host_rsa_key -N ""
+ssh-keygen -t dsa -f ssh_host_dsa_key -N ""
+
+建立文件夹/usr/local/etc/。然后把openssh目录下的sshd_config拷贝到该文件夹下面
+
+cp scp  sftp  ssh  ssh-add  ssh-agent  ssh-keygen  ssh-keyscan /nfsroot/rootfs/usr/local/bin
+cp moduli  ssh_config  sshd_config  ssh_host_dsa_key  ssh_host_dsa_key.pub  ssh_host_key  ssh_host_key.pub  ssh_host_rsa_key  ssh_host_rsa_key.pub  /nfsroot/rootfs/usr/local/etc
+
+# cp sftp-server  ssh-keysign   /nfsroot/rootfs/usr/local/libexec
+
+# cp sshd   /nfsroot/rootfs/usr/local/sbin
+
+·建立目录/var/run /var/empty/sshd，并设定权限chmod 755 /var/empty
+
+修改  /usr/local/etc    sshd_config文件如下选项：
+
+PermitRootLogin    yes―――――允许根用户登陆
+
+PermitEmptyPasswords yes――――允许使用空密码
+
+UsePrivilegeSeparation   no――――把安全级别降低，因为不会连接互联网
+
+好了 ，现在可以运行  /usr/local/sbin/sshd
+在PC可以连接开发板了
