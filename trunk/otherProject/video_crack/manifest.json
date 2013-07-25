@@ -1,0 +1,24 @@
+{
+	"name":"Video Crack",
+	"version":"0.0.1",
+	"manifest_version":2,
+	"description":"Get the url form flash player.",
+	"icons":
+	{
+		"16":"images/16.png",
+		"48":"images/48.png",
+		"128":"images/128.png"
+	},
+	"page_action":
+	{
+		"default_icon":"images/48.png",
+		"default_title":"Get flv url",
+		"default_popup":"chrome/popup.html"
+	},
+	"background":
+	{
+		"page":"chrome/background.html"
+	},
+	"permissions":
+		["tabs", "http://*/*"]
+}
