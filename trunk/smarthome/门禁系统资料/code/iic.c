@@ -11,6 +11,15 @@
 #define SDA_OUT (DDRC|=0x40)
 #define SDA_IN (DDRC&=0xbf,PORTC|=0x40)
 
+//pc7 scl
+//pc6 sda
+void iicport_init(void)
+{
+    //pc6 and pc7 output mode.
+    DDRC |= 0xc0;
+    PORTC |= 0xc0;
+    return;
+}
 
 /* * * * * 以下是对IIC总线的操作子程序 * * * * */   
 /* * * * * * 启动总线 * * * * */   
