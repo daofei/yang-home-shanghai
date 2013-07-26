@@ -27,16 +27,6 @@ SDA和SCL由用户自定义，这里暂定义为P3^0和P3^1; */
 
 #define MAXRETRY    10
 
-//pc7 scl
-//pc6 sda
-void at24c256_init(void)
-{
-    //pc6 and pc7 output mode.
-    DDRC |= 0xc0;
-    PORTC |= 0xc0;
-    return;
-}
-
 char rw24c256(unsigned char *data,unsigned char len,unsigned int addr, unsigned char rwFlag)    
 {
     unsigned char i = MAXRETRY;

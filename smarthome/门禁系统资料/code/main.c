@@ -24,7 +24,7 @@ int main(void)
     wg26_init_interrupt();
     tips_port_init();
     timer_init();
-    at24c256_init();
+    iicport_init();
 	locker_init();
 	doorandscreen_init();
 

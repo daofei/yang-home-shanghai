@@ -5,6 +5,7 @@
 extern "C" {
 #endif
 
+void iicport_init(void);
 void start(void);
 void stop(void);
 unsigned char recAck(void);
