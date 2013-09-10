@@ -10,6 +10,7 @@ locker.c
 ringandscreen.c
 eeprom.c
 uart.c
+iic.c
 [Headers]
 tips.h
 util.h
@@ -20,4 +21,5 @@ locker.h
 ringandscreen.h
 eeprom.h
 uart.h
+iic.h
 [Documents]

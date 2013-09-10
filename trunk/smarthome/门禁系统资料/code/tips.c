@@ -12,7 +12,7 @@
 //pb5 beep,pb6 led.
 void tips_port_init(void)
 {
-    //PINB5 & PINB6 OUTPUT AND pull-up resistors.
+    //PINB5 & PINB6 PINB0 tips led. OUTPUT AND pull-up resistors.
     PORTB |= 0x60;
     DDRB |= 0x60;
     return;

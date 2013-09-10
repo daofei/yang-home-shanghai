@@ -5,6 +5,9 @@
 extern "C" {
 #endif
 
+#define RWREAD 1
+#define RWWRITE   0
+
 void iicport_init(void);
 void start(void);
 void stop(void);

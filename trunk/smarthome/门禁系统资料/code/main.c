@@ -4,7 +4,7 @@
 
 #include<iom16v.h>
 #include <macros.h>
-#include <sleep.h>
+//#include <sleep.h>
 
 #include "uart.h"
 #include "wg26.h"
@@ -70,9 +70,9 @@ int main(void)
 		}
 		delay_ms(500);
 		*/
-		set_sleep_mode(SLEEP_MODE_IDLE);
-        sleep_mode();
-        delay_ms(5);
+		//set_sleep_mode(SLEEP_MODE_IDLE);
+        //sleep_mode();
+        delay_ms(500);
     }
     return 0;
 }
