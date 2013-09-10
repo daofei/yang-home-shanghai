@@ -4,6 +4,7 @@
 
 #include<iom16v.h>
 #include <macros.h>
+#include <sleep.h>
 
 #include "uart.h"
 #include "wg26.h"
@@ -17,7 +18,7 @@
 
 int main(void)
 {
-    unsigned int door_minitor_count = 0;
+    //unsigned int door_minitor_count = 0;
     passwordItem_t t, ot;
 	
     uart0_init();
@@ -56,7 +57,8 @@ int main(void)
 
     while(1)
     {
-		door_minitor_count++;
+        /*
+		//door_minitor_count++;
 		if(door_minitor_count>20)
 		{
 			//door open.
@@ -67,6 +69,10 @@ int main(void)
 			door_minitor_count = 0;
 		}
 		delay_ms(500);
+		*/
+		set_sleep_mode(SLEEP_MODE_IDLE);
+        sleep_mode();
+        delay_ms(5);
     }
     return 0;
 }
