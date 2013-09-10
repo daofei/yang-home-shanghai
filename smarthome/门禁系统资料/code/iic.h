@@ -13,6 +13,8 @@ void ack(void);
 void noAck(void);
 void sendByte(unsigned char byte);
 unsigned char receiveByte(void);
+char rwiic(unsigned char comAddr, unsigned char *data,unsigned char len,unsigned int addr, unsigned char rwFlag);
+unsigned long rwiicInt(unsigned char comAddr, unsigned long data, unsigned int addr, unsigned char rwFlag);
 
 #ifdef __cplusplus
 }

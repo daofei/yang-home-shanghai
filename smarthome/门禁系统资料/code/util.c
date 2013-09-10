@@ -17,3 +17,9 @@ void delay_ms(int ms)
         i++;
     }
 }
+
+void gotoSleep(void)
+{
+    
+}
+

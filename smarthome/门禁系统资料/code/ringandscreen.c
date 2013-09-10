@@ -17,10 +17,9 @@ void doorandscreen_init(void)
     //PA0 INPUT.
     DDRA &= 0xfe;
 	PORTA |= 0x01;
-    //pb7 OUTPUT.
-    DDRB |= 0x80;
-    //init screen off
-    PORTB |= 0x80;
+    //pb7 hi-z
+    DDRB &= 0x7f;
+    PORTB &= 0x7f;
     //init interrput.
     return;
 }
@@ -125,9 +124,16 @@ void input_isr(void)
 
 void screen_on(void)
 {
+    //pb7 OUTPUT.
+    DDRB |= 0x80;
+    
     SCREEN_ON;
 	delay_ms(25);
 	SCREEN_OFF;
+
+    //pb7 hi-z
+    DDRB &= 0x7f;
+    PORTB &= 0x7f;
     return;
 }
 
