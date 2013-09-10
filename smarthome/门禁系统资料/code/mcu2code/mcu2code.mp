@@ -21,7 +21,7 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0058   03A2 =    930. bytes (rel,con,rom)
+                            text   0058   03A0 =    928. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
@@ -37,24 +37,24 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
        00A3  _output_port_init
        00A8  _output_screen_off
        00C5  _output_screen_on
-       00E8  _output_ring_on
-       00F0  _timer_init
-       00FF  _set_timer
-       011F  _stop_timer
-       0135  _timer0_isr
-       018D  pop_gset2
-       018F  push_gset5
-       0191  push_gset4
-       0193  push_gset3
-       0195  push_gset2
-       0197  push_gset1
-       019A  pop_gset1
-       019B  pop
-       01AE  xicall
-       01B7  push_lset
-       01CE  pop_lset
-       01E5  <created procedures>
-       01FD  __text_end
+       00E7  _output_ring_on
+       00EF  _timer_init
+       00FE  _set_timer
+       011E  _stop_timer
+       0134  _timer0_isr
+       018C  pop_gset2
+       018E  push_gset5
+       0190  push_gset4
+       0192  push_gset3
+       0194  push_gset2
+       0196  push_gset1
+       0199  pop_gset1
+       019A  pop
+       01AD  xicall
+       01B6  push_lset
+       01CD  pop_lset
+       01E4  <created procedures>
+       01FC  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------

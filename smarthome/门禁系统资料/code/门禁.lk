@@ -1,1 +1,1 @@
-main.o wg26.o util.o tips.o password.o timer.o log.o locker.o ringandscreen.o eeprom.o uart.o 
+main.o wg26.o util.o tips.o password.o timer.o log.o locker.o ringandscreen.o eeprom.o uart.o iic.o 

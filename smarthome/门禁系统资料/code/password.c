@@ -5,6 +5,7 @@
 #include "locker.h"
 #include "tips.h"
 #include "timer.h"
+#include "iic.h"
 #include "eeprom.h"
 #include "password.h"
 #include "ringandscreen.h"
@@ -26,7 +27,7 @@ unsigned char readPasswordItemNum(void)
 {
     unsigned char num = 0;
 
-    rw24c256(&num, 1, 0, RW24C256READ);
+    rw24c256(&num, 1, 0, RWREAD);
     return num;
 }
 
@@ -35,34 +36,34 @@ passwordItem_t readPasswordItem(unsigned char index)
     passwordItem_t item;
     unsigned char t = 0;
 
-    rw24c256(&t, 1, index*13+1, RW24C256READ);
+    rw24c256(&t, 1, index*13+1, RWREAD);
     item.flags = t;
 
-    rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RW24C256READ);
+    rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RWREAD);
     
-    rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RW24C256READ);
+    rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RWREAD);
 	
-    rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RW24C256READ);
+    rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RWREAD);
     
     return item;
 }
 
 void insertPasswordItem(unsigned char index, passwordItem_t item)
 {
-    rw24c256(&(item.flags), 1, index*13+1, RW24C256WRITE);
+    rw24c256(&(item.flags), 1, index*13+1, RWWRITE);
 	
-    rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RW24C256WRITE);
+    rw24c256((unsigned char*)(&item.idCard), 4, index*13+2, RWWRITE);
 	
-    rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RW24C256WRITE);
+    rw24c256((unsigned char*)(&item.passwordH), 4, index*13+6, RWWRITE);
 	
-    rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RW24C256WRITE);
+    rw24c256((unsigned char*)(&item.passwordL), 4, index*13+10, RWWRITE);
 	
     return;
 }
 
 void writePasswordItemNum(unsigned char num)
 {
-    rw24c256(&num, 1, 0, RW24C256WRITE);
+    rw24c256(&num, 1, 0, RWWRITE);
     return;
 }
 

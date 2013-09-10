@@ -6,24 +6,23 @@ FILES = util.o input.o log.o main.o output.o timer.o
 
 mcu2code:	$(FILES)
 	$(CC) -o mcu2code $(LFLAGS) @mcu2code.lk   -lcatmega
-util.o: D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/util.h
-util.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\util.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\util.c
-input.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/output.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/util.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/input.h
-input.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\input.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\input.c
-log.o: C:/icc/include/iom16v.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/log.h
-log.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\log.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\log.c
-main.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/output.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/input.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/timer.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/util.h
-main.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\main.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\main.c
-output.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/output.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/util.h\
- D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/input.h
-output.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\output.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\output.c
-timer.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code/timer.h
-timer.o:	D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\timer.c
-	$(CC) -c $(CFLAGS) D:\yang-home-shanghai\smarthome\门禁系统资料\code\mcu2code\timer.c
+util.o: D:\smarthome\smarthome\门禁系统资料\code\mcu2code/util.h
+util.o:	D:\smarthome\smarthome\门禁系统资料\code\mcu2code\util.c
+	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\门禁系统资料\code\mcu2code\util.c
+input.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/output.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/util.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/input.h
+input.o:	D:\smarthome\smarthome\门禁系统资料\code\mcu2code\input.c
+	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\门禁系统资料\code\mcu2code\input.c
+log.o: C:/icc/include/iom16v.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/log.h
+log.o:	D:\smarthome\smarthome\门禁系统资料\code\mcu2code\log.c
+	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\门禁系统资料\code\mcu2code\log.c
+main.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/output.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/input.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/timer.h\
+ D:\smarthome\smarthome\门禁系统资料\code\mcu2code/util.h
+main.o:	D:\smarthome\smarthome\门禁系统资料\code\mcu2code\main.c
+	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\门禁系统资料\code\mcu2code\main.c
+output.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/output.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/util.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/input.h\
+ D:\smarthome\smarthome\门禁系统资料\code\mcu2code/timer.h
+output.o:	D:\smarthome\smarthome\门禁系统资料\code\mcu2code\output.c
+	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\门禁系统资料\code\mcu2code\output.c
+timer.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\门禁系统资料\code\mcu2code/timer.h
+timer.o:	D:\smarthome\smarthome\门禁系统资料\code\mcu2code\timer.c
+	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\门禁系统资料\code\mcu2code\timer.c

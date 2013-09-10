@@ -185,9 +185,6 @@ unsigned char receiveByte(void)
 
 #define MAXRETRY    10
 
-#define RW24C256READ 1
-#define RW24C256WRITE   0
-
 char rwiic(unsigned char comAddr, unsigned char *data,unsigned char len,unsigned int addr, unsigned char rwFlag)    
 {
     unsigned char i = MAXRETRY;
@@ -201,7 +198,7 @@ char rwiic(unsigned char comAddr, unsigned char *data,unsigned char len,unsigned
         if(recAck())  continue;    
         sendByte((unsigned char)addr); /*   向IIC总线写数据   */   
         if(recAck())  continue; /*   如写正确结束本次循环   */
-        if(rwFlag == RW24C256WRITE)   //判断是读器件还是写器件    
+        if(rwFlag == RWWRITE)   //判断是读器件还是写器件    
         {
             err=0;         /* 清错误特征位 */   
             while(len--)    
@@ -233,7 +230,7 @@ char rwiic(unsigned char comAddr, unsigned char *data,unsigned char len,unsigned
         }    
     }    
     stop();  /*   停止IIC总线   */   
-    if(rwFlag == RW24C256WRITE)    
+    if(rwFlag == RWWRITE)    
     {     
         delay_ms(50);    
     }    
@@ -245,18 +242,18 @@ unsigned long rwiicInt(unsigned char comAddr, unsigned long data, unsigned int a
     unsigned char tmp[4] = {0, 0, 0, 0};
 	unsigned long out = 0;
 
-    if(rwFlag==RW24C256WRITE)
+    if(rwFlag==RWWRITE)
     {
         tmp[0] = (unsigned char)(data&0x000000ff);
         tmp[1] = (unsigned char)((data>>8)&0x000000ff);
         tmp[2] = (unsigned char)((data>>16)&0x000000ff);
         tmp[3] = (unsigned char)((data>>24)&0x000000ff);
-        rwiic(comAddr, (unsigned char*)&tmp, 4, addr, RW24C256WRITE);
+        rwiic(comAddr, (unsigned char*)&tmp, 4, addr, RWWRITE);
 		out = data;
     }
     else
     {
-        rwiic(comAddr, (unsigned char*)&tmp, 4, addr, RW24C256READ);
+        rwiic(comAddr, (unsigned char*)&tmp, 4, addr, RWREAD);
 
         out= 0;
         out |= tmp[0];
