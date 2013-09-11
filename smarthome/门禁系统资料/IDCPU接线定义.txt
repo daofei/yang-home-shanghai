@@ -1,11 +1,12 @@
 PD2(INT0): ID读头中断输入
-PC0：ID读头DATA0
-PC1：ID读头DATA1
-PB7：显示器开控制（长高电平，低电平表示开）
+PC0：ID读头DATA0 ---换 iic 总线 SCL
+PC1：ID读头DATA1 ---换 iic 总线 SDA
+PB7：显示器开控制（长高电平，低电平表示开）---- 换板载LED指示灯
 PB6：ID读头LED（长高电平，低电平表示绿色）
 PB5：ID读头BEEP（长高电平，低电平表示绿色）
 PA0：门开关状态检测（高电平表示门开，低电平表示门关）
-PC6：存储器SDA
-PC7：存储器SCL
+PC6：存储器SDA  ---换ID读头 DATA0 
+PC7：存储器SCL  ---换ID读头 DATA1
 PB4：门锁驱动1
 PB3：门锁驱动2
+------PB2:显示器开控制（长高电平，低电平表示开）
