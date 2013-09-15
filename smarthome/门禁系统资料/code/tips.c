@@ -8,13 +8,15 @@
 #define BEEP_OFF (PORTB|=0x20)
 #define LED_ON (PORTB&=0xbf)
 #define LED_OFF (PORTB|=0x40)
+#define BOARD_LED_ON (PORTB&=0x7f)
+#define BOARD_LED_OFF (PORTB|=0x80)
 
-//pb5 beep,pb6 led.
+//pb5 beep,pb6 led, pb7 board led.
 void tips_port_init(void)
 {
     //PINB5 & PINB6 PINB0 tips led. OUTPUT AND pull-up resistors.
-    PORTB |= 0x60;
-    DDRB |= 0x60;
+    PORTB |= 0xe0;
+    DDRB |= 0xe0;
     return;
 }
 //led on.
@@ -105,3 +107,13 @@ void tips_ring_on(void)
     BEEP_OFF;
     return;
 }
+void tips_board_led_on(void)
+{
+	BOARD_LED_ON;
+}
+
+void tips_board_led_off(void)
+{
+	BOARD_LED_OFF;
+}
+

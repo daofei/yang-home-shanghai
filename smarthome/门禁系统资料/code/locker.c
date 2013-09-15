@@ -2,6 +2,7 @@
 
 #include "timer.h"
 #include "util.h"
+#include "tips.h"
 #include "locker.h"
 
 #define LOCKERINIT (PORTB&=0xe7)
@@ -25,17 +26,19 @@ static void unlock_time_out(char timer)
 		LOCKERLOCK;
 		delay_ms(800);
 		LOCKERINIT;
+		tips_board_led_off();
 	}
     return;
 }
 
 void locker_unlock(void)
 {
-	LOCKERUNLOCK;
+	LOCKERUNLOCK;	
     delay_ms(800);
 	LOCKERINIT;
 	//set time out. 
 	set_timer(UNLOCKTIMEOUTTIMER, 100, unlock_time_out);
+	tips_board_led_on();
 	return;
 }
 

@@ -7,19 +7,19 @@
 #include "ringandscreen.h"
 
 //door monitor input is pa0.
-//screen power output pb7.
+//screen power output pb2.
 
-#define SCREEN_ON (PORTB &= 0x7f)
-#define SCREEN_OFF (PORTB |= 0x80)
+#define SCREEN_ON (PORTB &= 0xfb)
+#define SCREEN_OFF (PORTB |= 0x04)
 
 void doorandscreen_init(void)
 {
     //PA0 INPUT.
     DDRA &= 0xfe;
 	PORTA |= 0x01;
-    //pb7 hi-z
-    DDRB &= 0x7f;
-    PORTB &= 0x7f;
+    //pb2 hi-z
+    DDRB &= 0xfb;
+    PORTB &= 0xfb;
     //init interrput.
     return;
 }
@@ -124,16 +124,16 @@ void input_isr(void)
 
 void screen_on(void)
 {
-    //pb7 OUTPUT.
-    DDRB |= 0x80;
+    //pb2 OUTPUT.
+    DDRB |= 0x04;
     
     SCREEN_ON;
 	delay_ms(25);
 	SCREEN_OFF;
 
-    //pb7 hi-z
-    DDRB &= 0x7f;
-    PORTB &= 0x7f;
+    //pb2 hi-z
+    DDRB &= 0xfb;
+    PORTB &= 0xfb;
     return;
 }
 

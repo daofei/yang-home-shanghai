@@ -16,6 +16,8 @@ void tips_ok(void);
 void tips_err(void);
 void tips_id_ok(void);
 void tips_ring_on(void);
+void tips_board_led_on(void);
+void tips_board_led_off(void);
 
 #ifdef __cplusplus
 }

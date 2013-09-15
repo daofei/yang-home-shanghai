@@ -12,6 +12,7 @@
 #include "tips.h"
 #include "timer.h"
 #include "ringandscreen.h"
+#include "iic.h"
 #include "eeprom.h"
 #include "password.h"
 #include "locker.h"
@@ -29,31 +30,25 @@ int main(void)
 	locker_init();
 	doorandscreen_init();
 
-    t.flags = PASSWORDFLAGS_ID;
-    t.idCard = 1163690;
-    t.passwordH = 1;
-    t.passwordL = 1;
-    insertPasswordItem(0, t);
-
     t.flags = PASSWORDFLAGS_PASSWORD;
     t.idCard = 0;
     t.passwordH = 1135642406;
     t.passwordL = 100;
-    insertPasswordItem(1, t);
+    insertPasswordItem(0, t);
 
     t.flags = PASSWORDFLAGS_ID;
     t.idCard = 9512827;
     t.passwordH = 1;
     t.passwordL = 1;
-    insertPasswordItem(2, t);
+    insertPasswordItem(1, t);
 
     t.flags = PASSWORDFLAGS_ID;
     t.idCard = 1392618;
     t.passwordH = 1;
     t.passwordL = 1;
-    insertPasswordItem(3, t);
+    insertPasswordItem(2, t);
 
-	writePasswordItemNum(4);
+	writePasswordItemNum(3);
 
     while(1)
     {
