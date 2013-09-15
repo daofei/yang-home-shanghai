@@ -1,6 +1,7 @@
 #include<iom16v.h>
 #include <macros.h>
 
+#include "util.h"
 #include "iic.h"
 
 #define SET_SCL (PORTC|=0x80)

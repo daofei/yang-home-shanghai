@@ -9,7 +9,7 @@ extern "C" {
 #define PASSWORDTIMEOUTTIMER        1
 #define UNLOCKTIMEOUTTIMER		    2
 
-#define MAXTIMER 4
+#define MAXTIMER 3
 
 typedef void (*timerCB)(char); 
 typedef struct __timer
