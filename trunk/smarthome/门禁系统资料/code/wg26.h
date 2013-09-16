@@ -7,6 +7,8 @@ extern "C" {
 
 void wg26_init_interrupt(void);
 
+void wg26_spank(void);
+
 #ifdef __cplusplus
 }
 #endif
