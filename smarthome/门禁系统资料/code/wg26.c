@@ -37,6 +37,9 @@ static void enable_reader(void)
     return;
 }
 
+static unsigned char havePassword = 0;
+
+static unsigned char type = 0;
 //id card id.
 static unsigned long id_code = 0;
 //read flags.
@@ -68,12 +71,16 @@ static void read_time_out(char timer)
             {
                 id_code &= 0x01fffffe;
                 id_code >>= 1;
-                password_handle(IDREADEDIDCARD, id_code);
+                type = IDREADEDIDCARD;
+                havePassword = 1;
+                //password_handle(IDREADEDIDCARD, id_code);
             }
         }
         else if(read_count==4)//keypad input.
         {
-            password_handle(IDREADEDKEYPAD, id_code);
+            type = IDREADEDKEYPAD;
+            havePassword = 1;
+            //password_handle(IDREADEDKEYPAD, id_code);
         }
         //enable reader.
         enable_reader();
@@ -103,12 +110,21 @@ void int0_isr(void)
     {
         id_code <<= 1;
         id_code |= 1;
-        ++read_count;
     }
     else if(!(PINC&0x01))
     {
         id_code <<= 1;
-        ++read_count;
+    }
+    ++read_count;
+    return;
+}
+
+void wg26_spank(void)
+{
+    if(1==havePassword)
+    {
+        password_handle(type, id_code);
+        havePassword = 0;
     }
     return;
 }
