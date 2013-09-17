@@ -24,7 +24,7 @@ static void unlock_time_out(char timer)
     if(timer==UNLOCKTIMEOUTTIMER)
     {
 		LOCKERLOCK;
-		delay_ms(800);
+		delay_ms(400);
 		LOCKERINIT;
 		tips_board_led_off();
 	}
@@ -34,7 +34,7 @@ static void unlock_time_out(char timer)
 void locker_unlock(void)
 {
 	LOCKERUNLOCK;	
-    delay_ms(800);
+    delay_ms(400);
 	LOCKERINIT;
 	//set time out. 
 	set_timer(UNLOCKTIMEOUTTIMER, 100, unlock_time_out);
