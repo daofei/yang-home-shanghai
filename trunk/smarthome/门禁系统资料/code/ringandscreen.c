@@ -128,7 +128,7 @@ void screen_on(void)
     DDRB |= 0x04;
     
     SCREEN_ON;
-	delay_ms(1);
+	delay_ms(20);
 	SCREEN_OFF;
 
     //pb2 hi-z
