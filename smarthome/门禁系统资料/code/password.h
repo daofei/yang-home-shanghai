@@ -9,8 +9,13 @@ extern "C" {
 #define PASSWORDFLAGS_ID                0x01
 #define PASSWORDFLAGS_PASSWORD  0x02
 
-#define IDREADEDIDCARD          0
-#define IDREADEDKEYPAD          1
+#define IDREADEDUNKOWN          0
+#define IDREADEDIDCARD          1
+#define IDREADEDKEYPAD          2
+
+void password_handle_err(void);
+
+void password_handle_ok(void);
 
 void password_handle(char type, unsigned long code);
 

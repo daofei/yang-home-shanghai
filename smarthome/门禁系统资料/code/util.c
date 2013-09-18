@@ -18,7 +18,3 @@ void delay_ms(int ms)
     }
 }
 
-void gotoSleep(void)
-{
-    
-}

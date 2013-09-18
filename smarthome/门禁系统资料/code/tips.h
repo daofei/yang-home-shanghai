@@ -12,10 +12,16 @@ void tips_led_on(void);
 void tips_led_off(void);
 void tips_beep_on(void);
 void tips_beep_off(void);
+/*
 void tips_ok(void);
+*/
 void tips_err(void);
+/*
 void tips_id_ok(void);
+*/
+/*
 void tips_ring_on(void);
+*/
 void tips_board_led_on(void);
 void tips_board_led_off(void);
 

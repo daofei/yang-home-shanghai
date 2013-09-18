@@ -4,7 +4,6 @@
 
 #include<iom16v.h>
 #include <macros.h>
-//#include <sleep.h>
 
 #include "uart.h"
 #include "wg26.h"
@@ -20,16 +19,14 @@
 int main(void)
 {
     //unsigned int door_minitor_count = 0;
-    passwordItem_t t, ot;
-	
-    uart0_init();
     wg26_init_interrupt();
     tips_port_init();
     timer_init();
     iicport_init();
 	locker_init();
 	doorandscreen_init();
-
+    uart0_init();
+/*
     t.flags = PASSWORDFLAGS_PASSWORD;
     t.idCard = 0;
     t.passwordH = 1135642406;
@@ -48,8 +45,8 @@ int main(void)
     t.passwordL = 1;
     insertPasswordItem(2, t);
 
-	writePasswordItemNum(3);
-
+    writePasswordItemNum(3);
+*/
     while(1)
     {
         /*

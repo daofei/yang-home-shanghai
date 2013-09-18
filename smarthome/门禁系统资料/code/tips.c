@@ -43,6 +43,7 @@ void tips_beep_off(void)
     BEEP_OFF;
     return;
 }
+/*
 //__------__ 6 pices.pice per 0.4 seconds.
 void tips_ok(void)
 {
@@ -54,6 +55,7 @@ void tips_ok(void)
     BEEP_OFF;
     return;
 }
+*/
 //_-_-___-_-_
 void tips_err(void)
 {
@@ -76,6 +78,7 @@ void tips_err(void)
     BEEP_OFF;
     return;
 }
+/*
 //_----_-_-_
 void tips_id_ok(void)
 {
@@ -93,6 +96,8 @@ void tips_id_ok(void)
     BEEP_OFF;
     return;
 }
+*/
+/*
 //__------__-----__
 void tips_ring_on(void)
 {
@@ -106,7 +111,7 @@ void tips_ring_on(void)
     delay_ms(400);
     BEEP_OFF;
     return;
-}
+}*/
 void tips_board_led_on(void)
 {
 	BOARD_LED_ON;

@@ -39,7 +39,7 @@ static void enable_reader(void)
 
 static unsigned char havePassword = 0;
 
-static unsigned char type = 0;
+static unsigned char type = IDREADEDUNKOWN;
 //id card id.
 static unsigned long id_code = 0;
 //read flags.
@@ -125,6 +125,8 @@ void wg26_spank(void)
     {
         password_handle(type, id_code);
         havePassword = 0;
+        type = IDREADEDUNKOWN;
+        id_code = 0;
     }
     return;
 }

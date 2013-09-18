@@ -238,6 +238,7 @@ char rwiic(unsigned char comAddr, unsigned char *data,unsigned char len,unsigned
     return err;    
 }    
 
+/*
 unsigned long rwiicInt(unsigned char comAddr, unsigned long data, unsigned int addr, unsigned char rwFlag)
 {
     unsigned char tmp[4] = {0, 0, 0, 0};
@@ -267,5 +268,5 @@ unsigned long rwiicInt(unsigned char comAddr, unsigned long data, unsigned int a
     }
     return out;
 }
-
+*/
 
