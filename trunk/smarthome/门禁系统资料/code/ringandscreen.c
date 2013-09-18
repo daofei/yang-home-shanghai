@@ -122,24 +122,28 @@ void input_isr(void)
 }
 **/
 
-void screen_on(void)
+void screen_on_pinLow(void)
 {
     //pb2 OUTPUT.
     DDRB |= 0x04;
-    
     SCREEN_ON;
-	delay_ms(20);
-	SCREEN_OFF;
+    return;
+}
 
+void screen_on_pinHigh(void)
+{
+	SCREEN_OFF;
     //pb2 hi-z
     DDRB &= 0xfb;
     PORTB &= 0xfb;
     return;
 }
 
+/*
 //when door open, return 1.
 char check_door(void)
 {
     return 0;//(PINA&0x01);
 }
+*/
 

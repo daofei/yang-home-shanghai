@@ -9,7 +9,9 @@ void doorandscreen_init(void);
 
 void screen_on(void);
 
+/*
 char check_door(void);
+*/
 
 #ifdef __cplusplus
 }

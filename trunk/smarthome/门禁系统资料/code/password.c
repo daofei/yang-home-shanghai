@@ -71,8 +71,7 @@ void writePasswordItemNum(unsigned char num)
 #define PASSWORDREADIDCARDOK                1
 #define PASSWORDREADIDANDPSWDOK         2
 
-static unsigned char password_read_flags = 0;
-static unsigned char current_index = 0;
+static unsigned long current_id = 1; //no card id is 1
 static unsigned char input_err_count = 0;
 
 //You input xxx then password is 1xxx.
@@ -84,9 +83,8 @@ static void clear_pswd_status(void)
     //clear last password input.
     passwordH = 1;
     passwordL = 1;
+    current_id = 1;
     tips_led_off();
-    password_read_flags = PASSWORDREADIDCARDUNKOWN;
-    current_index = 0;
     stop_timer(PASSWORDTIMEOUTTIMER);
     return;
 }
@@ -107,6 +105,20 @@ static void input_time_out(char timer)
     return;
 }
 
+void password_handle_err(void)
+{
+    clear_pswd_status();
+    tips_err();
+}
+void password_handle_ok(void)
+{
+    //clear pswd statuc.
+    clear_pswd_status();
+    //tips_ok();
+    locker_unlock();
+    //error count clear.
+    input_err_count = 0;
+}
 void password_handle(char type, unsigned long code)
 {
     unsigned char pswd_item_num = 0;
@@ -114,138 +126,23 @@ void password_handle(char type, unsigned long code)
     passwordItem_t item;
 
 	//on screen
-	screen_on();
+	screen_on_pinLow();
     //if input error count is too large.
     if(input_err_count>5)
     {
-        clear_pswd_status();
-        tips_err();
+        password_handle_err();
         //set time out. 100ms*10*60
         set_timer(PASSWORDTIMEOUTTIMER, 600, cannot_input_time_out);
-        return;
+        return screen_on_pinHigh();
     }
- 
-    //read a card.
-    if(type==IDREADEDIDCARD)
-    {
-        clear_pswd_status();
-        //read paswd item num.
-        pswd_item_num = readPasswordItemNum();
-        //loop find it.
-        for(i=0;i<pswd_item_num;++i)
-        {
-            //read a item.
-            item = readPasswordItem(i);
-            //if item need id card, and is this id card.
-            if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
-            {
-                //need paswd.
-                if(item.flags&PASSWORDFLAGS_PASSWORD)
-                {
-                    //id card ok, but need password.
-                    //tips_id_ok();
-                    //id card ok, but not input password, led on.
-                    tips_led_on();
-                    current_index = i;
-                    password_read_flags = PASSWORDREADIDCARDOK;
-                    //set time out. 100ms*10*30
-                    set_timer(PASSWORDTIMEOUTTIMER, 300, input_time_out);
-                }
-                else //only id card.
-                {
-                    //record log
-                    log(LOGTYPEIDOK, i, code, 0, 0);
-                    //clear pswd statuc.
-                    clear_pswd_status();
-                    //tips_ok();
-                    locker_unlock();
-                    //error count clear.
-                    input_err_count = 0;
-                } //else
-                return;
-            }  //if((item.flags&PASSWORDFLAGS_ID)&&(item.idCard==code))
-        }	  //for(i=0;i<pswd_item_num;++i)
-        //unkown id card.
-        log(LOGTYPEIDERR, 0, code, 0, 0);
-        //clear password.
-        clear_pswd_status();
-        //error password and log.
-        tips_err();
-        //error count ++
-        ++input_err_count;
-        return;
-    }	  //if(type==IDREADEDIDCARD)
-    else if(type==IDREADEDKEYPAD) // read a keypad input.
+    //deal with keypad input.
+    if((type==IDREADEDKEYPAD)&&(code!=0x0000000b))
     {
         code &= 0x0000000f;
         if(code == 0x0000000a)  //*
         {
             //clear password.
             clear_pswd_status();
-        }
-        else if(code == 0x0000000b) //#
-        {
-            //need id card password.
-            if(password_read_flags==PASSWORDREADIDCARDOK)
-            {
-                passwordItem_t current_item = readPasswordItem(current_index);
-                //password is ok.
-                if((current_item.passwordH==passwordH)&&(current_item.passwordL==passwordL))
-                {
-                    log(LOGTYPEIDANDPSWDOK, current_index, current_item.idCard, passwordH, passwordL);
-                    //clear password status.
-                    clear_pswd_status();
-                    //unlock and write log.
-                    //tips_ok();
-                    locker_unlock();
-                    //error count clear.
-                    input_err_count = 0;
-                }
-                else //password is error.
-                {
-                    log(LOGTYPEIDANDPSWDERR, current_index, current_item.idCard, passwordH, passwordL);
-                    //clear password.
-                    clear_pswd_status();
-                    //error password and log.
-                    tips_err();
-                    //error count ++.
-                    ++input_err_count;
-                }
-            }
-            else //only password.
-            {
-                //read paswd item num.
-                pswd_item_num = readPasswordItemNum();
-                //loop find it.
-                for(i=0;i<pswd_item_num;++i)
-                {
-                    //read a item.
-                    item = readPasswordItem(i);
-                    //if item need id card, and is this id card.
-                    if((item.flags==PASSWORDFLAGS_PASSWORD)&&(item.passwordH==passwordH)
-                        &&(item.passwordL==passwordL))
-                    {
-                        log(LOGTYPEPSWDOK, i, 0, passwordH, passwordL);
-                        //clear password.
-                        clear_pswd_status();
-                        //password is right. unlock and log.
-                        //tips_ok();
-                        locker_unlock();
-                        //error count clear.
-                        input_err_count = 0;
-                        return;
-                    }
-                }
-                //password is error.
-                log(LOGTYPEPSWDERR, 0, 0, passwordH, passwordL);
-                //clear password.
-                clear_pswd_status();
-                //password is error, and log.
-                tips_err();
-                //error count++.
-                ++input_err_count;
-                return;
-            }
         }
         else
         {
@@ -261,6 +158,54 @@ void password_handle(char type, unsigned long code)
             }
         }
     }
-    return;
+    else    //deal with key
+    {
+        //read paswd item num.
+        pswd_item_num = readPasswordItemNum();
+        //loop find it.
+        for(i=0;i<pswd_item_num;++i)
+        {
+            //read a item.
+            item = readPasswordItem(i);
+            if((item.flags==PASSWORDFLAGS_ID)&&(type==IDREADEDIDCARD)&&(item.idCard==code))
+            {
+                //record log
+                log(COMMANDIDLOGOK, PASSWORDFLAGS_ID, code, 0, 0);
+                password_handle_ok();
+                return screen_on_pinHigh();
+            }
+            else if((item.flags==PASSWORDFLAGS_PASSWORD)&&(type==IDREADEDKEYPAD)&&
+                (item.passwordH==passwordH)&&(item.passwordL==passwordL))
+            {
+                log(COMMANDIDLOGOK, PASSWORDFLAGS_PASSWORD, 0, passwordH, passwordL);
+                password_handle_ok();
+                return screen_on_pinHigh();
+            }
+            else if(item.flags==(PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD))
+            {
+                if((type==IDREADEDIDCARD)&&(item.idCard==code))
+                {
+                    //id card ok, but need password.
+                    //tips_id_ok();
+                    //id card ok, but not input password, led on.
+                    tips_led_on();
+                    current_id = code;
+                    //set time out. 100ms*10*30
+                    set_timer(PASSWORDTIMEOUTTIMER, 300, input_time_out);
+                    return screen_on_pinHigh();
+                }
+                else if((type==IDREADEDKEYPAD)&&(current_id==item.idCard)&&
+                    (item.passwordH==passwordH)&&(item.passwordL==passwordL))
+                {
+                    log(COMMANDIDLOGOK, PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD, item.idCard, passwordH, passwordL);
+                    password_handle_ok();
+                    return screen_on_pinHigh();
+                }
+            }
+        }
+        ++input_err_count;
+        log(COMMANDIDLOGERR, PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD, item.idCard, passwordH, passwordL);
+        password_handle_err();
+    }
+    return screen_on_pinHigh();
 }
-
