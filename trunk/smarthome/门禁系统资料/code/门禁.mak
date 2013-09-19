@@ -12,7 +12,7 @@ main.o: C:/icc/include/stdio.h C:/icc/include/stdarg.h C:/icc/include/_const.h C
  D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/locker.h
 main.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\main.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\main.c
-wg26.o: C:/icc/include/iom16v.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/password.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/timer.h
+wg26.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/password.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/timer.h
 wg26.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\wg26.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\wg26.c
 util.o: D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/util.h
@@ -22,14 +22,14 @@ tips.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\Ã
 tips.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\tips.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\tips.c
 password.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/log.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/locker.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/tips.h\
- D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/timer.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/iic.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/eeprom.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/password.h\
+ D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/timer.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/iic.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/eeprom.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/uart.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/password.h\
  D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/ringandscreen.h
 password.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\password.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\password.c
 timer.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/timer.h
 timer.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\timer.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\timer.c
-log.o: C:/icc/include/iom16v.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/log.h
+log.o: C:/icc/include/iom16v.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/uart.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/log.h
 log.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\log.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\log.c
 locker.o: C:/icc/include/iom16v.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/timer.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/util.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/tips.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/locker.h
@@ -42,7 +42,8 @@ ringandscreen.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\ringandscreen.c
 eeprom.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/util.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/iic.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/eeprom.h
 eeprom.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\eeprom.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\eeprom.c
-uart.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/uart.h
+uart.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/password.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/locker.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/timer.h\
+ D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/uart.h
 uart.o:	D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\uart.c
 	$(CC) -c $(CFLAGS) D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code\uart.c
 iic.o: C:/icc/include/iom16v.h C:/icc/include/macros.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/util.h D:\smarthome\smarthome\ÃÅ½ûÏµÍ³×ÊÁÏ\code/iic.h

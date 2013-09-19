@@ -8,8 +8,9 @@ extern "C" {
 #define IDREADERTIMEOUTTIMER        0
 #define PASSWORDTIMEOUTTIMER        1
 #define UNLOCKTIMEOUTTIMER		    2
+#define UART0RECTIMEOUTTIMER		3
 
-#define MAXTIMER 3
+#define MAXTIMER 4
 
 typedef void (*timerCB)(char); 
 typedef struct __timer
@@ -21,6 +22,7 @@ typedef struct __timer
 void timer_init(void);
 //set timer.
 void set_timer(char timer, int value, timerCB cb);
+void set_timer2(char timer, int value, timerCB cb);
 //stop timer.
 void stop_timer(char timer);
 
