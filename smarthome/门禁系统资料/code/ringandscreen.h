@@ -7,7 +7,9 @@ extern "C" {
 
 void doorandscreen_init(void);
 
-void screen_on(void);
+void screen_on_pinLow(void);
+
+void screen_on_pinHigh(void);
 
 /*
 char check_door(void);

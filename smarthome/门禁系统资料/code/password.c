@@ -7,6 +7,7 @@
 #include "timer.h"
 #include "iic.h"
 #include "eeprom.h"
+#include "uart.h"
 #include "password.h"
 #include "ringandscreen.h"
 
@@ -133,7 +134,8 @@ void password_handle(char type, unsigned long code)
         password_handle_err();
         //set time out. 100ms*10*60
         set_timer(PASSWORDTIMEOUTTIMER, 600, cannot_input_time_out);
-        return screen_on_pinHigh();
+        screen_on_pinHigh();
+		return;
     }
     //deal with keypad input.
     if((type==IDREADEDKEYPAD)&&(code!=0x0000000b))
@@ -172,14 +174,16 @@ void password_handle(char type, unsigned long code)
                 //record log
                 log(COMMANDIDLOGOK, PASSWORDFLAGS_ID, code, 0, 0);
                 password_handle_ok();
-                return screen_on_pinHigh();
+                screen_on_pinHigh();
+				return;
             }
             else if((item.flags==PASSWORDFLAGS_PASSWORD)&&(type==IDREADEDKEYPAD)&&
                 (item.passwordH==passwordH)&&(item.passwordL==passwordL))
             {
                 log(COMMANDIDLOGOK, PASSWORDFLAGS_PASSWORD, 0, passwordH, passwordL);
                 password_handle_ok();
-                return screen_on_pinHigh();
+                screen_on_pinHigh();
+				return;
             }
             else if(item.flags==(PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD))
             {
@@ -192,14 +196,16 @@ void password_handle(char type, unsigned long code)
                     current_id = code;
                     //set time out. 100ms*10*30
                     set_timer(PASSWORDTIMEOUTTIMER, 300, input_time_out);
-                    return screen_on_pinHigh();
+                    screen_on_pinHigh();
+					return;
                 }
                 else if((type==IDREADEDKEYPAD)&&(current_id==item.idCard)&&
                     (item.passwordH==passwordH)&&(item.passwordL==passwordL))
                 {
                     log(COMMANDIDLOGOK, PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD, item.idCard, passwordH, passwordL);
                     password_handle_ok();
-                    return screen_on_pinHigh();
+                    screen_on_pinHigh();
+					return;
                 }
             }
         }
@@ -207,5 +213,6 @@ void password_handle(char type, unsigned long code)
         log(COMMANDIDLOGERR, PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD, item.idCard, passwordH, passwordL);
         password_handle_err();
     }
-    return screen_on_pinHigh();
+    screen_on_pinHigh();
+	return;
 }

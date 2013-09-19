@@ -19,6 +19,8 @@
 int main(void)
 {
     //unsigned int door_minitor_count = 0;
+    CLI();
+	
     wg26_init_interrupt();
     tips_port_init();
     timer_init();
@@ -26,6 +28,9 @@ int main(void)
 	locker_init();
 	doorandscreen_init();
     uart0_init();
+
+	SEI();
+    //SREG |= 0x80;
 /*
     t.flags = PASSWORDFLAGS_PASSWORD;
     t.idCard = 0;

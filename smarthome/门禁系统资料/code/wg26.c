@@ -1,4 +1,5 @@
 #include<iom16v.h>
+#include <macros.h>
 
 #include "password.h"
 #include "timer.h"
@@ -17,7 +18,7 @@ void wg26_init_interrupt(void)
 	//
 	PORTD |= 0x04;
 	
-    SREG |= 0x80;
+    //SREG |= 0x80;
     //int0 enable.
     GICR |= 0x40;
     //int0 fall edge.
@@ -27,14 +28,18 @@ void wg26_init_interrupt(void)
 //diable reader.
 static void disable_reader(void)
 {
+	CLI();
     GICR &= 0xbf;
+	SEI();
     return;
 }
 //enable reader.
 static void enable_reader(void)
 {
+	CLI();
     GICR |= 0x40;
-    return;
+	SEI();
+	return;
 }
 
 static unsigned char havePassword = 0;
@@ -97,7 +102,7 @@ static void set_id_reading_status(void)
         id_reader_flags = IDREADERFLAG_READING;
         id_code = 0;
         //1*100ms.
-        set_timer(IDREADERTIMEOUTTIMER, 1, read_time_out);
+        set_timer(IDREADERTIMEOUTTIMER, 2, read_time_out);
     }
     return;
 }
