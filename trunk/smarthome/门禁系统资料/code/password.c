@@ -210,7 +210,7 @@ void password_handle(char type, unsigned long code)
             }
         }
         ++input_err_count;
-        log(COMMANDIDLOGERR, PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD, item.idCard, passwordH, passwordL);
+        log(COMMANDIDLOGERR, PASSWORDFLAGS_ID|PASSWORDFLAGS_PASSWORD, code, passwordH, passwordL);
         password_handle_err();
     }
     screen_on_pinHigh();
