@@ -21,87 +21,88 @@ Area                               Addr   Size   Decimal Bytes (Attributes)
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
-                            text   0076   12C0 =   4800. bytes (rel,con,rom)
+                            text   0076   12E4 =   4836. bytes (rel,con,rom)
 
        Addr  Global Symbol
       -----  --------------------------------
-       003B  __text_start
        003B  __start
+       003B  __text_start
        005A  _exit
        005B  _main
        006B  _wg26_init_interrupt
        00ED  _int0_isr
-       0119  _wg26_spank
-       0135  _delay_1ms
-       013E  _delay_ms
-       014D  _tips_port_init
-       0154  _tips_led_on
-       0158  _tips_led_off
-       015A  _tips_beep_on
-       015E  _tips_beep_off
-       0160  _tips_err
-       017A  _tips_board_led_on
-       017E  _tips_board_led_off
-       0180  _readPasswordItemNum
-       018B  _readPasswordItem
-       01C2  _insertPasswordItem
-       01E9  _writePasswordItemNum
-       021D  _password_handle_err
-       0220  _password_handle_ok
-       0226  _password_handle
-       0365  _timer_init
-       0379  _set_timer
-       0393  _stop_timer
-       03AC  _set_timer2
-       03CE  _timer0_isr
-       0420  _log
-       0432  _locker_init
-       044A  _locker_unlock
-       0460  _doorandscreen_init
-       046B  _screen_on_pinLow
-       0470  _screen_on_pinHigh
-       0478  _rw24c256
-       0489  _uart0_init
-       049B  _uart0_send
-       049F  _uart0_receive
-       04A3  _uart0_send_buffer
-       04B1  _uart0_read_buffer
-       04E0  _uart0_handleCommand_isr
-       065B  _iicport_init
-       0662  _start
-       0673  _stop
-       0684  _recAck
-       06A5  _ack
-       06AE  _noAck
-       06B3  _sendByte
-       06CF  _receiveByte
-       06F6  _rwiic
-       075B  push_arg4
-       075D  push_arg2
-       075E  empy32u
-       075E  empy32s
-       078A  pop_gset2
-       078C  pop_gset3
-       078E  pop_gset4
-       0790  pop_gset5
-       0792  push_gset5
-       0794  push_gset4
-       0796  push_gset3
-       0798  push_gset2
-       079A  push_gset1
-       079D  pop_gset1
-       079E  pop
-       07B1  xicall
-       07BA  long_prolog
-       07C8  long_epilog
-       07D3  tstzero1
-       07D9  tstzero2
-       07DF  push_lset
-       07F2  pop_lset
-       0809  lsl32
-       0815  asgnblk
-       082D  <created procedures>
-       099B  __text_end
+       010D  _wg26_spank
+       0129  _delay_1ms
+       0132  _delay_ms
+       0141  _tips_port_init
+       0148  _tips_led_on
+       014C  _tips_led_off
+       014E  _tips_beep_on
+       0152  _tips_beep_off
+       0154  _tips_err
+       016E  _tips_board_led_on
+       0172  _tips_board_led_off
+       0174  _readPasswordItemNum
+       017F  _readPasswordItem
+       01B6  _insertPasswordItem
+       01DD  _writePasswordItemNum
+       0211  _password_handle_err
+       0214  _password_handle_ok
+       021A  _password_handle
+       0359  _timer_init
+       036D  _set_timer
+       0387  _stop_timer
+       03A0  _set_timer2
+       03C2  _timer0_isr
+       0414  _log
+       0426  _locker_init
+       043E  _locker_unlock
+       0454  _doorandscreen_init
+       045F  _screen_on_pinLow
+       0464  _screen_on_pinHigh
+       046C  _rw24c256
+       047D  _uart0_init
+       048B  _uart0_port_hiz
+       048E  _uart0_send
+       0492  _uart0_receive
+       0496  _uart0_send_buffer
+       04A5  _uart0_read_buffer
+       04D4  _uart0_handleCommand_isr
+       0650  _iicport_init
+       0657  _start
+       0668  _stop
+       0679  _recAck
+       069A  _ack
+       06A3  _noAck
+       06A8  _sendByte
+       06C4  _receiveByte
+       06EB  _rwiic
+       0750  push_arg4
+       0752  push_arg2
+       0753  empy32u
+       0753  empy32s
+       077F  pop_gset2
+       0781  pop_gset3
+       0783  pop_gset4
+       0785  pop_gset5
+       0787  push_gset5
+       0789  push_gset4
+       078B  push_gset3
+       078D  push_gset2
+       078F  push_gset1
+       0792  pop_gset1
+       0793  pop
+       07A6  xicall
+       07AF  long_prolog
+       07BD  long_epilog
+       07C8  tstzero1
+       07CE  tstzero2
+       07D4  push_lset
+       07E7  pop_lset
+       07FE  lsl32
+       080A  asgnblk
+       0822  <created procedures>
+       09AD  __text_end
 
 Area                               Addr   Size   Decimal Bytes (Attributes)
 --------------------------------   ----   ----   ------- ----- ------------
